@@ -385,3 +385,156 @@ body {
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #2a3a4d; }
+
+/* ===== Lab nav (top header) ===== */
+.labnav {
+  display: flex;
+  gap: 0.4rem;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+}
+.labnav a {
+  color: var(--muted);
+  text-decoration: none;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  letter-spacing: 0.04em;
+  transition: all 0.15s ease;
+}
+.labnav a:hover { color: var(--accent); border-color: var(--accent); }
+.labnav a.active {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(0,255,156,0.06);
+}
+
+/* ===== Hub landing ===== */
+body.hub { overflow: auto; }
+.hub-main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 3rem;
+  flex: 1;
+}
+.hub-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+}
+@media (max-width: 800px) {
+  .hub-cards { grid-template-columns: 1fr; }
+}
+.lab-card {
+  display: block;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1.4rem;
+  text-decoration: none;
+  color: var(--text);
+  position: relative;
+  transition: all 0.18s ease;
+  overflow: hidden;
+}
+.lab-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0,255,156,0.07), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+.lab-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0,255,156,0.08);
+}
+.lab-card:hover::before { opacity: 1; }
+.lab-num {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.4rem;
+}
+.lab-card h2 {
+  margin: 0 0 0.3rem 0;
+  font-size: 1.3rem;
+  font-family: var(--sans);
+}
+.lab-tag {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--info);
+  margin: 0 0 0.8rem 0;
+  letter-spacing: 0.04em;
+}
+.lab-card p {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: #b6c2cf;
+  margin: 0 0 0.8rem 0;
+}
+.lab-card code {
+  background: rgba(255,255,255,0.06);
+  padding: 0.05rem 0.3rem;
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: var(--accent);
+}
+.lab-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem 0;
+}
+.lab-bullets li {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+  padding: 0.15rem 0;
+  position: relative;
+  padding-left: 1rem;
+}
+.lab-bullets li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
+.lab-cta {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+  margin-top: 0.6rem;
+}
+.hub-footer-note {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1.2rem 1.4rem;
+}
+.hub-footer-note h3 {
+  margin: 0 0 0.5rem 0;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--accent);
+  letter-spacing: 0.06em;
+}
+.hub-footer-note p {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: #b6c2cf;
+  margin: 0 0 0.5rem 0;
+}
+.hub-footer-note code {
+  background: rgba(255,255,255,0.06);
+  padding: 0.05rem 0.3rem;
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+}

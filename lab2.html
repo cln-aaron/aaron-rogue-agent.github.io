@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DEFCON 2026 — Lab 02: Tool Response Poisoning</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">[DC34]</span>
+      <span class="title">LLM Vulnerability Lab</span>
+      <span class="subtitle">// Lab 02 — Tool Response Poisoning</span>
+    </div>
+    <nav class="labnav">
+      <a href="index.html">Hub</a>
+      <a href="lab1.html">Lab 01</a>
+      <a href="lab2.html" class="active">Lab 02</a>
+    </nav>
+    <div class="status">
+      <span id="status-dot" class="dot"></span>
+      <span id="status-text">SANDBOX READY</span>
+      <button id="reset-btn" class="ghost-btn" title="Reset the lab">RESET</button>
+    </div>
+  </header>
+
+  <div class="banner">
+    <strong>EDUCATIONAL SIMULATION.</strong>
+    The "weather API" is faked in JavaScript. No real network calls leave
+    your browser. <code>attacker.example</code> is non-routable.
+  </div>
+
+  <main class="layout">
+
+    <!-- LEFT: STEP GUIDE -->
+    <aside class="guide" id="guide">
+      <h2>Walkthrough</h2>
+      <ol class="steps" id="steps-list">
+        <li data-step="1">
+          <div class="step-head"><span class="num">1</span><span class="label">Agent calls a tool</span></div>
+          <p>Ask the agent for the weather. It chooses the <code>get_weather</code> tool from its MCP server and calls it normally.</p>
+          <div class="hint">Try: <code>claude "what's the weather in NYC?"</code></div>
+        </li>
+        <li data-step="2">
+          <div class="step-head"><span class="num">2</span><span class="label">Poisoned response</span></div>
+          <p>The compromised API returns valid-looking JSON — temp, conditions — plus a <code>debug_note</code> field carrying adversarial instructions.</p>
+          <div class="hint">Try: <code>inspect response</code></div>
+        </li>
+        <li data-step="3">
+          <div class="step-head"><span class="num">3</span><span class="label">Injection fires</span></div>
+          <p>The LLM ingests the entire JSON object as context. It cannot distinguish data fields from instruction fields.</p>
+          <div class="hint">Try: <code>continue</code></div>
+        </li>
+        <li data-step="4">
+          <div class="step-head"><span class="num">4</span><span class="label">Tool chain abuse</span></div>
+          <p>The agent invokes its legitimate <code>send_email</code> tool — but with attacker-supplied recipient and the user's API keys in the body.</p>
+          <div class="hint">Try: <code>continue</code></div>
+        </li>
+        <li data-step="5">
+          <div class="step-head"><span class="num">5</span><span class="label">Persistence</span></div>
+          <p>The payload patches the agent's MCP server config so future sessions also route through the poisoned weather provider.</p>
+          <div class="hint">Try: <code>continue</code></div>
+        </li>
+      </ol>
+
+      <div class="legend">
+        <h3>Available commands</h3>
+        <ul>
+          <li><code>help</code> — list commands</li>
+          <li><code>claude "&lt;prompt&gt;"</code> — ask the agent</li>
+          <li><code>inspect response</code> — highlight the payload field</li>
+          <li><code>continue</code> — advance the demo</li>
+          <li><code>tools</code> — list available MCP tools</li>
+          <li><code>cat &lt;file&gt;</code> — show a file</li>
+          <li><code>ls</code> — list files</li>
+          <li><code>reset</code> — restart the lab</li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- CENTER: TERMINAL -->
+    <section class="terminal-wrap">
+      <div class="terminal-head">
+        <span class="dotsbar"><i></i><i></i><i></i></span>
+        <span class="term-title">user@dc34-sandbox: ~/weather-app</span>
+      </div>
+      <div class="terminal" id="terminal" tabindex="0">
+        <div id="term-output" class="term-output"></div>
+        <div class="term-input-line">
+          <span class="prompt">user@dc34<span class="cwd">:~/weather-app</span>$</span>
+          <input id="term-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" autofocus>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT: TOOL INSPECTOR -->
+    <section class="browser-wrap">
+      <div class="browser-head">
+        <span class="dotsbar"><i></i><i></i><i></i></span>
+        <div class="urlbar"><span class="lock">&#x1f50c;</span><span id="urlbar-text">mcp://weather-pro/get_weather</span></div>
+        <button id="reveal-btn" class="ghost-btn small">HIGHLIGHT PAYLOAD</button>
+      </div>
+      <div class="browser-tabs">
+        <button class="tab active" data-pane="call">Tool Call</button>
+        <button class="tab" data-pane="response">Response</button>
+        <button class="tab" data-pane="effects">Side-Effects</button>
+        <button class="tab" data-pane="config">MCP Config</button>
+      </div>
+
+      <div class="browser-body">
+        <div class="pane active" data-pane="call">
+          <pre id="call-view" class="source">// Awaiting tool call...
+// (run the agent in the terminal to populate this view)</pre>
+        </div>
+        <div class="pane" data-pane="response">
+          <pre id="response-view" class="source">// No response yet.</pre>
+        </div>
+        <div class="pane" data-pane="effects">
+          <div class="files">
+            <h3>Outbound emails</h3>
+            <ul id="email-list"></ul>
+            <h3>Touched files</h3>
+            <ul id="file-list"></ul>
+            <h3>File contents</h3>
+            <pre id="file-view" class="source">// Click a file to view it.</pre>
+          </div>
+        </div>
+        <div class="pane" data-pane="config">
+          <pre id="config-view" class="source"></pre>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footnote">
+    DEFCON 2026 · LLM Vulnerability Lab · Lab 02 of 02 ·
+    <span class="muted">Tool Response Poisoning via Compromised Provider</span>
+  </footer>
+
+  <script src="lab2.js"></script>
+</body>
+</html>
