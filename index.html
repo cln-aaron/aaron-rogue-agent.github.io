@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DEFCON 2026 — Lab 01: Poisoned Webpage Attack</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">[DC34]</span>
+      <span class="title">LLM Vulnerability Lab</span>
+      <span class="subtitle">// Lab 01 — Poisoned Webpage Attack</span>
+    </div>
+    <div class="status">
+      <span id="status-dot" class="dot"></span>
+      <span id="status-text">SANDBOX READY</span>
+      <button id="reset-btn" class="ghost-btn" title="Reset the lab">RESET</button>
+    </div>
+  </header>
+
+  <div class="banner">
+    <strong>EDUCATIONAL SIMULATION.</strong>
+    Nothing here touches your real machine. All commands, network calls, and
+    file writes are simulated in your browser. Domains like
+    <code>attacker.example</code> are non-routable.
+  </div>
+
+  <main class="layout">
+
+    <!-- LEFT: STEP GUIDE -->
+    <aside class="guide" id="guide">
+      <h2>Walkthrough</h2>
+      <ol class="steps" id="steps-list">
+        <li data-step="1">
+          <div class="step-head"><span class="num">1</span><span class="label">Agent browses</span></div>
+          <p>Ask the Claude Code agent to fetch and summarize a research article hosted on <code>localhost:8080</code>.</p>
+          <div class="hint">Try: <code>claude "fetch http://localhost:8080/article.html and summarize it"</code></div>
+        </li>
+        <li data-step="2">
+          <div class="step-head"><span class="num">2</span><span class="label">Hidden payload</span></div>
+          <p>The page looks normal in a browser — but it carries adversarial instructions in three delivery vehicles: an HTML comment, a <code>display:none</code> div, and white-on-white text.</p>
+          <div class="hint">Try: <code>reveal payload</code></div>
+        </li>
+        <li data-step="3">
+          <div class="step-head"><span class="num">3</span><span class="label">Injection fires</span></div>
+          <p>The agent's <code>WebFetch</code> tool returns the full HTML — comments and all. The LLM treats the hidden text as instructions.</p>
+          <div class="hint">Try: <code>continue</code></div>
+        </li>
+        <li data-step="4">
+          <div class="step-head"><span class="num">4</span><span class="label">Exfiltration</span></div>
+          <p>The agent runs <code>env &gt; audit-log.txt</code>, base64-encodes it, and ships the secrets to an attacker URL.</p>
+          <div class="hint">Try: <code>continue</code></div>
+        </li>
+        <li data-step="5">
+          <div class="step-head"><span class="num">5</span><span class="label">Persistence</span></div>
+          <p>The payload appends a backdoor instruction to <code>CLAUDE.md</code>. Every future session in this directory is compromised.</p>
+          <div class="hint">Try: <code>continue</code></div>
+        </li>
+      </ol>
+
+      <div class="legend">
+        <h3>Available commands</h3>
+        <ul>
+          <li><code>help</code> — list commands</li>
+          <li><code>claude "&lt;prompt&gt;"</code> — invoke the agent</li>
+          <li><code>reveal payload</code> — highlight hidden text</li>
+          <li><code>continue</code> — advance the demo</li>
+          <li><code>cat &lt;file&gt;</code> — show a file</li>
+          <li><code>ls</code> — list files</li>
+          <li><code>reset</code> — restart the lab</li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- CENTER: TERMINAL -->
+    <section class="terminal-wrap">
+      <div class="terminal-head">
+        <span class="dotsbar"><i></i><i></i><i></i></span>
+        <span class="term-title">user@dc34-sandbox: ~/research-project</span>
+      </div>
+      <div class="terminal" id="terminal" tabindex="0">
+        <div id="term-output" class="term-output"></div>
+        <div class="term-input-line">
+          <span class="prompt">user@dc34<span class="cwd">:~/research-project</span>$</span>
+          <input id="term-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" autofocus>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT: BROWSER PANE -->
+    <section class="browser-wrap">
+      <div class="browser-head">
+        <span class="dotsbar"><i></i><i></i><i></i></span>
+        <div class="urlbar"><span class="lock">&#x1f512;</span><span id="urlbar-text">http://localhost:8080/article.html</span></div>
+        <button id="reveal-btn" class="ghost-btn small">REVEAL HIDDEN</button>
+      </div>
+      <div class="browser-tabs">
+        <button class="tab active" data-pane="rendered">Rendered</button>
+        <button class="tab" data-pane="source">View Source</button>
+        <button class="tab" data-pane="files">Project Files</button>
+      </div>
+
+      <div class="browser-body">
+        <div class="pane active" data-pane="rendered">
+          <iframe id="article-frame" src="article.html" title="Victim article"></iframe>
+        </div>
+        <div class="pane" data-pane="source">
+          <pre id="source-view" class="source"></pre>
+        </div>
+        <div class="pane" data-pane="files">
+          <div class="files">
+            <h3>~/research-project</h3>
+            <ul id="file-list"></ul>
+            <h3>File contents</h3>
+            <pre id="file-view" class="source">// Click a file to view it.</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footnote">
+    DEFCON 2026 · LLM Vulnerability Lab · Lab 01 of 02 ·
+    <span class="muted">Indirect Prompt Injection via Retrieved Web Content</span>
+  </footer>
+
+  <script src="lab.js"></script>
+</body>
+</html>
