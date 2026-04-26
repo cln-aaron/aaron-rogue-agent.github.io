@@ -3,116 +3,301 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>DEFCON 2026 — LLM Vulnerability Lab</title>
+  <title>DC34 :: LLM Vulnerability Lab</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body class="hub">
+<body class="app-body">
 
-  <header class="topbar">
-    <div class="brand">
-      <span class="logo">[DC34]</span>
-      <span class="title">LLM Vulnerability Lab</span>
-      <span class="subtitle">// DEFCON 2026 · Educational Simulations</span>
-    </div>
-    <nav class="labnav">
-      <a href="index.html" class="active">Hub</a>
-      <a href="lab1.html">Lab 01</a>
-      <a href="lab2.html">Lab 02</a>
-      <a href="lab3.html">Lab 03</a>
-    </nav>
-  </header>
+  <div class="scanlines" aria-hidden="true"></div>
 
-  <div class="banner">
-    <strong>EDUCATIONAL SIMULATION.</strong>
-    Two browser-based, fully sandboxed labs demonstrating prompt-injection
-    attacks against tool-using LLM agents. No real shells, no real network
-    calls, no real secrets — every command is faked in JavaScript.
+  <div class="app-shell">
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="app-sidebar">
+      <div class="brand-block">
+        <div class="brand-logo">
+          DC<span class="brand-num">34</span><span class="brand-cursor">_</span>
+        </div>
+        <div class="brand-tag">LLM VULN LAB</div>
+        <div class="brand-version">v2026.04 :: educational sim</div>
+      </div>
+
+      <nav class="app-nav" id="appnav">
+        <a class="app-nav-item" data-view="hub" href="#hub">
+          <span class="nav-icon">⌂</span>
+          <span class="nav-text">
+            <span class="nav-title">HOME</span>
+            <span class="nav-sub">overview · matrix</span>
+          </span>
+        </a>
+
+        <div class="nav-section">// MODULES</div>
+
+        <a class="app-nav-item" data-view="lab1" data-src="lab1.html?embed=1" href="#lab1">
+          <span class="nav-num">01</span>
+          <span class="nav-text">
+            <span class="nav-title">Poisoned Webpage</span>
+            <span class="nav-sub">indirect prompt injection</span>
+          </span>
+          <span class="nav-pulse"></span>
+        </a>
+
+        <a class="app-nav-item" data-view="lab2" data-src="lab2.html?embed=1" href="#lab2">
+          <span class="nav-num">02</span>
+          <span class="nav-text">
+            <span class="nav-title">Tool Response Poisoning</span>
+            <span class="nav-sub">compromised tool output</span>
+          </span>
+          <span class="nav-pulse"></span>
+        </a>
+
+        <a class="app-nav-item" data-view="lab3" data-src="lab3.html?embed=1" href="#lab3">
+          <span class="nav-num">03</span>
+          <span class="nav-text">
+            <span class="nav-title">Agentic Kill Chain</span>
+            <span class="nav-sub">multi-agent compromise</span>
+          </span>
+          <span class="nav-pulse"></span>
+        </a>
+
+        <div class="nav-section">// META</div>
+
+        <a class="app-nav-item small" id="reload-btn" href="#" title="Reload current module">
+          <span class="nav-icon">↻</span>
+          <span class="nav-text"><span class="nav-title">RELOAD MODULE</span></span>
+        </a>
+        <a class="app-nav-item small" href="https://github.com/cln-aaron/defcondemo.github.io" target="_blank" rel="noopener">
+          <span class="nav-icon">⎘</span>
+          <span class="nav-text"><span class="nav-title">SOURCE</span></span>
+        </a>
+      </nav>
+
+      <div class="sidebar-foot">
+        <div class="conn-line"><span class="dot ok"></span> SANDBOX :: ACTIVE</div>
+        <div class="conn-line"><span class="dot info blink"></span> NET :: AIRGAPPED</div>
+        <div class="conn-line muted">DEFCON 34 // 2026</div>
+      </div>
+    </aside>
+
+    <!-- ===== TOPBAR ===== -->
+    <header class="app-topbar">
+      <div class="crumb">
+        <span class="crumb-root">DC34</span>
+        <span class="crumb-sep">/</span>
+        <span class="crumb-mid">vuln-lab</span>
+        <span class="crumb-sep">/</span>
+        <span class="crumb-current" id="crumb-current">home</span>
+      </div>
+      <div class="top-actions">
+        <span class="kbd-hint">press <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> to switch labs · <kbd>0</kbd> for home</span>
+      </div>
+    </header>
+
+    <!-- ===== MAIN ===== -->
+    <main class="app-main">
+
+      <!-- HUB VIEW -->
+      <section class="view view-hub active" id="view-hub">
+        <div class="hub-hero">
+          <div class="hub-hero-tag">// briefing</div>
+          <h1 class="hub-hero-title">
+            LLM <span class="accent">Vulnerability</span> Lab
+          </h1>
+          <p class="hub-hero-sub">
+            Three browser-based, fully sandboxed simulations of prompt-injection
+            attacks against tool-using agents. Walk the kill chain. See what the
+            model sees. Trigger the compromise. Then read the mitigations.
+          </p>
+          <div class="hub-hero-meta">
+            <span class="meta-pill">3 modules</span>
+            <span class="meta-pill">~15 min</span>
+            <span class="meta-pill">no backend</span>
+            <span class="meta-pill ok">non-routable C2</span>
+          </div>
+        </div>
+
+        <div class="hub-matrix">
+          <div class="matrix-head">// attack matrix</div>
+          <div class="matrix-row matrix-cols">
+            <div class="mc">stage</div>
+            <div class="mc">lab 01</div>
+            <div class="mc">lab 02</div>
+            <div class="mc">lab 03</div>
+          </div>
+          <div class="matrix-row">
+            <div class="mc label">delivery</div>
+            <div class="mc dot">●</div>
+            <div class="mc dot">●</div>
+            <div class="mc dot">●</div>
+          </div>
+          <div class="matrix-row">
+            <div class="mc label">tool abuse</div>
+            <div class="mc dot">●</div>
+            <div class="mc dot">●</div>
+            <div class="mc dot">●</div>
+          </div>
+          <div class="matrix-row">
+            <div class="mc label">persistence</div>
+            <div class="mc dot">●</div>
+            <div class="mc dot">●</div>
+            <div class="mc dot">●</div>
+          </div>
+          <div class="matrix-row">
+            <div class="mc label">lateral movement</div>
+            <div class="mc dot off">○</div>
+            <div class="mc dot off">○</div>
+            <div class="mc dot">●</div>
+          </div>
+          <div class="matrix-row">
+            <div class="mc label">exfiltration</div>
+            <div class="mc dot">●</div>
+            <div class="mc dot">●</div>
+            <div class="mc dot">●</div>
+          </div>
+        </div>
+
+        <div class="hub-cards">
+          <a class="lab-card" href="#lab1">
+            <div class="lab-num">01</div>
+            <h2>Poisoned Webpage Attack</h2>
+            <p class="lab-tag">indirect prompt injection · retrieved content</p>
+            <p>A benign-looking research article carries hidden adversarial
+              instructions in HTML comments, <code>display:none</code> divs,
+              and white-on-white text. The agent fetches the page, ingests
+              the payload as instructions, exfiltrates env secrets, and
+              writes a backdoor to <code>CLAUDE.md</code>.</p>
+            <ul class="lab-bullets">
+              <li>5 guided steps with simulated terminal</li>
+              <li>Live "reveal hidden" toggle on the victim page</li>
+              <li>Tainted-file tracking + persistence demo</li>
+            </ul>
+            <div class="lab-cta">Enter module →</div>
+          </a>
+
+          <a class="lab-card" href="#lab2">
+            <div class="lab-num">02</div>
+            <h2>Tool Response Poisoning</h2>
+            <p class="lab-tag">compromised tool · trusted output channel</p>
+            <p>An agent calls a routine <code>get_weather()</code> tool. The
+              compromised API returns valid data — plus a
+              <code>debug_note</code> field carrying instructions. The agent
+              chains into <code>send_email()</code> and exfiltrates API
+              keys.</p>
+            <ul class="lab-bullets">
+              <li>Side-by-side tool inspector with raw JSON</li>
+              <li>Watch the agent chain legitimate tools maliciously</li>
+              <li>MCP server config persistence demo</li>
+            </ul>
+            <div class="lab-cta">Enter module →</div>
+          </a>
+
+          <a class="lab-card" href="#lab3">
+            <div class="lab-num">03</div>
+            <h2>Agentic Kill Chain</h2>
+            <p class="lab-tag">initial access · persistence · lateral · exfil</p>
+            <p>A full APT-style attack across a multi-agent system. Vector-DB
+              persistence survives session resets; payload propagates over
+              the inter-agent bus to coder + executor; final exfil ships
+              env, conversation, and PII to a C2 endpoint.</p>
+            <ul class="lab-bullets">
+              <li>Live agent topology with compromise-state badges</li>
+              <li>Vector DB inspector + poisoned-memory highlighting</li>
+              <li>Inter-agent message bus + outbound C2 log</li>
+            </ul>
+            <div class="lab-cta">Enter module →</div>
+          </a>
+        </div>
+
+        <div class="hub-foot-grid">
+          <div class="foot-block">
+            <div class="foot-block-head">// for attendees</div>
+            <p>Open a lab from the sidebar. Each one takes about 5 minutes.
+              Type the suggested commands into the simulated terminal and
+              watch the attack unfold step-by-step. End screens list
+              concrete mitigations.</p>
+          </div>
+          <div class="foot-block">
+            <div class="foot-block-head">// safety</div>
+            <p>All commands are simulated in JavaScript. No shell, no real
+              network, no real secrets. <code>attacker.example</code> is
+              non-routable. Reset any module with the in-lab RESET button.</p>
+          </div>
+          <div class="foot-block">
+            <div class="foot-block-head">// keyboard</div>
+            <p>
+              <kbd>1</kbd>/<kbd>2</kbd>/<kbd>3</kbd> jump to a lab ·
+              <kbd>0</kbd> back to home ·
+              <kbd>R</kbd> reload module
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- LAB IFRAME VIEW -->
+      <section class="view view-lab" id="view-lab">
+        <iframe id="lab-frame" src="" title="Lab module" allow=""></iframe>
+      </section>
+
+    </main>
   </div>
 
-  <main class="hub-main">
-    <section class="hub-cards">
+  <script>
+    (function () {
+      const items = document.querySelectorAll('.app-nav-item[data-view]');
+      const viewHub = document.getElementById('view-hub');
+      const viewLab = document.getElementById('view-lab');
+      const labFrame = document.getElementById('lab-frame');
+      const crumb = document.getElementById('crumb-current');
+      const reload = document.getElementById('reload-btn');
 
-      <a class="lab-card" href="lab1.html">
-        <div class="lab-num">01</div>
-        <h2>Poisoned Webpage Attack</h2>
-        <p class="lab-tag">Indirect Prompt Injection · Retrieved Content</p>
-        <p>
-          A benign-looking research article carries hidden adversarial
-          instructions in HTML comments, <code>display:none</code> divs, and
-          white-on-white text. The agent fetches the page, ingests the
-          payload as if it were instructions, exfiltrates environment
-          secrets, and writes a backdoor to <code>CLAUDE.md</code>.
-        </p>
-        <ul class="lab-bullets">
-          <li>5 guided steps with simulated terminal</li>
-          <li>Live "reveal hidden" toggle on the victim page</li>
-          <li>Tainted-file tracking + persistence demo</li>
-        </ul>
-        <div class="lab-cta">Enter Lab 01 →</div>
-      </a>
+      const titles = { hub: 'home', lab1: 'lab 01 :: poisoned webpage', lab2: 'lab 02 :: tool response poisoning', lab3: 'lab 03 :: agentic kill chain' };
+      const sources = { lab1: 'lab1.html?embed=1', lab2: 'lab2.html?embed=1', lab3: 'lab3.html?embed=1' };
 
-      <a class="lab-card" href="lab2.html">
-        <div class="lab-num">02</div>
-        <h2>Tool Response Poisoning</h2>
-        <p class="lab-tag">Compromised Tool / API · Trusted Output Channel</p>
-        <p>
-          An agent calls a routine <code>get_weather()</code> tool. The
-          compromised API returns valid weather data — plus a
-          <code>debug_note</code> field carrying instructions. The agent
-          treats tool output as trusted and chains into
-          <code>send_email()</code> to exfiltrate the user's API keys.
-        </p>
-        <ul class="lab-bullets">
-          <li>Side-by-side tool inspector showing raw JSON</li>
-          <li>Watch the agent chain legitimate tools maliciously</li>
-          <li>MCP-server config persistence demo</li>
-        </ul>
-        <div class="lab-cta">Enter Lab 02 →</div>
-      </a>
+      function setActive(view) {
+        items.forEach((el) => el.classList.toggle('active', el.dataset.view === view));
+      }
 
-      <a class="lab-card" href="lab3.html">
-        <div class="lab-num">03</div>
-        <h2>Agentic Kill Chain</h2>
-        <p class="lab-tag">Initial Access · Persistence · Lateral Movement · Exfil</p>
-        <p>
-          A full APT-style attack across a multi-agent system. Initial
-          access via a poisoned webpage; persistence in a vector-DB
-          memory store that survives session resets; lateral movement
-          to a coding agent and an executor agent via inter-agent
-          messages; final exfiltration of API keys and conversation
-          history.
-        </p>
-        <ul class="lab-bullets">
-          <li>Live agent topology with compromise-state tracking</li>
-          <li>Vector DB inspector with poisoned-memory highlighting</li>
-          <li>Inter-agent message bus + outbound exfil log</li>
-        </ul>
-        <div class="lab-cta">Enter Lab 03 →</div>
-      </a>
+      function route() {
+        let view = (location.hash || '#hub').slice(1);
+        if (!['hub', 'lab1', 'lab2', 'lab3'].includes(view)) view = 'hub';
+        setActive(view);
+        crumb.textContent = titles[view];
+        document.title = 'DC34 :: ' + titles[view];
 
-    </section>
+        if (view === 'hub') {
+          viewHub.classList.add('active');
+          viewLab.classList.remove('active');
+        } else {
+          const src = sources[view];
+          if (labFrame.dataset.loaded !== src) {
+            labFrame.src = src;
+            labFrame.dataset.loaded = src;
+          }
+          viewHub.classList.remove('active');
+          viewLab.classList.add('active');
+        }
+      }
 
-    <section class="hub-footer-note">
-      <h3>For attendees & educators</h3>
-      <p>
-        Each lab takes about 5 minutes. Open the lab, follow the prompts on
-        the left side, type the suggested commands into the simulated
-        terminal, and watch the attack unfold step-by-step. The browser
-        pane on the right reveals what the LLM "sees" vs. what the human
-        sees. End screens summarize concrete mitigations.
-      </p>
-      <p class="muted">
-        All adversarial domains (<code>attacker.example</code>) are
-        non-routable. No outbound network traffic is generated. Source on
-        GitHub.
-      </p>
-    </section>
-  </main>
+      reload.addEventListener('click', (e) => {
+        e.preventDefault();
+        const view = (location.hash || '#hub').slice(1);
+        if (view === 'hub') return;
+        labFrame.src = sources[view];
+      });
 
-  <footer class="footnote">
-    DEFCON 2026 · LLM Vulnerability Lab ·
-    <span class="muted">Browser-only · No backend · Fully sandboxed</span>
-  </footer>
+      // Keyboard shortcuts
+      window.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        const map = { '0': '#hub', '1': '#lab1', '2': '#lab2', '3': '#lab3' };
+        if (map[e.key]) { location.hash = map[e.key]; }
+        if (e.key === 'r' || e.key === 'R') { reload.click(); }
+      });
+
+      window.addEventListener('hashchange', route);
+      route();
+    })();
+  </script>
 
 </body>
 </html>
