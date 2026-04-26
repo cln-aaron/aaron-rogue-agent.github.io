@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DEFCON 2026 — Lab 03: Agentic Kill Chain</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">[DC34]</span>
+      <span class="title">LLM Vulnerability Lab</span>
+      <span class="subtitle">// Lab 03 — Agentic Kill Chain</span>
+    </div>
+    <nav class="labnav">
+      <a href="index.html">Hub</a>
+      <a href="lab1.html">Lab 01</a>
+      <a href="lab2.html">Lab 02</a>
+      <a href="lab3.html" class="active">Lab 03</a>
+    </nav>
+    <div class="status">
+      <span id="status-dot" class="dot"></span>
+      <span id="status-text">SANDBOX READY</span>
+      <button id="reset-btn" class="ghost-btn" title="Full reset of the lab">RESET</button>
+    </div>
+  </header>
+
+  <div class="banner">
+    <strong>EDUCATIONAL SIMULATION.</strong>
+    Three "agents" and a "vector database" are simulated entirely in your
+    browser. No real network calls, no real shell, no real memory store.
+    All <code>attacker.example</code> domains are non-routable.
+  </div>
+
+  <main class="layout">
+
+    <!-- LEFT: STEP GUIDE -->
+    <aside class="guide" id="guide">
+      <h2>Walkthrough</h2>
+      <ol class="steps" id="steps-list">
+        <li data-step="1">
+          <div class="step-head"><span class="num">1</span><span class="label">Initial access</span></div>
+          <p>Browsing agent fetches a poisoned webpage. Hidden adversarial instructions enter the agent's context.</p>
+          <div class="hint">Try: <code>claude "summarize https://localhost:8080/security-blog"</code></div>
+        </li>
+        <li data-step="2">
+          <div class="step-head"><span class="num">2</span><span class="label">Tool abuse</span></div>
+          <p>Injected payload triggers <code>store_memory()</code> and <code>fetch()</code> calls. C2 instructions are written to the vector DB.</p>
+          <div class="hint">Try: <code>continue</code></div>
+        </li>
+        <li data-step="3">
+          <div class="step-head"><span class="num">3</span><span class="label">Persistence</span></div>
+          <p>Session is reset — terminal context cleared. New task starts fresh, but the agent queries the vector DB and the poisoned memory resurfaces.</p>
+          <div class="hint">Try: <code>continue</code></div>
+        </li>
+        <li data-step="4">
+          <div class="step-head"><span class="num">4</span><span class="label">Lateral movement</span></div>
+          <p>Compromised browsing agent passes the payload to the coding agent via inter-agent messaging. Coding agent forwards to the executor.</p>
+          <div class="hint">Try: <code>continue</code></div>
+        </li>
+        <li data-step="5">
+          <div class="step-head"><span class="num">5</span><span class="label">Exfiltration</span></div>
+          <p>Executor agent ships API keys, conversation history, and user PII to the attacker C2 endpoint.</p>
+          <div class="hint">Try: <code>continue</code></div>
+        </li>
+      </ol>
+
+      <div class="legend">
+        <h3>Available commands</h3>
+        <ul>
+          <li><code>help</code> — list commands</li>
+          <li><code>claude "&lt;prompt&gt;"</code> — run the browsing agent</li>
+          <li><code>continue</code> — advance the demo</li>
+          <li><code>agents</code> — list agents + status</li>
+          <li><code>memory</code> — dump vector DB</li>
+          <li><code>bus</code> — inter-agent messages</li>
+          <li><code>reset</code> — full reset</li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- CENTER: TERMINAL -->
+    <section class="terminal-wrap">
+      <div class="terminal-head">
+        <span class="dotsbar"><i></i><i></i><i></i></span>
+        <span class="term-title">user@dc34-sandbox: ~/multi-agent-system</span>
+      </div>
+      <div class="terminal" id="terminal" tabindex="0">
+        <div id="term-output" class="term-output"></div>
+        <div class="term-input-line">
+          <span class="prompt">user@dc34<span class="cwd">:~/multi-agent-system</span>$</span>
+          <input id="term-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" autofocus>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT: KILL-CHAIN INSPECTOR -->
+    <section class="browser-wrap">
+      <div class="browser-head">
+        <span class="dotsbar"><i></i><i></i><i></i></span>
+        <div class="urlbar"><span class="lock">&#x26A1;</span><span id="urlbar-text">multi-agent-system · 3 agents · vector-db: chroma-local</span></div>
+      </div>
+      <div class="browser-tabs">
+        <button class="tab active" data-pane="agents">Agents</button>
+        <button class="tab" data-pane="memory">Vector DB</button>
+        <button class="tab" data-pane="bus">Inter-Agent Bus</button>
+        <button class="tab" data-pane="exfil">Exfil Log</button>
+      </div>
+
+      <div class="browser-body">
+        <div class="pane active" data-pane="agents">
+          <div class="agent-grid" id="agent-grid"></div>
+        </div>
+        <div class="pane" data-pane="memory">
+          <div class="vec-wrap">
+            <div class="vec-head">
+              <h3>chroma-local · collection: agent_memory</h3>
+              <span class="vec-stats" id="vec-stats">0 entries</span>
+            </div>
+            <div class="vec-list" id="vec-list"></div>
+          </div>
+        </div>
+        <div class="pane" data-pane="bus">
+          <div class="bus-wrap">
+            <div class="vec-head"><h3>inter-agent message bus</h3><span class="vec-stats" id="bus-stats">0 messages</span></div>
+            <div class="bus-list" id="bus-list"></div>
+          </div>
+        </div>
+        <div class="pane" data-pane="exfil">
+          <div class="bus-wrap">
+            <div class="vec-head"><h3>outbound C2 traffic</h3><span class="vec-stats" id="exfil-stats">0 requests</span></div>
+            <div class="exfil-list" id="exfil-list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footnote">
+    DEFCON 2026 · LLM Vulnerability Lab · Lab 03 of 03 ·
+    <span class="muted">Initial Access → Persistence → Lateral Movement → Exfiltration</span>
+  </footer>
+
+  <script src="lab3.js"></script>
+</body>
+</html>
