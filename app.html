@@ -185,7 +185,7 @@
             <h2>Tool Response Poisoning</h2>
             <p class="lab-tag">compromised tool · trusted output channel</p>
             <p>An agent calls a routine <code>get_weather()</code> tool. The
-              compromised API returns valid data — plus a
+              compromised API returns valid data; plus a
               <code>debug_note</code> field carrying instructions. The agent
               chains into <code>send_email()</code> and exfiltrates API
               keys.</p>

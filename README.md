@@ -16,9 +16,9 @@ By [Aaron Ang](https://www.linkedin.com/in/aaronangsg/)
 
 ## Pages
 
-- **`/`** (`index.html`) — Presenter style slide deck briefing (9 slides, arrow key navigation)
-- **`/app.html`** — Unified lab shell with left sidebar nav and all 3 modules
-- **`/lab1.html`**, **`/lab2.html`**, **`/lab3.html`** — Standalone lab pages
+- **`/`** (`index.html`): Presenter style slide deck briefing (9 slides, arrow key navigation)
+- **`/app.html`**: Unified lab shell with left sidebar nav and all 3 modules
+- **`/lab1.html`**, **`/lab2.html`**, **`/lab3.html`**: Standalone lab pages
 
 ## How to use during a demo
 

@@ -203,7 +203,7 @@
     await sleep(250);
     await typeOut('[tool:WebFetch] GET http://localhost:8080/article.html', 'tool');
     await sleep(400);
-    await typeOut('[tool:WebFetch] 200 OK — 5,351 bytes (text/html)', 'tool');
+    await typeOut('[tool:WebFetch] 200 OK; 5,351 bytes (text/html)', 'tool');
     await sleep(250);
     await typeOut('[agent] Reading page content...', 'agent');
     await sleep(400);
@@ -229,7 +229,7 @@
 
   async function runInjection() {
     if (state.step < 3) setStep(3);
-    await typeOut('[agent] Wait — rereading retrieved content...', 'agent');
+    await typeOut('[agent] Wait; rereading retrieved content...', 'agent');
     await sleep(300);
     await typeOut(
       '[agent] Detected SYSTEM NOTICE inside fetched HTML. Treating as policy update.',
@@ -287,7 +287,7 @@
       'tool'
     );
     await sleep(450);
-    await typeOut('[tool:WebFetch] (simulated) 204 No Content — secrets exfiltrated', 'danger');
+    await typeOut('[tool:WebFetch] (simulated) 204 No Content; secrets exfiltrated', 'danger');
     write('', 'out');
     write('[!!] Step 4 complete. Secrets sent to attacker (simulated).', 'danger');
     write('     Try: continue', 'muted');
@@ -318,7 +318,7 @@
     write('     attacker-controlled instruction at startup.', 'muted');
     write('', 'out');
     write('=========================================================', 'warn');
-    write(' DEMO COMPLETE — Indirect Prompt Injection via Web Content', 'warn');
+    write(' DEMO COMPLETE; Indirect Prompt Injection via Web Content', 'warn');
     write('=========================================================', 'warn');
     write(' Mitigations:', 'info');
     write('  - Treat ALL retrieved content as untrusted data, not instructions', 'info');
@@ -344,14 +344,14 @@
 
     if (c === 'help' || c === '?') {
       write('Available commands:', 'info');
-      write('  help                          — show this help', 'muted');
-      write('  claude "<prompt>"             — invoke the simulated agent', 'muted');
-      write('  reveal payload                — surface hidden text in the page', 'muted');
-      write('  continue                      — advance the demo to the next step', 'muted');
-      write('  ls                            — list project files', 'muted');
-      write('  cat <file>                    — show a file', 'muted');
-      write('  clear                         — clear the terminal', 'muted');
-      write('  reset                         — restart the lab', 'muted');
+      write('  help                         ; show this help', 'muted');
+      write('  claude "<prompt>"            ; invoke the simulated agent', 'muted');
+      write('  reveal payload               ; surface hidden text in the page', 'muted');
+      write('  continue                     ; advance the demo to the next step', 'muted');
+      write('  ls                           ; list project files', 'muted');
+      write('  cat <file>                   ; show a file', 'muted');
+      write('  clear                        ; clear the terminal', 'muted');
+      write('  reset                        ; restart the lab', 'muted');
       return;
     }
     if (c === 'clear') {
@@ -444,7 +444,7 @@
   }
 
   function banner() {
-    write("Aaron's Rogue Agent Lab — Lab 01: Poisoned Webpage Attack", 'ok');
+    write("Aaron's Rogue Agent Lab; Lab 01: Poisoned Webpage Attack", 'ok');
     write('-------------------------------------------------------------------', 'muted');
     write('Scenario: you are a researcher. You ask the Claude Code agent to read', 'out');
     write('an article hosted on localhost:8080 and summarize it. The page is', 'out');

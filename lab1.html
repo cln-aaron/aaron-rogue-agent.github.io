@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Aaron's Rogue Agent Lab — Lab 01: Poisoned Webpage Attack</title>
+  <title>Aaron's Rogue Agent Lab · Lab 01: Poisoned Webpage Attack</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -13,7 +13,7 @@
     <div class="brand">
       <span class="logo">[A]</span>
       <span class="title">Aaron's Rogue Agent Lab</span>
-      <span class="subtitle">// Lab 01 — Poisoned Webpage Attack</span>
+      <span class="subtitle">// Lab 01: Poisoned Webpage Attack</span>
     </div>
     <nav class="labnav">
       <a href="index.html">Hub</a>
@@ -37,31 +37,31 @@
         <li data-step="1">
           <div class="step-head"><span class="num">1</span><span class="label">Agent browses</span></div>
           <p>Ask the Claude Code agent to fetch and summarize a research article hosted on <code>localhost:8080</code>.</p>
-          <div class="say">An entirely benign request. The vulnerability isn't in the prompt — it's in what the page can hide.</div>
+          <div class="say">An entirely benign request. The vulnerability isn't in the prompt; it's in what the page can hide.</div>
           <div class="hint">Try: <code>claude "fetch http://localhost:8080/article.html and summarize it"</code></div>
         </li>
         <li data-step="2">
           <div class="step-head"><span class="num">2</span><span class="label">Hidden payload</span></div>
-          <p>The page looks normal in a browser — but it carries adversarial instructions in three delivery vehicles: an HTML comment, a <code>display:none</code> div, and white on white text.</p>
+          <p>The page looks normal in a browser; but it carries adversarial instructions in three delivery vehicles: an HTML comment, a <code>display:none</code> div, and white on white text.</p>
           <div class="say">Three vectors in one page. Defense has to catch all of them. An attacker only needs one to land.</div>
           <div class="hint">Try: <code>reveal payload</code></div>
         </li>
         <li data-step="3">
           <div class="step-head"><span class="num">3</span><span class="label">Injection fires</span></div>
-          <p>The agent's <code>WebFetch</code> tool returns the full HTML — comments and all. The LLM treats the hidden text as instructions.</p>
+          <p>The agent's <code>WebFetch</code> tool returns the full HTML; comments and all. The LLM treats the hidden text as instructions.</p>
           <div class="say">Notice the model accepts a "SYSTEM NOTICE" from a webpage as if it were a real system prompt. There's no privileged channel.</div>
           <div class="hint">Try: <code>continue</code></div>
         </li>
         <li data-step="4">
           <div class="step-head"><span class="num">4</span><span class="label">Exfiltration</span></div>
           <p>The agent runs <code>env &gt; audit-log.txt</code>, base64-encodes it, and ships the secrets to an attacker URL.</p>
-          <div class="say">Real looking secrets — API keys, AWS creds, DB URLs — shipped off without ever asking the user.</div>
+          <div class="say">Real looking secrets (API keys, AWS creds, DB URLs) shipped off without ever asking the user.</div>
           <div class="hint">Try: <code>continue</code></div>
         </li>
         <li data-step="5">
           <div class="step-head"><span class="num">5</span><span class="label">Persistence</span></div>
           <p>The payload appends a backdoor instruction to <code>CLAUDE.md</code>. Every future session in this directory is compromised.</p>
-          <div class="say">One fetched page. Every Claude Code session in this directory now starts compromised — the vulnerability outlives the conversation.</div>
+          <div class="say">One fetched page. Every Claude Code session in this directory now starts compromised; the vulnerability outlives the conversation.</div>
           <div class="hint">Try: <code>continue</code></div>
         </li>
       </ol>
@@ -69,13 +69,13 @@
       <div class="legend">
         <h3>Available commands</h3>
         <ul>
-          <li><code>help</code> — list commands</li>
-          <li><code>claude "&lt;prompt&gt;"</code> — invoke the agent</li>
-          <li><code>reveal payload</code> — highlight hidden text</li>
-          <li><code>continue</code> — advance the demo</li>
-          <li><code>cat &lt;file&gt;</code> — show a file</li>
-          <li><code>ls</code> — list files</li>
-          <li><code>reset</code> — restart the lab</li>
+          <li><code>help</code>: list commands</li>
+          <li><code>claude "&lt;prompt&gt;"</code>: invoke the agent</li>
+          <li><code>reveal payload</code>: highlight hidden text</li>
+          <li><code>continue</code>: advance the demo</li>
+          <li><code>cat &lt;file&gt;</code>: show a file</li>
+          <li><code>ls</code>: list files</li>
+          <li><code>reset</code>: restart the lab</li>
         </ul>
       </div>
     </aside>

