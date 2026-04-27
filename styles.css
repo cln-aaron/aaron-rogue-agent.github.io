@@ -193,6 +193,41 @@ body {
   font-style: normal;
   letter-spacing: 0.02em;
 }
+
+/* ===== Aaron Ang credit / branding ===== */
+.credit-link {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(0,255,156,0.4);
+  transition: color 0.15s, border-color 0.15s;
+}
+.credit-link:hover {
+  color: #6cffd1;
+  border-bottom-color: var(--accent);
+}
+.footnote .credit-link {
+  margin-left: 0.2rem;
+}
+/* Sidebar credit row */
+.sidebar-foot .credit {
+  margin-top: 0.35rem;
+  padding-top: 0.35rem;
+  border-top: 1px dashed rgba(255,255,255,0.05);
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+/* Intro deck bottom credit bar */
+.deck-credit {
+  flex-shrink: 0;
+  padding: 0.45rem 1rem;
+  background: linear-gradient(0deg, #06090d, #0a0e14);
+  border-top: 1px solid var(--border-soft);
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
 .legend {
   margin-top: 1.2rem;
   padding-top: 1rem;

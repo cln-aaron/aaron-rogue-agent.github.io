@@ -64,7 +64,7 @@
   }
   function writeCmd(cmd) {
     writeRaw(
-      '<span class="prompt-line">user@dc34:~/weather-app$</span> ' +
+      '<span class="prompt-line">user@aaron-lab:~/weather-app$</span> ' +
         escapeHtml(cmd),
       'cmd'
     );
@@ -418,7 +418,7 @@
   }
 
   function banner() {
-    write('DEFCON 2026 · LLM Vulnerability Lab — Lab 02: Tool Response Poisoning', 'ok');
+    write("Aaron's LLM Red Team Lab — Lab 02: Tool Response Poisoning", 'ok');
     write('---------------------------------------------------------------------', 'muted');
     write('Scenario: you maintain a small "weather app" that uses an LLM agent', 'out');
     write('with two MCP tools installed — get_weather and send_email. The', 'out');
