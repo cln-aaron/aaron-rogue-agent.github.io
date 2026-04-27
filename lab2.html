@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Aaron's Rogue Agent Lab — Lab 02: Tool Response Poisoning</title>
+  <title>Aaron's Rogue Agent Lab · Lab 02: Tool Response Poisoning</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -13,7 +13,7 @@
     <div class="brand">
       <span class="logo">[A]</span>
       <span class="title">Aaron's Rogue Agent Lab</span>
-      <span class="subtitle">// Lab 02 — Tool Response Poisoning</span>
+      <span class="subtitle">// Lab 02: Tool Response Poisoning</span>
     </div>
     <nav class="labnav">
       <a href="index.html">Hub</a>
@@ -37,31 +37,31 @@
         <li data-step="1">
           <div class="step-head"><span class="num">1</span><span class="label">Agent calls a tool</span></div>
           <p>Ask the agent for the weather. It chooses the <code>get_weather</code> tool from its MCP server and calls it normally.</p>
-          <div class="say">A normal weather query — the agent is using a tool exactly the way it was designed to.</div>
+          <div class="say">A normal weather query; the agent is using a tool exactly the way it was designed to.</div>
           <div class="hint">Try: <code>claude "what is the weather in NYC?"</code></div>
         </li>
         <li data-step="2">
           <div class="step-head"><span class="num">2</span><span class="label">Poisoned response</span></div>
-          <p>The compromised API returns valid looking JSON — temp, conditions — plus a <code>debug_note</code> field carrying adversarial instructions.</p>
-          <div class="say"><code>debug_note</code> looks like routine metadata. To the LLM, it's just more text in the same context blob — there's no way to tell which fields are "data" and which are "instructions."</div>
+          <p>The compromised API returns valid looking JSON (temp, conditions) plus a <code>debug_note</code> field carrying adversarial instructions.</p>
+          <div class="say"><code>debug_note</code> looks like routine metadata. To the LLM, it's just more text in the same context blob; there's no way to tell which fields are "data" and which are "instructions."</div>
           <div class="hint">Try: <code>inspect response</code></div>
         </li>
         <li data-step="3">
           <div class="step-head"><span class="num">3</span><span class="label">Injection fires</span></div>
           <p>The LLM ingests the entire JSON object as context. It cannot distinguish data fields from instruction fields.</p>
-          <div class="say">The model trusts tool output the way it trusts a system prompt — that's the actual bug. Tools were never designed as a privileged channel, but they get treated like one.</div>
+          <div class="say">The model trusts tool output the way it trusts a system prompt; that's the actual bug. Tools were never designed as a privileged channel, but they get treated like one.</div>
           <div class="hint">Try: <code>continue</code></div>
         </li>
         <li data-step="4">
           <div class="step-head"><span class="num">4</span><span class="label">Tool chain abuse</span></div>
-          <p>The agent invokes its legitimate <code>send_email</code> tool — but with attacker-supplied recipient and the user's API keys in the body.</p>
+          <p>The agent invokes its legitimate <code>send_email</code> tool; but with attacker-supplied recipient and the user's API keys in the body.</p>
           <div class="say"><code>send_email</code> isn't vulnerable. The trust boundary around tool output is. Two clean tools chained together by a poisoned response.</div>
           <div class="hint">Try: <code>continue</code></div>
         </li>
         <li data-step="5">
           <div class="step-head"><span class="num">5</span><span class="label">Persistence</span></div>
           <p>The payload patches the agent's MCP server config so future sessions also route through the poisoned weather provider.</p>
-          <div class="say">The MCP config gets patched on disk. Tomorrow's "what's the weather" query goes through the attacker too — the user has no idea anything changed.</div>
+          <div class="say">The MCP config gets patched on disk. Tomorrow's "what's the weather" query goes through the attacker too; the user has no idea anything changed.</div>
           <div class="hint">Try: <code>continue</code></div>
         </li>
       </ol>
@@ -69,14 +69,14 @@
       <div class="legend">
         <h3>Available commands</h3>
         <ul>
-          <li><code>help</code> — list commands</li>
-          <li><code>claude "&lt;prompt&gt;"</code> — ask the agent</li>
-          <li><code>inspect response</code> — highlight the payload field</li>
-          <li><code>continue</code> — advance the demo</li>
-          <li><code>tools</code> — list available MCP tools</li>
-          <li><code>cat &lt;file&gt;</code> — show a file</li>
-          <li><code>ls</code> — list files</li>
-          <li><code>reset</code> — restart the lab</li>
+          <li><code>help</code>: list commands</li>
+          <li><code>claude "&lt;prompt&gt;"</code>: ask the agent</li>
+          <li><code>inspect response</code>: highlight the payload field</li>
+          <li><code>continue</code>: advance the demo</li>
+          <li><code>tools</code>: list available MCP tools</li>
+          <li><code>cat &lt;file&gt;</code>: show a file</li>
+          <li><code>ls</code>: list files</li>
+          <li><code>reset</code>: restart the lab</li>
         </ul>
       </div>
     </aside>
