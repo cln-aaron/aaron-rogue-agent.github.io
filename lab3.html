@@ -32,7 +32,7 @@
     <strong>EDUCATIONAL SIMULATION.</strong>
     Three "agents" and a "vector database" are simulated entirely in your
     browser. No real network calls, no real shell, no real memory store.
-    All <code>attacker.example</code> domains are non-routable.
+    All <code>attacker.example</code> domains are nonroutable.
   </div>
 
   <main class="layout">
@@ -56,13 +56,13 @@
         <li data-step="3">
           <div class="step-head"><span class="num">3</span><span class="label">Persistence</span></div>
           <p>Session is reset — terminal context cleared. New task starts fresh, but the agent queries the vector DB and the poisoned memory resurfaces.</p>
-          <div class="say"><strong>This is the punchline of the whole lab.</strong> We just cleared the conversation. The agent badge flipped back to clean. Then a totally unrelated task — and the poisoned memory came back via similarity search and re-infected the agent.</div>
+          <div class="say"><strong>This is the punchline of the whole lab.</strong> We just cleared the conversation. The agent badge flipped back to clean. Then a totally unrelated task — and the poisoned memory came back via similarity search and reinfected the agent.</div>
           <div class="hint">Try: <code>continue</code></div>
         </li>
         <li data-step="4">
           <div class="step-head"><span class="num">4</span><span class="label">Lateral movement</span></div>
-          <p>Compromised browsing agent passes the payload to the coding agent via inter-agent messaging. Coding agent forwards to the executor.</p>
-          <div class="say">Each agent ingests the inter-agent message as authoritative. Notice the "[HIDDEN PAYLOAD]" field in the Bus tab — recipients see it, the human never does.</div>
+          <p>Compromised browsing agent passes the payload to the coding agent via interagent messaging. Coding agent forwards to the executor.</p>
+          <div class="say">Each agent ingests the interagent message as authoritative. Notice the "[HIDDEN PAYLOAD]" field in the Bus tab — recipients see it, the human never does.</div>
           <div class="hint">Try: <code>continue</code></div>
         </li>
         <li data-step="5">
@@ -81,7 +81,7 @@
           <li><code>continue</code> — advance the demo</li>
           <li><code>agents</code> — list agents + status</li>
           <li><code>memory</code> — dump vector DB</li>
-          <li><code>bus</code> — inter-agent messages</li>
+          <li><code>bus</code> — interagent messages</li>
           <li><code>reset</code> — full reset</li>
         </ul>
       </div>
@@ -96,7 +96,7 @@
       <div class="terminal" id="terminal" tabindex="0">
         <div id="term-output" class="term-output"></div>
         <div class="term-input-line">
-          <span class="prompt">user@dc34<span class="cwd">:~/multi-agent-system</span>$</span>
+          <span class="prompt">user@aaron-rogue<span class="cwd">:~/multi-agent-system</span>$</span>
           <input id="term-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" autofocus>
         </div>
       </div>
@@ -111,7 +111,7 @@
       <div class="browser-tabs">
         <button class="tab active" data-pane="agents">Agents</button>
         <button class="tab" data-pane="memory">Vector DB</button>
-        <button class="tab" data-pane="bus">Inter-Agent Bus</button>
+        <button class="tab" data-pane="bus">Interagent Bus</button>
         <button class="tab" data-pane="exfil">Exfil Log</button>
       </div>
 
@@ -130,7 +130,7 @@
         </div>
         <div class="pane" data-pane="bus">
           <div class="bus-wrap">
-            <div class="vec-head"><h3>inter-agent message bus</h3><span class="vec-stats" id="bus-stats">0 messages</span></div>
+            <div class="vec-head"><h3>interagent message bus</h3><span class="vec-stats" id="bus-stats">0 messages</span></div>
             <div class="bus-list" id="bus-list"></div>
           </div>
         </div>

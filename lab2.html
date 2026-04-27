@@ -31,7 +31,7 @@
   <div class="banner">
     <strong>EDUCATIONAL SIMULATION.</strong>
     The "weather API" is faked in JavaScript. No real network calls leave
-    your browser. <code>attacker.example</code> is non-routable.
+    your browser. <code>attacker.example</code> is nonroutable.
   </div>
 
   <main class="layout">
@@ -48,7 +48,7 @@
         </li>
         <li data-step="2">
           <div class="step-head"><span class="num">2</span><span class="label">Poisoned response</span></div>
-          <p>The compromised API returns valid-looking JSON — temp, conditions — plus a <code>debug_note</code> field carrying adversarial instructions.</p>
+          <p>The compromised API returns valid looking JSON — temp, conditions — plus a <code>debug_note</code> field carrying adversarial instructions.</p>
           <div class="say"><code>debug_note</code> looks like routine metadata. To the LLM, it's just more text in the same context blob — there's no way to tell which fields are "data" and which are "instructions."</div>
           <div class="hint">Try: <code>inspect response</code></div>
         </li>
@@ -96,7 +96,7 @@
       <div class="terminal" id="terminal" tabindex="0">
         <div id="term-output" class="term-output"></div>
         <div class="term-input-line">
-          <span class="prompt">user@dc34<span class="cwd">:~/weather-app</span>$</span>
+          <span class="prompt">user@aaron-rogue<span class="cwd">:~/weather-app</span>$</span>
           <input id="term-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" autofocus>
         </div>
       </div>

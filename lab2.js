@@ -293,8 +293,8 @@
     write('  - Schema-validate tool output; reject unknown fields', 'info');
     write('  - Require human approval for sensitive tool chains (email, file)', 'info');
     write('  - Pin & checksum MCP server packages; alert on config changes', 'info');
-    write('  - Scope agent tokens — never expose .env to a tool-using agent', 'info');
-    write('  - Log every tool call + response; flag instruction-shaped strings', 'info');
+    write('  - Scope agent tokens — never expose .env to a tool using agent', 'info');
+    write('  - Log every tool call + response; flag instruction shaped strings', 'info');
     write('', 'out');
     write("Type 'reset' to run the demo again, or visit /index.html for Lab 01.", 'muted');
   }

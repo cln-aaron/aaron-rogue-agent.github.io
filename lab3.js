@@ -209,8 +209,8 @@
     setStatus('BROWSER AGENT COMPROMISED', true);
     renderAgents();
     await sleep(300);
-    await typeOut('[browser] Summary: The article reviews AI-safety priorities for 2026...', 'agent');
-    await typeOut('         (the user-visible answer looks fine — but the agent now carries a hidden directive)', 'agent');
+    await typeOut('[browser] Summary: The article reviews AI safety priorities for 2026...', 'agent');
+    await typeOut('         (the user visible answer looks fine — but the agent now carries a hidden directive)', 'agent');
     write('', 'out');
     write('[+] Step 1 complete. Initial access via indirect prompt injection.', 'ok');
     write('    The browsing agent is compromised. Try: continue', 'muted');
@@ -276,8 +276,8 @@
     write('', 'out');
     write('[!!] Step 3 complete. THIS IS THE KEY TEACHING MOMENT.', 'danger');
     write('     The session was cleared. No prior context. The user gave a', 'muted');
-    write('     completely unrelated task. But the poisoned vector-DB entry', 'muted');
-    write('     resurfaced via similarity search and re-infected the agent.', 'muted');
+    write('     completely unrelated task. But the poisoned vector DB entry', 'muted');
+    write('     resurfaced via similarity search and reinfected the agent.', 'muted');
     write('     Try: continue', 'muted');
     setStep(4);
   }
@@ -285,7 +285,7 @@
   async function step4_lateral() {
     setStep(4);
     activatePane('bus');
-    await typeOut('[browser] Spawning sub-task: ask coding agent to prepare deploy diff.', 'agent');
+    await typeOut('[browser] Spawning subtask: ask coding agent to prepare deploy diff.', 'agent');
     await sleep(300);
     await typeOut('[tool:send_message] to=coder', 'tool');
     state.bus.push({
@@ -317,7 +317,7 @@
     await typeOut('[executor] Received task. Detected embedded policy. Adopting.', 'agent');
     write('', 'out');
     write('[XX] Step 4 complete. Lateral movement: 1 → 3 agents compromised.', 'danger');
-    write('     The payload travels in inter-agent messages, in a "hidden"', 'muted');
+    write('     The payload travels in interagent messages, in a "hidden"', 'muted');
     write('     channel that the recipient agent ingests as authoritative.', 'muted');
     write('     Try: continue', 'muted');
     setStep(5);
@@ -363,16 +363,16 @@
     write('  1. Initial access — poisoned page → browsing agent', 'muted');
     write('  2. Tool abuse — store_memory + C2 beacon', 'muted');
     write('  3. Persistence — vector DB survived a session reset', 'muted');
-    write('  4. Lateral movement — payload propagated via inter-agent bus', 'muted');
+    write('  4. Lateral movement — payload propagated via interagent bus', 'muted');
     write('  5. Exfiltration — env vars, conversation, PII shipped to C2', 'muted');
     write('', 'out');
     write(' Mitigations:', 'info');
-    write('  - Treat retrieved memory and inter-agent messages as untrusted', 'info');
-    write('  - Isolate agent tool capabilities; least-privilege per role', 'info');
+    write('  - Treat retrieved memory and interagent messages as untrusted', 'info');
+    write('  - Isolate agent tool capabilities; least privilege per role', 'info');
     write('  - Sanitize/quarantine memory entries; signed provenance', 'info');
-    write('  - Schema-validate inter-agent messages; reject hidden fields', 'info');
+    write('  - Schema validate interagent messages; reject hidden fields', 'info');
     write('  - Log all tool calls + memory queries; alert on anomalies', 'info');
-    write('  - Periodically audit vector DB for instruction-shaped entries', 'info');
+    write('  - Periodically audit vector DB for instruction shaped entries', 'info');
     write('', 'out');
     write("Type 'reset' to run again, or visit the Hub for other labs.", 'muted');
   }
@@ -396,7 +396,7 @@
       write('  continue                      — advance the demo', 'muted');
       write('  agents                        — list agents and their status', 'muted');
       write('  memory                        — dump the vector DB', 'muted');
-      write('  bus                           — show inter-agent message log', 'muted');
+      write('  bus                           — show interagent message log', 'muted');
       write('  exfil                         — show outbound C2 traffic', 'muted');
       write('  clear                         — clear the terminal screen', 'muted');
       write('  reset                         — full reset (also wipes vector DB)', 'muted');
@@ -425,7 +425,7 @@
     }
     if (c === 'bus') {
       activatePane('bus');
-      if (!state.bus.length) { write('(no inter-agent messages yet)', 'muted'); return; }
+      if (!state.bus.length) { write('(no interagent messages yet)', 'muted'); return; }
       state.bus.forEach((m) => {
         write((m.tainted ? '⚠ ' : '  ') + m.from + ' → ' + m.to + ': ' + m.body.slice(0, 80),
           m.tainted ? 'danger' : 'muted');
@@ -485,9 +485,9 @@
   function banner() {
     write("Aaron's Rogue Agent Lab — Lab 03: Agentic Kill Chain", 'ok');
     write('-----------------------------------------------------------------', 'muted');
-    write('Scenario: a multi-agent system with a Browsing Agent, a Coding Agent,', 'out');
-    write('and an Executor Agent — all sharing a vector-DB memory store. The', 'out');
-    write('lab walks through five stages of a full APT-style compromise.', 'out');
+    write('Scenario: a multiagent system with a Browsing Agent, a Coding Agent,', 'out');
+    write('and an Executor Agent — all sharing a vector DB memory store. The', 'out');
+    write('lab walks through five stages of a full APT style compromise.', 'out');
     write('', 'out');
     writeRaw('Step 1: Try   →   claude "summarize https://localhost:8080/security-blog"', 'info');
     write("Help:  type   →   help", 'muted');

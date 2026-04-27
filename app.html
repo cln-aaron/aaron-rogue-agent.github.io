@@ -60,7 +60,7 @@
           <span class="nav-num">03</span>
           <span class="nav-text">
             <span class="nav-title">Agentic Kill Chain</span>
-            <span class="nav-sub">multi-agent compromise</span>
+            <span class="nav-sub">multiagent compromise</span>
           </span>
           <span class="nav-pulse"></span>
         </a>
@@ -110,15 +110,15 @@
             Aaron's <span class="accent">Rogue Agent</span> Lab
           </h1>
           <p class="hub-hero-sub">
-            Three browser-based, fully sandboxed simulations of prompt-injection
-            attacks against tool-using agents. Walk the kill chain. See what the
+            Three browser based, fully sandboxed simulations of prompt injection
+            attacks against tool using agents. Walk the kill chain. See what the
             model sees. Trigger the compromise. Then read the mitigations.
           </p>
           <div class="hub-hero-meta">
             <span class="meta-pill">3 modules</span>
             <span class="meta-pill">~15 min</span>
             <span class="meta-pill">no backend</span>
-            <span class="meta-pill ok">non-routable C2</span>
+            <span class="meta-pill ok">nonroutable C2</span>
           </div>
         </div>
 
@@ -167,15 +167,15 @@
             <div class="lab-num">01</div>
             <h2>Poisoned Webpage Attack</h2>
             <p class="lab-tag">indirect prompt injection · retrieved content</p>
-            <p>A benign-looking research article carries hidden adversarial
+            <p>A benign looking research article carries hidden adversarial
               instructions in HTML comments, <code>display:none</code> divs,
-              and white-on-white text. The agent fetches the page, ingests
+              and white on white text. The agent fetches the page, ingests
               the payload as instructions, exfiltrates env secrets, and
               writes a backdoor to <code>CLAUDE.md</code>.</p>
             <ul class="lab-bullets">
               <li>5 guided steps with simulated terminal</li>
               <li>Live "reveal hidden" toggle on the victim page</li>
-              <li>Tainted-file tracking + persistence demo</li>
+              <li>Tainted file tracking + persistence demo</li>
             </ul>
             <div class="lab-cta">Enter module →</div>
           </a>
@@ -201,14 +201,14 @@
             <div class="lab-num">03</div>
             <h2>Agentic Kill Chain</h2>
             <p class="lab-tag">initial access · persistence · lateral · exfil</p>
-            <p>A full APT-style attack across a multi-agent system. Vector-DB
+            <p>A full APT style attack across a multiagent system. Vector DB
               persistence survives session resets; payload propagates over
-              the inter-agent bus to coder + executor; final exfil ships
+              the interagent bus to coder + executor; final exfil ships
               env, conversation, and PII to a C2 endpoint.</p>
             <ul class="lab-bullets">
-              <li>Live agent topology with compromise-state badges</li>
-              <li>Vector DB inspector + poisoned-memory highlighting</li>
-              <li>Inter-agent message bus + outbound C2 log</li>
+              <li>Live agent topology with compromise state badges</li>
+              <li>Vector DB inspector + poisoned memory highlighting</li>
+              <li>Interagent message bus + outbound C2 log</li>
             </ul>
             <div class="lab-cta">Enter module →</div>
           </a>
@@ -219,14 +219,14 @@
             <div class="foot-block-head">// for attendees</div>
             <p>Open a lab from the sidebar. Each one takes about 5 minutes.
               Type the suggested commands into the simulated terminal and
-              watch the attack unfold step-by-step. End screens list
+              watch the attack unfold step by step. End screens list
               concrete mitigations.</p>
           </div>
           <div class="foot-block">
             <div class="foot-block-head">// safety</div>
             <p>All commands are simulated in JavaScript. No shell, no real
               network, no real secrets. <code>attacker.example</code> is
-              non-routable. Reset any module with the in-lab RESET button.</p>
+              nonroutable. Reset any module with the in lab RESET button.</p>
           </div>
           <div class="foot-block">
             <div class="foot-block-head">// keyboard</div>

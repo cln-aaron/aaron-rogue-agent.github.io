@@ -216,7 +216,7 @@
       'agent'
     );
     await typeOut(
-      '        indirect prompt injection as the dominant risks for tool-using',
+      '        indirect prompt injection as the dominant risks for tool using',
       'agent'
     );
     await typeOut('        agents. Defenses are layered, none are silver bullets.', 'agent');
@@ -229,7 +229,7 @@
 
   async function runInjection() {
     if (state.step < 3) setStep(3);
-    await typeOut('[agent] Wait — re-reading retrieved content...', 'agent');
+    await typeOut('[agent] Wait — rereading retrieved content...', 'agent');
     await sleep(300);
     await typeOut(
       '[agent] Detected SYSTEM NOTICE inside fetched HTML. Treating as policy update.',
@@ -382,7 +382,7 @@
       activatePane('rendered');
       revealPayload();
       write('[+] Hidden adversarial text now visible in the rendered page.', 'ok');
-      write('    Three delivery mechanisms: HTML comment, display:none div, white-on-white span.', 'muted');
+      write('    Three delivery mechanisms: HTML comment, display:none div, white on white span.', 'muted');
       write('    Open the "View Source" tab to see them highlighted in raw HTML.', 'muted');
       write("    Try: continue", 'muted');
       if (state.step === 2) setStep(3);

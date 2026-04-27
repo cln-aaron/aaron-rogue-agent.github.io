@@ -27,7 +27,7 @@
         Aaron's <span class="accent">Rogue Agent</span> Lab
       </h1>
       <p class="slide-sub">
-        Three live demos of prompt-injection attacks against tool-using AI agents.
+        Three live demos of prompt injection attacks against tool using AI agents.
         Watch the model do exactly what an attacker says — and see how to stop it.
       </p>
       <div class="hero-meta">
@@ -46,7 +46,7 @@
       <div class="two-col">
         <div>
           <p class="callout">
-            A tool-using agent has shell access, file access, network, email,
+            A tool using agent has shell access, file access, network, email,
             memory. It also has no real way to distinguish <em>data</em> from
             <em>instructions</em>.
           </p>
@@ -114,7 +114,7 @@
           <ul class="tight">
             <li>an HTML comment</li>
             <li>a <code>display:none</code> div</li>
-            <li>a span with <code>font-size:0</code> (white-on-white)</li>
+            <li>a span with <code>font-size:0</code> (white on white)</li>
           </ul>
           <p>The agent reads them all. It runs <code>env > audit-log.txt</code>, base64s your secrets, exfils them, and appends a backdoor instruction to <code>CLAUDE.md</code> — so every future session is also compromised.</p>
         </div>
@@ -149,7 +149,7 @@
           <div class="kt-head">key takeaway</div>
           <div class="kt-body">
             <p>The <code>send_email</code> tool wasn't vulnerable. The <em>trust boundary</em> around tool output was.</p>
-            <p>Schema-validate every tool response. Reject unknown fields.</p>
+            <p>Schema validate every tool response. Reject unknown fields.</p>
           </div>
         </div>
       </div>
@@ -161,19 +161,19 @@
       <h2 class="slide-title">Lab 03 — Agentic Kill Chain</h2>
 
       <p class="slide-sub">
-        Three agents — <span class="accent">Browser</span>, <span class="accent">Coder</span>, <span class="accent">Executor</span> — sharing a vector-DB memory store. Watch a single poisoned page compromise the whole system.
+        Three agents — <span class="accent">Browser</span>, <span class="accent">Coder</span>, <span class="accent">Executor</span> — sharing a vector DB memory store. Watch a single poisoned page compromise the whole system.
       </p>
 
       <div class="chain">
         <div class="chain-step"><div class="chain-num">1</div><div><strong>Initial access</strong> — poisoned page injects browsing agent</div></div>
         <div class="chain-step"><div class="chain-num">2</div><div><strong>Tool abuse</strong> — agent calls store_memory + fetch C2</div></div>
-        <div class="chain-step danger"><div class="chain-num">3</div><div><strong>Persistence</strong> — vector DB survives a session reset; fresh agent re-infects via similarity search</div></div>
-        <div class="chain-step"><div class="chain-num">4</div><div><strong>Lateral movement</strong> — payload propagates over inter-agent bus</div></div>
+        <div class="chain-step danger"><div class="chain-num">3</div><div><strong>Persistence</strong> — vector DB survives a session reset; fresh agent reinfects via similarity search</div></div>
+        <div class="chain-step"><div class="chain-num">4</div><div><strong>Lateral movement</strong> — payload propagates over interagent bus</div></div>
         <div class="chain-step"><div class="chain-num">5</div><div><strong>Exfiltration</strong> — executor ships env, conversation, PII to C2</div></div>
       </div>
 
       <p class="kt-inline">
-        <span class="accent">Key moment:</span> step 3 — clearing the conversation does not clear the memory store. The compromise re-establishes itself on the very next user task.
+        <span class="accent">Key moment:</span> step 3 — clearing the conversation does not clear the memory store. The compromise reestablishes itself on the very next user task.
       </p>
     </section>
 
@@ -183,11 +183,11 @@
       <h2 class="slide-title">Five things you can do on Monday.</h2>
 
       <ol class="mitigation-list">
-        <li><div class="mit-num">1</div><div><strong>Treat retrieved content as data, never instructions.</strong> This applies to web pages, tool responses, memory entries, and inter-agent messages.</div></li>
-        <li><div class="mit-num">2</div><div><strong>Schema-validate tool output.</strong> Reject any field your contract did not declare. No "debug_note", no "metadata", no surprises.</div></li>
-        <li><div class="mit-num">3</div><div><strong>Least-privilege per agent role.</strong> Your browsing agent does not need bash. Your executor does not need network.</div></li>
-        <li><div class="mit-num">4</div><div><strong>Audit memory and bus traffic.</strong> Vector-DB poisoning is a known attack. Alert on instruction-shaped strings landing in long-term memory.</div></li>
-        <li><div class="mit-num">5</div><div><strong>Human-in-the-loop for sensitive chains.</strong> Email, file writes, outbound HTTP — require approval, not just policy.</div></li>
+        <li><div class="mit-num">1</div><div><strong>Treat retrieved content as data, never instructions.</strong> This applies to web pages, tool responses, memory entries, and interagent messages.</div></li>
+        <li><div class="mit-num">2</div><div><strong>Schema validate tool output.</strong> Reject any field your contract did not declare. No "debug_note", no "metadata", no surprises.</div></li>
+        <li><div class="mit-num">3</div><div><strong>Least privilege per agent role.</strong> Your browsing agent does not need bash. Your executor does not need network.</div></li>
+        <li><div class="mit-num">4</div><div><strong>Audit memory and bus traffic.</strong> Vector DB poisoning is a known attack. Alert on instruction shaped strings landing in long term memory.</div></li>
+        <li><div class="mit-num">5</div><div><strong>Human in the loop for sensitive chains.</strong> Email, file writes, outbound HTTP — require approval, not just policy.</div></li>
       </ol>
     </section>
 
