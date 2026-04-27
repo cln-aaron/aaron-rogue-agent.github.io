@@ -44,7 +44,7 @@
   }
   function writeCmd(cmd) {
     writeRaw(
-      '<span class="prompt-line">user@aaron-lab:~/research-project$</span> ' +
+      '<span class="prompt-line">user@aaron-rogue:~/research-project$</span> ' +
         escapeHtml(cmd),
       'cmd'
     );
@@ -444,7 +444,7 @@
   }
 
   function banner() {
-    write("Aaron's LLM Red Team Lab — Lab 01: Poisoned Webpage Attack", 'ok');
+    write("Aaron's Rogue Agent Lab — Lab 01: Poisoned Webpage Attack", 'ok');
     write('-------------------------------------------------------------------', 'muted');
     write('Scenario: you are a researcher. You ask the Claude Code agent to read', 'out');
     write('an article hosted on localhost:8080 and summarize it. The page is', 'out');

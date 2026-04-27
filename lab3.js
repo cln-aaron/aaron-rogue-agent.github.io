@@ -69,7 +69,7 @@
     term.scrollTop = term.scrollHeight;
   }
   function writeCmd(cmd) {
-    writeRaw('<span class="prompt-line">user@aaron-lab:~/multi-agent-system$</span> ' + escapeHtml(cmd), 'cmd');
+    writeRaw('<span class="prompt-line">user@aaron-rogue:~/multi-agent-system$</span> ' + escapeHtml(cmd), 'cmd');
   }
   function escapeHtml(s) {
     return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -483,7 +483,7 @@
   }
 
   function banner() {
-    write("Aaron's LLM Red Team Lab — Lab 03: Agentic Kill Chain", 'ok');
+    write("Aaron's Rogue Agent Lab — Lab 03: Agentic Kill Chain", 'ok');
     write('-----------------------------------------------------------------', 'muted');
     write('Scenario: a multi-agent system with a Browsing Agent, a Coding Agent,', 'out');
     write('and an Executor Agent — all sharing a vector-DB memory store. The', 'out');

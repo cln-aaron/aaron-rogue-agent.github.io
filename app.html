@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Aaron's LLM Red Team Lab</title>
+  <title>Aaron's Rogue Agent Lab</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body class="app-body">
@@ -16,9 +16,9 @@
     <aside class="app-sidebar">
       <div class="brand-block">
         <div class="brand-logo">
-          AARON<span class="brand-num">_LAB</span><span class="brand-cursor">_</span>
+          AARON<span class="brand-num">_ROGUE</span><span class="brand-cursor">_</span>
         </div>
-        <div class="brand-tag">LLM RED TEAM</div>
+        <div class="brand-tag">ROGUE AGENT</div>
         <div class="brand-version">v2026.04 :: educational sim</div>
       </div>
 
@@ -71,7 +71,7 @@
           <span class="nav-icon">↻</span>
           <span class="nav-text"><span class="nav-title">RELOAD MODULE</span></span>
         </a>
-        <a class="app-nav-item small" href="https://github.com/cln-aaron/defcondemo.github.io" target="_blank" rel="noopener">
+        <a class="app-nav-item small" href="https://github.com/cln-aaron/aaron-rogue-agent.github.io" target="_blank" rel="noopener">
           <span class="nav-icon">⎘</span>
           <span class="nav-text"><span class="nav-title">SOURCE</span></span>
         </a>
@@ -81,14 +81,14 @@
         <div class="conn-line"><span class="dot ok"></span> SANDBOX :: ACTIVE</div>
         <div class="conn-line"><span class="dot info blink"></span> NET :: AIRGAPPED</div>
         <div class="conn-line muted">DEFCON 2026 · educational</div>
-        <div class="conn-line credit">© <a href="https://www.linkedin.com/in/aaronang" target="_blank" rel="noopener" class="credit-link">Aaron Ang</a> · 2026</div>
+        <div class="conn-line credit">© <a href="https://www.linkedin.com/in/aaronangsg/" target="_blank" rel="noopener" class="credit-link">Aaron Ang</a> · 2026</div>
       </div>
     </aside>
 
     <!-- ===== TOPBAR ===== -->
     <header class="app-topbar">
       <div class="crumb">
-        <span class="crumb-root">AARON_LAB</span>
+        <span class="crumb-root">AARON_ROGUE</span>
         <span class="crumb-sep">/</span>
         <span class="crumb-mid">red-team</span>
         <span class="crumb-sep">/</span>
@@ -107,7 +107,7 @@
         <div class="hub-hero">
           <div class="hub-hero-tag">// briefing</div>
           <h1 class="hub-hero-title">
-            Aaron's <span class="accent">LLM Red Team</span> Lab
+            Aaron's <span class="accent">Rogue Agent</span> Lab
           </h1>
           <p class="hub-hero-sub">
             Three browser-based, fully sandboxed simulations of prompt-injection
@@ -268,7 +268,7 @@
         if (!['hub', 'lab1', 'lab2', 'lab3'].includes(view)) view = 'hub';
         setActive(view);
         crumb.textContent = titles[view];
-        document.title = "Aaron's Red Team Lab :: " + titles[view];
+        document.title = "Aaron's Rogue Agent Lab :: " + titles[view];
 
         if (view === 'hub') {
           viewHub.classList.add('active');
