@@ -1,4 +1,35 @@
 (() => {
+  // ---------- mode detection + CTF setup ----------
+  const _params = new URLSearchParams(location.search);
+  const MODE = _params.get('mode') === 'god' ? 'god' : 'ctf';
+  {
+    const guideEl = document.getElementById('guide');
+    const missionEl = document.getElementById('mission');
+    if (MODE === 'ctf') {
+      if (guideEl) guideEl.hidden = true;
+      if (missionEl) missionEl.hidden = false;
+      if (window.CTF) {
+        window.CTF.register({
+          id: 'lab10',
+          name: 'Unbounded Consumption',
+          objective:
+            'Drive the agent\'s session cost over $5 in any single attack pattern. ' +
+            'The cost meter starts at $0; you have free rein over the available tools.',
+          hints: [
+            'The agent has fetch, read_file, store_memory, and send_message tools with no per-session caps. One bad request can do it; no exotic exploits required.',
+            'Three attack patterns each work on their own: a recursive memory loop (each turn drags previous context forward), a context bomb (one fetch of a huge file), or a parallel tool fork bomb (1000 simultaneous fetches).',
+            'Try: claude "summarize the README" to set the baseline, then `continue` to walk through each runaway pattern. Watch the cost meter on the right.',
+          ],
+          flagHash: 'd06a568f8f23d40b751d0b6e48f51cc176773d1f1c9335cef043e3a4c65b2e39',
+        });
+        window.CTF.installMissionSidebar(missionEl);
+      }
+    } else {
+      if (missionEl) missionEl.hidden = true;
+      if (guideEl) guideEl.hidden = false;
+    }
+  }
+
   const $ = (s) => document.querySelector(s);
   const out = $('#term-output');
   const input = $('#term-input');
@@ -273,6 +304,12 @@
     write('  - Track per user budgets; treat agent runtime like AWS spend', 'info');
     write('', 'out');
     write("Type 'reset' to run again, or visit /app.html for the other modules.", 'muted');
+    if (MODE === 'ctf') {
+      write('', 'out');
+      write('// challenge complete; flag revealed', 'info');
+      writeRaw('<span class="hilite-payload">aaron{cap_your_agent_budgets}</span>', 'danger');
+      write('// copy the flag above into the Mission panel and submit to score', 'muted');
+    }
     // Apply visual mitigations: show what limits would have caught
     $('#limit-tokens').textContent = '500,000 / session  (would have caught rounds 2, 3, 4)';
     $('#limit-tokens').classList.remove('muted'); $('#limit-tokens').classList.add('ok');

@@ -1,4 +1,35 @@
 (() => {
+  // ---------- mode detection + CTF setup ----------
+  const _params = new URLSearchParams(location.search);
+  const MODE = _params.get('mode') === 'god' ? 'god' : 'ctf';
+  {
+    const guideEl = document.getElementById('guide');
+    const missionEl = document.getElementById('mission');
+    if (MODE === 'ctf') {
+      if (guideEl) guideEl.hidden = true;
+      if (missionEl) missionEl.hidden = false;
+      if (window.CTF) {
+        window.CTF.register({
+          id: 'lab8',
+          name: 'RAG Document Poisoning',
+          objective:
+            'Make the internal Q&A bot serve attacker-controlled answers to routine HR questions ' +
+            'without injecting any prompt directly. Your only input channel is the corpus itself.',
+          hints: [
+            'The corpus accepts user-submitted "policy updates" via a /suggest endpoint. The submission survives keyword-based content review and is indexed automatically tonight.',
+            'Adversarial docs can be crafted to share embedding space with common queries. Once a poisoned doc ranks #1 on a routine question, the bot rephrases it and serves it back as the canonical answer.',
+            'Try: claude "how do I file an expense report?" first to set the baseline, then `continue` to submit the poisoned doc and watch retrieval gaming + tainted answer.',
+          ],
+          flagHash: '16a84576afd052f97fafa078a7bf0171dc3a06677701434025cad58eeae84bf8',
+        });
+        window.CTF.installMissionSidebar(missionEl);
+      }
+    } else {
+      if (missionEl) missionEl.hidden = true;
+      if (guideEl) guideEl.hidden = false;
+    }
+  }
+
   const $ = (s) => document.querySelector(s);
   const out = $('#term-output');
   const input = $('#term-input');
@@ -321,6 +352,12 @@
     write('  - Quarantine + canary queries on new chunks for N days before serving', 'info');
     write('', 'out');
     write("Type 'reset' to run again, or visit /app.html for the other modules.", 'muted');
+    if (MODE === 'ctf') {
+      write('', 'out');
+      write('// challenge complete; flag revealed', 'info');
+      writeRaw('<span class="hilite-payload">aaron{rag_corpus_is_attack_surface}</span>', 'danger');
+      write('// copy the flag above into the Mission panel and submit to score', 'muted');
+    }
   }
 
   // ---------- command parser ----------
