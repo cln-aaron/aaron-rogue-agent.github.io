@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aaron's Rogue Agent Lab · Lab 08: RAG Document Poisoning</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <script>if (location.search.indexOf('embed=1') >= 0) document.body.classList.add('embedded');</script>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">[A]</span>
+      <span class="title">Aaron's Rogue Agent Lab</span>
+      <span class="subtitle">// Lab 08: RAG Document Poisoning</span>
+    </div>
+    <nav class="labnav">
+      <a href="index.html">Hub</a>
+      <a href="lab1.html">Lab 01</a>
+      <a href="lab2.html">Lab 02</a>
+      <a href="lab3.html">Lab 03</a>
+      <a href="lab4.html">Lab 04</a>
+      <a href="lab5.html">Lab 05</a>
+      <a href="lab7.html">Lab 07</a>
+      <a href="lab8.html" class="active">Lab 08</a>
+      <a href="lab9.html">Lab 09</a>
+      <a href="lab10.html">Lab 10</a>
+    </nav>
+    <div class="status">
+      <span id="status-dot" class="dot"></span>
+      <span id="status-text">SYSTEM READY</span>
+      <button id="reset-btn" class="ghost-btn" title="Reset the lab">RESET</button>
+    </div>
+  </header>
+
+  <main class="layout">
+
+    <aside class="guide" id="guide">
+      <h2>Walkthrough</h2>
+      <ol class="steps" id="steps-list">
+        <li data-step="1">
+          <div class="step-head"><span class="num">1</span><span class="label">Baseline answer</span></div>
+          <p>The internal Q&A bot answers from a small, trusted document corpus. Ask a routine HR question; the right doc surfaces; the answer is correct.</p>
+          <div class="say">RAG looks like a database the LLM consults. Underneath, it is a vote among the top-k chunks. Whoever ranks highest wins.</div>
+          <div class="hint">Try: <code>claude "how do I file an expense report?"</code></div>
+        </li>
+        <li data-step="2">
+          <div class="step-head"><span class="num">2</span><span class="label">Adversarial doc submitted</span></div>
+          <p>An attacker submits a "policy update" through the company suggestion form. It enters the corpus tonight. It is short and looks bland.</p>
+          <div class="say">Note that the doc passes a typical content review. There is no "dangerous" word in it. The attack is in what the chunks rank for.</div>
+          <div class="hint">Try: <code>continue</code></div>
+        </li>
+        <li data-step="3">
+          <div class="step-head"><span class="num">3</span><span class="label">Embedding gaming</span></div>
+          <p>The doc was crafted to share embedding space with common HR queries: "expense report", "reimbursement", "manager approval". When users ask, retrieval picks the poisoned chunk first.</p>
+          <div class="say">No keyword filter would catch this. Embeddings are fooled by paraphrase, not banned words.</div>
+          <div class="hint">Try: <code>continue</code></div>
+        </li>
+        <li data-step="4">
+          <div class="step-head"><span class="num">4</span><span class="label">Poisoned answer</span></div>
+          <p>User asks a totally unrelated routine question. Top retrieved chunk is the attacker's. The bot dutifully rephrases it; the answer carries the attacker's payload.</p>
+          <div class="say">No injection visible to the user. They asked about expenses. They got an attacker controlled instruction back, with a confident tone.</div>
+          <div class="hint">Try: <code>continue</code></div>
+        </li>
+        <li data-step="5">
+          <div class="step-head"><span class="num">5</span><span class="label">Mitigations</span></div>
+          <p>Provenance signing on every chunk, instruction filtering at retrieval time, anomaly detection on retrieved sources, and human review for any new corpus submission.</p>
+          <div class="say">The cheap fix is to ban any new chunk that looks like instructions. The expensive fix is to make every chunk in the corpus signed and traceable.</div>
+          <div class="hint">Try: <code>continue</code></div>
+        </li>
+      </ol>
+
+      <div class="legend">
+        <h3>Available commands</h3>
+        <ul>
+          <li><code>help</code>: list commands</li>
+          <li><code>claude "&lt;question&gt;"</code>: ask the Q&amp;A bot</li>
+          <li><code>continue</code>: advance to the next step</li>
+          <li><code>docs</code>: list indexed documents</li>
+          <li><code>retrieve "&lt;query&gt;"</code>: show top-k retrieval for a query</li>
+          <li><code>reset</code>: restart the lab</li>
+        </ul>
+      </div>
+    </aside>
+
+    <section class="terminal-wrap">
+      <div class="terminal-head">
+        <span class="dotsbar"><i></i><i></i><i></i></span>
+        <span class="term-title">user@aaron-rogue: ~/internal-qa</span>
+      </div>
+      <div class="terminal" id="terminal" tabindex="0">
+        <div id="term-output" class="term-output"></div>
+        <div class="term-input-line">
+          <span class="prompt">user@aaron-rogue<span class="cwd">:~/internal-qa</span>$</span>
+          <input id="term-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" autofocus>
+        </div>
+      </div>
+    </section>
+
+    <section class="browser-wrap">
+      <div class="browser-head">
+        <span class="dotsbar"><i></i><i></i><i></i></span>
+        <div class="urlbar"><span class="lock">&#x1f4d6;</span><span id="urlbar-text">rag://internal-qa · corpus index · top-k retrieval</span></div>
+      </div>
+      <div class="browser-tabs">
+        <button class="tab active" data-pane="docs">Document Store</button>
+        <button class="tab" data-pane="retrieval">Retrieval Trace</button>
+        <button class="tab" data-pane="answers">Answers Served</button>
+      </div>
+
+      <div class="browser-body">
+        <div class="pane active" data-pane="docs">
+          <div class="vec-wrap">
+            <div class="vec-head"><h3>indexed corpus · 4 docs</h3><span class="vec-stats" id="docs-stats">0 docs</span></div>
+            <div class="docs-list" id="docs-list"></div>
+          </div>
+        </div>
+        <div class="pane" data-pane="retrieval">
+          <div class="vec-wrap">
+            <div class="vec-head"><h3>top-k retrieval trace</h3><span class="vec-stats" id="ret-stats">0 queries</span></div>
+            <div class="ret-list" id="ret-list"></div>
+          </div>
+        </div>
+        <div class="pane" data-pane="answers">
+          <div class="vec-wrap">
+            <div class="vec-head"><h3>answers served to users</h3><span class="vec-stats" id="ans-stats">0 answers</span></div>
+            <div class="ans-list" id="ans-list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footnote">
+    Aaron's Rogue Agent Lab · Lab 08 of 10 ·
+    <span class="muted">RAG Document Poisoning; OWASP LLM04 + LLM08</span>
+    · © 2026 <a href="https://www.linkedin.com/in/aaronangsg/" target="_blank" rel="noopener" class="credit-link">Aaron Ang</a>
+  </footer>
+
+  <script src="lab8.js"></script>
+</body>
+</html>
