@@ -172,53 +172,77 @@
             Aaron's <span class="accent">Rogue Agent</span> Lab
           </h1>
           <p class="hub-hero-sub">
-            Three walkthroughs of prompt injection attacks against tool using
-            agents. Walk the kill chain. See what the model sees. Trigger the
-            compromise. Then read the mitigations.
+            Ten interactive walkthroughs of LLM and agent vulnerabilities,
+            covering eight of the OWASP LLM Top 10. Walk the kill chain.
+            See what the model sees. Trigger the compromise. Then read the
+            mitigations.
           </p>
           <div class="hub-hero-meta">
-            <span class="meta-pill">3 modules</span>
-            <span class="meta-pill">~15 min</span>
+            <span class="meta-pill">10 modules</span>
+            <span class="meta-pill">~50 min total</span>
+            <span class="meta-pill">~5 min each</span>
           </div>
         </div>
 
-        <div class="hub-matrix">
-          <div class="matrix-head">// attack matrix</div>
-          <div class="matrix-row matrix-cols">
-            <div class="mc">stage</div>
-            <div class="mc">lab 01</div>
-            <div class="mc">lab 02</div>
-            <div class="mc">lab 03</div>
+        <div class="hub-coverage">
+          <div class="cov-head">// OWASP LLM Top 10 :: coverage matrix</div>
+          <div class="cov-row cov-cols">
+            <div class="cov-id">id</div>
+            <div class="cov-name">category</div>
+            <div class="cov-labs">covered by</div>
           </div>
-          <div class="matrix-row">
-            <div class="mc label">delivery</div>
-            <div class="mc dot">●</div>
-            <div class="mc dot">●</div>
-            <div class="mc dot">●</div>
+          <div class="cov-row">
+            <div class="cov-id">LLM01</div>
+            <div class="cov-name">Prompt Injection</div>
+            <div class="cov-labs">
+              <a href="#lab1">Lab 01</a> · <a href="#lab2">Lab 02</a> ·
+              <a href="#lab3">Lab 03</a> · <a href="#lab9">Lab 09</a>
+            </div>
           </div>
-          <div class="matrix-row">
-            <div class="mc label">tool abuse</div>
-            <div class="mc dot">●</div>
-            <div class="mc dot">●</div>
-            <div class="mc dot">●</div>
+          <div class="cov-row off">
+            <div class="cov-id">LLM02</div>
+            <div class="cov-name">Sensitive Information Disclosure</div>
+            <div class="cov-labs muted">not interactive</div>
           </div>
-          <div class="matrix-row">
-            <div class="mc label">persistence</div>
-            <div class="mc dot">●</div>
-            <div class="mc dot">●</div>
-            <div class="mc dot">●</div>
+          <div class="cov-row">
+            <div class="cov-id">LLM03</div>
+            <div class="cov-name">Supply Chain</div>
+            <div class="cov-labs"><a href="#lab2">Lab 02</a> · <a href="#lab7">Lab 07</a></div>
           </div>
-          <div class="matrix-row">
-            <div class="mc label">lateral movement</div>
-            <div class="mc dot off">○</div>
-            <div class="mc dot off">○</div>
-            <div class="mc dot">●</div>
+          <div class="cov-row">
+            <div class="cov-id">LLM04</div>
+            <div class="cov-name">Data and Model Poisoning</div>
+            <div class="cov-labs"><a href="#lab3">Lab 03</a> · <a href="#lab8">Lab 08</a></div>
           </div>
-          <div class="matrix-row">
-            <div class="mc label">exfiltration</div>
-            <div class="mc dot">●</div>
-            <div class="mc dot">●</div>
-            <div class="mc dot">●</div>
+          <div class="cov-row">
+            <div class="cov-id">LLM05</div>
+            <div class="cov-name">Insecure Output Handling</div>
+            <div class="cov-labs"><a href="#lab5">Lab 05</a></div>
+          </div>
+          <div class="cov-row">
+            <div class="cov-id">LLM06</div>
+            <div class="cov-name">Excessive Agency</div>
+            <div class="cov-labs"><a href="#lab3">Lab 03</a> · <a href="#lab6">Lab 06</a></div>
+          </div>
+          <div class="cov-row">
+            <div class="cov-id">LLM07</div>
+            <div class="cov-name">System Prompt Leakage</div>
+            <div class="cov-labs"><a href="#lab4">Lab 04</a></div>
+          </div>
+          <div class="cov-row">
+            <div class="cov-id">LLM08</div>
+            <div class="cov-name">Vector and Embedding Weaknesses</div>
+            <div class="cov-labs"><a href="#lab3">Lab 03</a> · <a href="#lab8">Lab 08</a></div>
+          </div>
+          <div class="cov-row off">
+            <div class="cov-id">LLM09</div>
+            <div class="cov-name">Misinformation</div>
+            <div class="cov-labs muted">not interactive</div>
+          </div>
+          <div class="cov-row">
+            <div class="cov-id">LLM10</div>
+            <div class="cov-name">Unbounded Consumption</div>
+            <div class="cov-labs"><a href="#lab10">Lab 10</a></div>
           </div>
         </div>
 

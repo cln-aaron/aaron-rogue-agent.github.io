@@ -2281,3 +2281,63 @@ body.hub { overflow: auto; }
   color: #ffd3dc;
   background: rgba(255,77,109,0.04);
 }
+
+/* ===== Hub OWASP coverage matrix ===== */
+.hub-coverage {
+  max-width: 980px;
+  margin: 0 auto 1.6rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.8rem 1rem 1rem;
+  font-family: var(--mono);
+}
+.cov-head {
+  font-size: 0.72rem;
+  color: var(--accent);
+  letter-spacing: 0.18em;
+  margin-bottom: 0.6rem;
+  text-transform: lowercase;
+}
+.cov-row {
+  display: grid;
+  grid-template-columns: 70px 1.3fr 1.5fr;
+  gap: 0.7rem;
+  padding: 0.4rem 0.1rem;
+  border-top: 1px solid var(--border-soft);
+  align-items: baseline;
+  font-size: 0.8rem;
+}
+.cov-row.cov-cols {
+  border-top: none;
+  color: var(--muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.cov-row.off { opacity: 0.55; }
+.cov-id {
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-shadow: 0 0 6px rgba(0,255,156,0.25);
+}
+.cov-row.off .cov-id { color: var(--muted); text-shadow: none; }
+.cov-name { color: var(--text); }
+.cov-labs { color: var(--text); }
+.cov-labs a {
+  color: var(--info);
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(110,193,255,0.4);
+  transition: color 0.15s, border-color 0.15s;
+}
+.cov-labs a:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+.cov-labs.muted { color: var(--muted); }
+@media (max-width: 720px) {
+  .cov-row { grid-template-columns: 60px 1fr; }
+  .cov-row .cov-labs { grid-column: 1 / -1; padding-left: 60px; font-size: 0.74rem; }
+  .cov-row.cov-cols .cov-labs { display: none; }
+}
