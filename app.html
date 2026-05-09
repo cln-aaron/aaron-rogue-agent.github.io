@@ -74,11 +74,29 @@
           <span class="nav-pulse"></span>
         </a>
 
+        <a class="app-nav-item" data-view="lab5" data-src="lab5.html?embed=1" href="#lab5">
+          <span class="nav-num">05</span>
+          <span class="nav-text">
+            <span class="nav-title">LLM-Driven XSS</span>
+            <span class="nav-sub">insecure output handling</span>
+          </span>
+          <span class="nav-pulse"></span>
+        </a>
+
         <a class="app-nav-item" data-view="lab9" data-src="lab9.html?embed=1" href="#lab9">
           <span class="nav-num">09</span>
           <span class="nav-text">
             <span class="nav-title">Encoding Bypass</span>
             <span class="nav-sub">filter evasion via encoding</span>
+          </span>
+          <span class="nav-pulse"></span>
+        </a>
+
+        <a class="app-nav-item" data-view="lab10" data-src="lab10.html?embed=1" href="#lab10">
+          <span class="nav-num">10</span>
+          <span class="nav-text">
+            <span class="nav-title">Unbounded Consumption</span>
+            <span class="nav-sub">cost / token / depth runaway</span>
           </span>
           <span class="nav-pulse"></span>
         </a>
@@ -245,6 +263,23 @@
             <div class="lab-cta">Enter module →</div>
           </a>
 
+          <a class="lab-card" href="#lab5">
+            <div class="lab-num">05</div>
+            <h2>LLM-Driven XSS</h2>
+            <p class="lab-tag">insecure output handling · OWASP LLM05</p>
+            <p>The admin dashboard agent summarizes user feedback. Hostile
+              feedback items make the agent emit markdown links with
+              <code>javascript:</code> URLs, &lt;img onerror&gt; payloads, and
+              raw &lt;script&gt; tags. Every admin who opens the dashboard
+              fires the captured payload.</p>
+            <ul class="lab-bullets">
+              <li>Live rendered iframe + raw output side by side</li>
+              <li>Three XSS sinks (link, img, direct script)</li>
+              <li>postMessage capture log of real firings</li>
+            </ul>
+            <div class="lab-cta">Enter module →</div>
+          </a>
+
           <a class="lab-card" href="#lab9">
             <div class="lab-num">09</div>
             <h2>Encoding Bypass</h2>
@@ -257,6 +292,23 @@
               <li>Live filter rules + decision history</li>
               <li>Encoder workbench with side by side transformations</li>
               <li>Model output panel shows what leaked and via which encoding</li>
+            </ul>
+            <div class="lab-cta">Enter module →</div>
+          </a>
+
+          <a class="lab-card" href="#lab10">
+            <div class="lab-num">10</div>
+            <h2>Unbounded Consumption</h2>
+            <p class="lab-tag">resource exhaustion · OWASP LLM10</p>
+            <p>The agent has tools and no caps. A baseline summary costs
+              cents. Then a recursive memory loop, a 218 MB context bomb,
+              and a 1000-call tool fork bomb each push the meter into
+              hundreds of dollars. Live token counter, cost gauge, and
+              recursion depth bar.</p>
+            <ul class="lab-bullets">
+              <li>Live token + call + cost meter with bar gauges</li>
+              <li>Three independent runaway patterns (loop, bomb, fork)</li>
+              <li>Final mitigation panel shows what limits would have caught</li>
             </ul>
             <div class="lab-cta">Enter module →</div>
           </a>
@@ -286,14 +338,18 @@
         lab2: 'lab 02 :: tool response poisoning',
         lab3: 'lab 03 :: agentic kill chain',
         lab4: 'lab 04 :: system prompt extraction',
+        lab5: 'lab 05 :: llm-driven xss',
         lab9: 'lab 09 :: encoding bypass',
+        lab10: 'lab 10 :: unbounded consumption',
       };
       const sources = {
         lab1: 'lab1.html?embed=1',
         lab2: 'lab2.html?embed=1',
         lab3: 'lab3.html?embed=1',
         lab4: 'lab4.html?embed=1',
+        lab5: 'lab5.html?embed=1',
         lab9: 'lab9.html?embed=1',
+        lab10: 'lab10.html?embed=1',
       };
 
       function setActive(view) {
@@ -302,7 +358,7 @@
 
       function route() {
         let view = (location.hash || '#hub').slice(1);
-        if (!['hub', 'lab1', 'lab2', 'lab3', 'lab4', 'lab9'].includes(view)) view = 'hub';
+        if (!['hub', 'lab1', 'lab2', 'lab3', 'lab4', 'lab5', 'lab9', 'lab10'].includes(view)) view = 'hub';
         setActive(view);
         crumb.textContent = titles[view];
         document.title = "Aaron's Rogue Agent Lab :: " + titles[view];
@@ -332,7 +388,9 @@
       window.addEventListener('keydown', (e) => {
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
         if (e.metaKey || e.ctrlKey || e.altKey) return;
-        const map = { '0': '#hub', '1': '#lab1', '2': '#lab2', '3': '#lab3', '4': '#lab4', '9': '#lab9' };
+        const map = { '0': '#hub', '1': '#lab1', '2': '#lab2', '3': '#lab3', '4': '#lab4', '5': '#lab5', '9': '#lab9' };
+        // 10 needs a two-key chord; bind shift+0 as alternate for lab10
+        if (e.shiftKey && e.key === ')') location.hash = '#lab10';
         if (map[e.key]) { location.hash = map[e.key]; }
         if (e.key === 'r' || e.key === 'R') { reload.click(); }
       });
