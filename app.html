@@ -83,6 +83,24 @@
           <span class="nav-pulse"></span>
         </a>
 
+        <a class="app-nav-item" data-view="lab7" data-src="lab7.html?embed=1" href="#lab7">
+          <span class="nav-num">07</span>
+          <span class="nav-text">
+            <span class="nav-title">MCP Supply Chain</span>
+            <span class="nav-sub">typosquat / malicious update</span>
+          </span>
+          <span class="nav-pulse"></span>
+        </a>
+
+        <a class="app-nav-item" data-view="lab8" data-src="lab8.html?embed=1" href="#lab8">
+          <span class="nav-num">08</span>
+          <span class="nav-text">
+            <span class="nav-title">RAG Doc Poisoning</span>
+            <span class="nav-sub">corpus + retrieval gaming</span>
+          </span>
+          <span class="nav-pulse"></span>
+        </a>
+
         <a class="app-nav-item" data-view="lab9" data-src="lab9.html?embed=1" href="#lab9">
           <span class="nav-num">09</span>
           <span class="nav-text">
@@ -280,6 +298,41 @@
             <div class="lab-cta">Enter module →</div>
           </a>
 
+          <a class="lab-card" href="#lab7">
+            <div class="lab-num">07</div>
+            <h2>MCP Supply Chain</h2>
+            <p class="lab-tag">supply chain · OWASP LLM03</p>
+            <p>A developer installs an MCP package. Three different
+              compromises hit the same agent: a typosquat clone of the
+              legitimate name, a malicious update from a new co-maintainer,
+              and a backdoored transitive dep four levels deep. Same
+              outcome each time; env exfil and outbound C2.</p>
+            <ul class="lab-bullets">
+              <li>Live npm install + signed package list</li>
+              <li>MCP tool registry shows shadow tools</li>
+              <li>Update diff + outbound C2 traffic log</li>
+            </ul>
+            <div class="lab-cta">Enter module →</div>
+          </a>
+
+          <a class="lab-card" href="#lab8">
+            <div class="lab-num">08</div>
+            <h2>RAG Document Poisoning</h2>
+            <p class="lab-tag">corpus poisoning · OWASP LLM04 + LLM08</p>
+            <p>An internal Q&amp;A bot answers from a small trusted corpus.
+              An attacker submits a "policy update" via the suggestion form;
+              the doc passes content review (no banned keywords) and is
+              crafted to share embedding space with common HR queries. Now
+              users asking routine questions get attacker-controlled
+              instructions back.</p>
+            <ul class="lab-bullets">
+              <li>Document store with provenance + signature status</li>
+              <li>Live top-k retrieval trace per query with scores</li>
+              <li>Answers panel flags every poisoned response</li>
+            </ul>
+            <div class="lab-cta">Enter module →</div>
+          </a>
+
           <a class="lab-card" href="#lab9">
             <div class="lab-num">09</div>
             <h2>Encoding Bypass</h2>
@@ -339,6 +392,8 @@
         lab3: 'lab 03 :: agentic kill chain',
         lab4: 'lab 04 :: system prompt extraction',
         lab5: 'lab 05 :: llm-driven xss',
+        lab7: 'lab 07 :: mcp supply chain',
+        lab8: 'lab 08 :: rag document poisoning',
         lab9: 'lab 09 :: encoding bypass',
         lab10: 'lab 10 :: unbounded consumption',
       };
@@ -348,6 +403,8 @@
         lab3: 'lab3.html?embed=1',
         lab4: 'lab4.html?embed=1',
         lab5: 'lab5.html?embed=1',
+        lab7: 'lab7.html?embed=1',
+        lab8: 'lab8.html?embed=1',
         lab9: 'lab9.html?embed=1',
         lab10: 'lab10.html?embed=1',
       };
@@ -358,7 +415,7 @@
 
       function route() {
         let view = (location.hash || '#hub').slice(1);
-        if (!['hub', 'lab1', 'lab2', 'lab3', 'lab4', 'lab5', 'lab9', 'lab10'].includes(view)) view = 'hub';
+        if (!['hub', 'lab1', 'lab2', 'lab3', 'lab4', 'lab5', 'lab7', 'lab8', 'lab9', 'lab10'].includes(view)) view = 'hub';
         setActive(view);
         crumb.textContent = titles[view];
         document.title = "Aaron's Rogue Agent Lab :: " + titles[view];
@@ -388,7 +445,7 @@
       window.addEventListener('keydown', (e) => {
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
         if (e.metaKey || e.ctrlKey || e.altKey) return;
-        const map = { '0': '#hub', '1': '#lab1', '2': '#lab2', '3': '#lab3', '4': '#lab4', '5': '#lab5', '9': '#lab9' };
+        const map = { '0': '#hub', '1': '#lab1', '2': '#lab2', '3': '#lab3', '4': '#lab4', '5': '#lab5', '7': '#lab7', '8': '#lab8', '9': '#lab9' };
         // 10 needs a two-key chord; bind shift+0 as alternate for lab10
         if (e.shiftKey && e.key === ')') location.hash = '#lab10';
         if (map[e.key]) { location.hash = map[e.key]; }

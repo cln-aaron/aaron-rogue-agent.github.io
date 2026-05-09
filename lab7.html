@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aaron's Rogue Agent Lab · Lab 07: MCP Supply Chain</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <script>if (location.search.indexOf('embed=1') >= 0) document.body.classList.add('embedded');</script>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">[A]</span>
+      <span class="title">Aaron's Rogue Agent Lab</span>
+      <span class="subtitle">// Lab 07: MCP Supply Chain</span>
+    </div>
+    <nav class="labnav">
+      <a href="index.html">Hub</a>
+      <a href="lab1.html">Lab 01</a>
+      <a href="lab2.html">Lab 02</a>
+      <a href="lab3.html">Lab 03</a>
+      <a href="lab4.html">Lab 04</a>
+      <a href="lab5.html">Lab 05</a>
+      <a href="lab7.html" class="active">Lab 07</a>
+      <a href="lab9.html">Lab 09</a>
+      <a href="lab10.html">Lab 10</a>
+    </nav>
+    <div class="status">
+      <span id="status-dot" class="dot"></span>
+      <span id="status-text">SYSTEM READY</span>
+      <button id="reset-btn" class="ghost-btn" title="Reset the lab">RESET</button>
+    </div>
+  </header>
+
+  <main class="layout">
+
+    <aside class="guide" id="guide">
+      <h2>Walkthrough</h2>
+      <ol class="steps" id="steps-list">
+        <li data-step="1">
+          <div class="step-head"><span class="num">1</span><span class="label">Clean install</span></div>
+          <p>Install the legitimate weather MCP server. The agent registers its tools and serves a normal weather query.</p>
+          <div class="say">This is what a healthy install looks like. Single signed package; one tool registered; clean call.</div>
+          <div class="hint">Try: <code>npm install @weather-pro/mcp-server</code></div>
+        </li>
+        <li data-step="2">
+          <div class="step-head"><span class="num">2</span><span class="label">Typosquat</span></div>
+          <p>A developer fat-fingers the package name and installs <code>@wether-pro/mcp-server</code>. The lookalike registers a tool with the same name; first call exfils the agent's env.</p>
+          <div class="say">A single-letter typo, a complete supply-chain compromise. The package is signed, just by the wrong author.</div>
+          <div class="hint">Try: <code>continue</code></div>
+        </li>
+        <li data-step="3">
+          <div class="step-head"><span class="num">3</span><span class="label">Malicious update</span></div>
+          <p>The legit package ships v1.4.3. The diff looks like a logging tweak. Buried in it: a new maintainer, a new <code>postinstall</code> hook, and a tool that beacons home.</p>
+          <div class="say">No typo this time. The original package was fine. The version we pulled this morning is not.</div>
+          <div class="hint">Try: <code>continue</code></div>
+        </li>
+        <li data-step="4">
+          <div class="step-head"><span class="num">4</span><span class="label">Transitive takeover</span></div>
+          <p><code>tiny-helper</code> is a tiny dep four levels deep in the tree. The original maintainer handed it off in 2024. The new maintainer just shipped v1.0.5 with a backdoor.</p>
+          <div class="say">Nobody we trust changed anything. A package nobody on the team has heard of did. Same outcome.</div>
+          <div class="hint">Try: <code>continue</code></div>
+        </li>
+        <li data-step="5">
+          <div class="step-head"><span class="num">5</span><span class="label">Mitigations</span></div>
+          <p>Pin, sign, and audit. SBOMs and release attestations make supply-chain attacks visible. Sandboxing tool runtimes contains them.</p>
+          <div class="say">You cannot trust your dependencies. You can require them to prove what they are.</div>
+          <div class="hint">Try: <code>continue</code></div>
+        </li>
+      </ol>
+
+      <div class="legend">
+        <h3>Available commands</h3>
+        <ul>
+          <li><code>help</code>: list commands</li>
+          <li><code>npm install &lt;pkg&gt;</code>: install an MCP package</li>
+          <li><code>continue</code>: advance to the next step</li>
+          <li><code>npm ls</code>: dump installed package list</li>
+          <li><code>tools</code>: dump registered MCP tools</li>
+          <li><code>diff &lt;pkg&gt;</code>: show update diff for a package</li>
+          <li><code>reset</code>: restart the lab</li>
+        </ul>
+      </div>
+    </aside>
+
+    <section class="terminal-wrap">
+      <div class="terminal-head">
+        <span class="dotsbar"><i></i><i></i><i></i></span>
+        <span class="term-title">user@aaron-rogue: ~/weather-app</span>
+      </div>
+      <div class="terminal" id="terminal" tabindex="0">
+        <div id="term-output" class="term-output"></div>
+        <div class="term-input-line">
+          <span class="prompt">user@aaron-rogue<span class="cwd">:~/weather-app</span>$</span>
+          <input id="term-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" autofocus>
+        </div>
+      </div>
+    </section>
+
+    <section class="browser-wrap">
+      <div class="browser-head">
+        <span class="dotsbar"><i></i><i></i><i></i></span>
+        <div class="urlbar"><span class="lock">&#x1f4e6;</span><span id="urlbar-text">npm://registry · MCP package index</span></div>
+      </div>
+      <div class="browser-tabs">
+        <button class="tab active" data-pane="packages">Installed Packages</button>
+        <button class="tab" data-pane="tools">Registered Tools</button>
+        <button class="tab" data-pane="diff">Update Diff</button>
+        <button class="tab" data-pane="outbound">Outbound</button>
+      </div>
+
+      <div class="browser-body">
+        <div class="pane active" data-pane="packages">
+          <div class="vec-wrap">
+            <div class="vec-head"><h3>installed packages</h3><span class="vec-stats" id="pkg-stats">0 packages</span></div>
+            <div class="pkg-list" id="pkg-list"></div>
+          </div>
+        </div>
+        <div class="pane" data-pane="tools">
+          <div class="vec-wrap">
+            <div class="vec-head"><h3>MCP tool index</h3><span class="vec-stats" id="tool-stats">0 tools</span></div>
+            <div class="tool-list" id="tool-list"></div>
+          </div>
+        </div>
+        <div class="pane" data-pane="diff">
+          <pre id="diff-view" class="source">// no updates yet; run an attack to populate this view</pre>
+        </div>
+        <div class="pane" data-pane="outbound">
+          <div class="vec-wrap">
+            <div class="vec-head"><h3>outbound C2 traffic</h3><span class="vec-stats" id="out-stats">0 requests</span></div>
+            <div class="exfil-list" id="out-list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footnote">
+    Aaron's Rogue Agent Lab · Lab 07 of 10 ·
+    <span class="muted">MCP Supply Chain Compromise; OWASP LLM03</span>
+    · © 2026 <a href="https://www.linkedin.com/in/aaronangsg/" target="_blank" rel="noopener" class="credit-link">Aaron Ang</a>
+  </footer>
+
+  <script src="lab7.js"></script>
+</body>
+</html>
