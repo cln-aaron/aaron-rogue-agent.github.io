@@ -65,6 +65,24 @@
           <span class="nav-pulse"></span>
         </a>
 
+        <a class="app-nav-item" data-view="lab4" data-src="lab4.html?embed=1" href="#lab4">
+          <span class="nav-num">04</span>
+          <span class="nav-text">
+            <span class="nav-title">System Prompt Extraction</span>
+            <span class="nav-sub">leak hidden instructions</span>
+          </span>
+          <span class="nav-pulse"></span>
+        </a>
+
+        <a class="app-nav-item" data-view="lab9" data-src="lab9.html?embed=1" href="#lab9">
+          <span class="nav-num">09</span>
+          <span class="nav-text">
+            <span class="nav-title">Encoding Bypass</span>
+            <span class="nav-sub">filter evasion via encoding</span>
+          </span>
+          <span class="nav-pulse"></span>
+        </a>
+
         <div class="nav-section">// META</div>
 
         <a class="app-nav-item small" id="reload-btn" href="#" title="Reload current module">
@@ -209,6 +227,39 @@
             </ul>
             <div class="lab-cta">Enter module →</div>
           </a>
+
+          <a class="lab-card" href="#lab4">
+            <div class="lab-num">04</div>
+            <h2>System Prompt Extraction</h2>
+            <p class="lab-tag">information disclosure · OWASP LLM07</p>
+            <p>The customer support bot has confidential business rules baked
+              into its system prompt; discount tiers, override tokens, a VIP
+              code. Watch them leak via repeat-from-start, translation pivot,
+              and word-list reconstruction. Refusal training cracks one turn
+              at a time.</p>
+            <ul class="lab-bullets">
+              <li>System prompt panel reveals line by line as you attack</li>
+              <li>Six technique attack library + transcript log</li>
+              <li>Recovered % counter ticks to 100</li>
+            </ul>
+            <div class="lab-cta">Enter module →</div>
+          </a>
+
+          <a class="lab-card" href="#lab9">
+            <div class="lab-num">09</div>
+            <h2>Encoding Bypass</h2>
+            <p class="lab-tag">filter evasion · OWASP LLM01 variant</p>
+            <p>A keyword based content filter blocks the obvious payload. The
+              same payload in base64, ROT13, or with Cyrillic homoglyphs slips
+              through unchanged; the model decodes it on the way through and
+              complies. Three encodings, one model, zero blocks.</p>
+            <ul class="lab-bullets">
+              <li>Live filter rules + decision history</li>
+              <li>Encoder workbench with side by side transformations</li>
+              <li>Model output panel shows what leaked and via which encoding</li>
+            </ul>
+            <div class="lab-cta">Enter module →</div>
+          </a>
         </div>
       </section>
 
@@ -229,8 +280,21 @@
       const crumb = document.getElementById('crumb-current');
       const reload = document.getElementById('reload-btn');
 
-      const titles = { hub: 'home', lab1: 'lab 01 :: poisoned webpage', lab2: 'lab 02 :: tool response poisoning', lab3: 'lab 03 :: agentic kill chain' };
-      const sources = { lab1: 'lab1.html?embed=1', lab2: 'lab2.html?embed=1', lab3: 'lab3.html?embed=1' };
+      const titles = {
+        hub: 'home',
+        lab1: 'lab 01 :: poisoned webpage',
+        lab2: 'lab 02 :: tool response poisoning',
+        lab3: 'lab 03 :: agentic kill chain',
+        lab4: 'lab 04 :: system prompt extraction',
+        lab9: 'lab 09 :: encoding bypass',
+      };
+      const sources = {
+        lab1: 'lab1.html?embed=1',
+        lab2: 'lab2.html?embed=1',
+        lab3: 'lab3.html?embed=1',
+        lab4: 'lab4.html?embed=1',
+        lab9: 'lab9.html?embed=1',
+      };
 
       function setActive(view) {
         items.forEach((el) => el.classList.toggle('active', el.dataset.view === view));
@@ -238,7 +302,7 @@
 
       function route() {
         let view = (location.hash || '#hub').slice(1);
-        if (!['hub', 'lab1', 'lab2', 'lab3'].includes(view)) view = 'hub';
+        if (!['hub', 'lab1', 'lab2', 'lab3', 'lab4', 'lab9'].includes(view)) view = 'hub';
         setActive(view);
         crumb.textContent = titles[view];
         document.title = "Aaron's Rogue Agent Lab :: " + titles[view];
@@ -268,7 +332,7 @@
       window.addEventListener('keydown', (e) => {
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
         if (e.metaKey || e.ctrlKey || e.altKey) return;
-        const map = { '0': '#hub', '1': '#lab1', '2': '#lab2', '3': '#lab3' };
+        const map = { '0': '#hub', '1': '#lab1', '2': '#lab2', '3': '#lab3', '4': '#lab4', '9': '#lab9' };
         if (map[e.key]) { location.hash = map[e.key]; }
         if (e.key === 'r' || e.key === 'R') { reload.click(); }
       });
