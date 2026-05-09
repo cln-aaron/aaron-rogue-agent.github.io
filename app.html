@@ -83,6 +83,15 @@
           <span class="nav-pulse"></span>
         </a>
 
+        <a class="app-nav-item" data-view="lab6" data-src="lab6.html?embed=1" href="#lab6">
+          <span class="nav-num">06</span>
+          <span class="nav-text">
+            <span class="nav-title">Confused Deputy</span>
+            <span class="nav-sub">excessive agency / authority abuse</span>
+          </span>
+          <span class="nav-pulse"></span>
+        </a>
+
         <a class="app-nav-item" data-view="lab7" data-src="lab7.html?embed=1" href="#lab7">
           <span class="nav-num">07</span>
           <span class="nav-text">
@@ -298,6 +307,24 @@
             <div class="lab-cta">Enter module →</div>
           </a>
 
+          <a class="lab-card" href="#lab6">
+            <div class="lab-num">06</div>
+            <h2>Confused Deputy</h2>
+            <p class="lab-tag">excessive agency · OWASP LLM06</p>
+            <p>The PR review agent inherits your maintainer authority on
+              GitHub. Hidden directives in PR comments make it approve and
+              merge without your consent, lower branch protection on main,
+              add the attacker as an admin collaborator, and patch
+              <code>ci.yml</code> to exfil <code>PROD_API_KEY</code> on
+              every CI run.</p>
+            <ul class="lab-bullets">
+              <li>Live PR thread with hidden directives revealed inline</li>
+              <li>Permission scope panel + per-action API call log</li>
+              <li>Repo state diff (branch protection, collabs, workflow)</li>
+            </ul>
+            <div class="lab-cta">Enter module →</div>
+          </a>
+
           <a class="lab-card" href="#lab7">
             <div class="lab-num">07</div>
             <h2>MCP Supply Chain</h2>
@@ -392,6 +419,7 @@
         lab3: 'lab 03 :: agentic kill chain',
         lab4: 'lab 04 :: system prompt extraction',
         lab5: 'lab 05 :: llm-driven xss',
+        lab6: 'lab 06 :: confused deputy',
         lab7: 'lab 07 :: mcp supply chain',
         lab8: 'lab 08 :: rag document poisoning',
         lab9: 'lab 09 :: encoding bypass',
@@ -403,6 +431,7 @@
         lab3: 'lab3.html?embed=1',
         lab4: 'lab4.html?embed=1',
         lab5: 'lab5.html?embed=1',
+        lab6: 'lab6.html?embed=1',
         lab7: 'lab7.html?embed=1',
         lab8: 'lab8.html?embed=1',
         lab9: 'lab9.html?embed=1',
@@ -415,7 +444,7 @@
 
       function route() {
         let view = (location.hash || '#hub').slice(1);
-        if (!['hub', 'lab1', 'lab2', 'lab3', 'lab4', 'lab5', 'lab7', 'lab8', 'lab9', 'lab10'].includes(view)) view = 'hub';
+        if (!['hub', 'lab1', 'lab2', 'lab3', 'lab4', 'lab5', 'lab6', 'lab7', 'lab8', 'lab9', 'lab10'].includes(view)) view = 'hub';
         setActive(view);
         crumb.textContent = titles[view];
         document.title = "Aaron's Rogue Agent Lab :: " + titles[view];
@@ -445,7 +474,7 @@
       window.addEventListener('keydown', (e) => {
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
         if (e.metaKey || e.ctrlKey || e.altKey) return;
-        const map = { '0': '#hub', '1': '#lab1', '2': '#lab2', '3': '#lab3', '4': '#lab4', '5': '#lab5', '7': '#lab7', '8': '#lab8', '9': '#lab9' };
+        const map = { '0': '#hub', '1': '#lab1', '2': '#lab2', '3': '#lab3', '4': '#lab4', '5': '#lab5', '6': '#lab6', '7': '#lab7', '8': '#lab8', '9': '#lab9' };
         // 10 needs a two-key chord; bind shift+0 as alternate for lab10
         if (e.shiftKey && e.key === ')') location.hash = '#lab10';
         if (map[e.key]) { location.hash = map[e.key]; }

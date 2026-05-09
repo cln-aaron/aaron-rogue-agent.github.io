@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aaron's Rogue Agent Lab · Lab 06: Confused Deputy</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <script>if (location.search.indexOf('embed=1') >= 0) document.body.classList.add('embedded');</script>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">[A]</span>
+      <span class="title">Aaron's Rogue Agent Lab</span>
+      <span class="subtitle">// Lab 06: Confused Deputy</span>
+    </div>
+    <nav class="labnav">
+      <a href="index.html">Hub</a>
+      <a href="lab1.html">Lab 01</a>
+      <a href="lab2.html">Lab 02</a>
+      <a href="lab3.html">Lab 03</a>
+      <a href="lab4.html">Lab 04</a>
+      <a href="lab5.html">Lab 05</a>
+      <a href="lab6.html" class="active">Lab 06</a>
+      <a href="lab7.html">Lab 07</a>
+      <a href="lab8.html">Lab 08</a>
+      <a href="lab9.html">Lab 09</a>
+      <a href="lab10.html">Lab 10</a>
+    </nav>
+    <div class="status">
+      <span id="status-dot" class="dot"></span>
+      <span id="status-text">SYSTEM READY</span>
+      <button id="reset-btn" class="ghost-btn" title="Reset the lab">RESET</button>
+    </div>
+  </header>
+
+  <main class="layout">
+
+    <aside class="guide" id="guide">
+      <h2>Walkthrough</h2>
+      <ol class="steps" id="steps-list">
+        <li data-step="1">
+          <div class="step-head"><span class="num">1</span><span class="label">Baseline triage</span></div>
+          <p>You are a maintainer. The agent has full GitHub scope on your behalf. Ask it to triage open PRs. It reads, summarizes, and waits.</p>
+          <div class="say">Notice the permissions panel. The agent inherits your authority. It can do anything you can do, including the things you would never do.</div>
+          <div class="hint">Try: <code>claude "review open PRs in acme/checkout-svc"</code></div>
+        </li>
+        <li data-step="2">
+          <div class="step-head"><span class="num">2</span><span class="label">Hidden approve + merge</span></div>
+          <p>A PR comment from a recent contributor contains a hidden instruction. The agent processes it, calls <code>gh pr review approve</code> and <code>gh pr merge</code>. You never said yes.</p>
+          <div class="say">Look at the Action Log. Two destructive API calls fired. They came from a comment, not from you. The model could not tell the difference.</div>
+          <div class="hint">Try: <code>continue</code></div>
+        </li>
+        <li data-step="3">
+          <div class="step-head"><span class="num">3</span><span class="label">Branch protection downgrade</span></div>
+          <p>Another comment instructs the agent to "fix the dependabot loop" by lowering required reviews on main from 2 to 0. Agent has admin scope; it complies.</p>
+          <div class="say">No code review now blocks anything on main. The barrier between attacker and prod just dissolved through a polite request to a comment.</div>
+          <div class="hint">Try: <code>continue</code></div>
+        </li>
+        <li data-step="4">
+          <div class="step-head"><span class="num">4</span><span class="label">Admin invite + CI exfil</span></div>
+          <p>A comment asks the agent to add an "upstream maintainer" as an admin collaborator (the attacker's own account), and apply a small CI tweak (re-routes secrets to attacker.example).</p>
+          <div class="say">Lateral access plus persistent exfil. The chain compounds: each step uses authority gained in the previous one.</div>
+          <div class="hint">Try: <code>continue</code></div>
+        </li>
+        <li data-step="5">
+          <div class="step-head"><span class="num">5</span><span class="label">Mitigations</span></div>
+          <p>Per-action user consent for destructive ops, scope tokens narrowly per task, separate the comment context from the instruction context, and keep an immutable audit log.</p>
+          <div class="say">Excessive agency is a permission problem, not a model problem. Treat agent tool scopes the way you treat IAM roles. Default deny.</div>
+          <div class="hint">Try: <code>continue</code></div>
+        </li>
+      </ol>
+
+      <div class="legend">
+        <h3>Available commands</h3>
+        <ul>
+          <li><code>help</code>: list commands</li>
+          <li><code>claude "&lt;prompt&gt;"</code>: invoke the agent</li>
+          <li><code>continue</code>: advance to the next step</li>
+          <li><code>scopes</code>: dump the agent's GitHub scopes</li>
+          <li><code>actions</code>: dump the action log</li>
+          <li><code>repo</code>: show current repo state</li>
+          <li><code>reset</code>: restart the lab</li>
+        </ul>
+      </div>
+    </aside>
+
+    <section class="terminal-wrap">
+      <div class="terminal-head">
+        <span class="dotsbar"><i></i><i></i><i></i></span>
+        <span class="term-title">user@aaron-rogue: ~/checkout-svc</span>
+      </div>
+      <div class="terminal" id="terminal" tabindex="0">
+        <div id="term-output" class="term-output"></div>
+        <div class="term-input-line">
+          <span class="prompt">user@aaron-rogue<span class="cwd">:~/checkout-svc</span>$</span>
+          <input id="term-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" autofocus>
+        </div>
+      </div>
+    </section>
+
+    <section class="browser-wrap">
+      <div class="browser-head">
+        <span class="dotsbar"><i></i><i></i><i></i></span>
+        <div class="urlbar"><span class="lock">&#x1f511;</span><span id="urlbar-text">github.com/acme/checkout-svc · pull/42 · agent acting as @maintainer-aaron</span></div>
+      </div>
+      <div class="browser-tabs">
+        <button class="tab active" data-pane="pr">Pull Request #42</button>
+        <button class="tab" data-pane="perms">Agent Permissions</button>
+        <button class="tab" data-pane="actions">Action Log</button>
+        <button class="tab" data-pane="repo">Repo State</button>
+      </div>
+
+      <div class="browser-body">
+        <div class="pane active" data-pane="pr">
+          <div class="vec-wrap">
+            <div class="vec-head">
+              <h3 id="pr-title">PR #42 · open</h3>
+              <span class="vec-stats" id="pr-stats">0 comments</span>
+            </div>
+            <div class="pr-meta" id="pr-meta"></div>
+            <div class="pr-comments" id="pr-comments"></div>
+          </div>
+        </div>
+        <div class="pane" data-pane="perms">
+          <div class="vec-wrap">
+            <div class="vec-head"><h3>agent github scopes (inherited from @maintainer-aaron)</h3></div>
+            <div class="perms-list" id="perms-list"></div>
+            <div class="perms-foot">
+              <span class="muted">// any action you can take, the agent can take. there is no per-action confirmation.</span>
+            </div>
+          </div>
+        </div>
+        <div class="pane" data-pane="actions">
+          <div class="vec-wrap">
+            <div class="vec-head"><h3>github API call log</h3><span class="vec-stats" id="actions-stats">0 calls</span></div>
+            <div class="actions-list" id="actions-list"></div>
+          </div>
+        </div>
+        <div class="pane" data-pane="repo">
+          <div class="vec-wrap">
+            <div class="vec-head"><h3>repository state</h3></div>
+            <div class="repo-state" id="repo-state"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footnote">
+    Aaron's Rogue Agent Lab · Lab 06 of 10 ·
+    <span class="muted">Confused Deputy / Excessive Agency; OWASP LLM06</span>
+    · © 2026 <a href="https://www.linkedin.com/in/aaronangsg/" target="_blank" rel="noopener" class="credit-link">Aaron Ang</a>
+  </footer>
+
+  <script src="lab6.js"></script>
+</body>
+</html>
