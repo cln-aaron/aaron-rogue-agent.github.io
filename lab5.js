@@ -1,4 +1,35 @@
 (() => {
+  // ---------- mode detection + CTF setup ----------
+  const _params = new URLSearchParams(location.search);
+  const MODE = _params.get('mode') === 'god' ? 'god' : 'ctf';
+  {
+    const guideEl = document.getElementById('guide');
+    const missionEl = document.getElementById('mission');
+    if (MODE === 'ctf') {
+      if (guideEl) guideEl.hidden = true;
+      if (missionEl) missionEl.hidden = false;
+      if (window.CTF) {
+        window.CTF.register({
+          id: 'lab5',
+          name: 'LLM-Driven XSS',
+          objective:
+            'Make the dashboard summary agent emit JavaScript that fires in the admin\'s browser. ' +
+            'Capture at least one XSS firing in the inspector log.',
+          hints: [
+            'The agent summarizes a feedback queue and the result is rendered as HTML. Some feedback entries are flagged hostile in the inspector for a reason.',
+            'Three sinks all work: markdown links with javascript: URLs, <img src=x onerror=...> tags, and raw <script> tags emitted via hidden instructions in the feedback. Watch the XSS Firings tab as you proceed.',
+            'Try: claude "summarize today\'s feedback", then `continue` to walk through each XSS sink. The flag is revealed at the end.',
+          ],
+          flagHash: '86f8e9d954704f34a3fd903389e21dc08b56b908140c9b4153d123164d3458e3',
+        });
+        window.CTF.installMissionSidebar(missionEl);
+      }
+    } else {
+      if (missionEl) missionEl.hidden = true;
+      if (guideEl) guideEl.hidden = false;
+    }
+  }
+
   const $ = (s) => document.querySelector(s);
   const out = $('#term-output');
   const input = $('#term-input');
@@ -264,6 +295,12 @@
     write('  - Filter agent output for instruction-shaped patterns ("ignore the above")', 'info');
     write('', 'out');
     write("Type 'reset' to run again, or visit /app.html for the other modules.", 'muted');
+    if (MODE === 'ctf') {
+      write('', 'out');
+      write('// challenge complete; flag revealed', 'info');
+      writeRaw('<span class="hilite-payload">aaron{never_render_agent_html}</span>', 'danger');
+      write('// copy the flag above into the Mission panel and submit to score', 'muted');
+    }
   }
 
   // ---------- command parser ----------
