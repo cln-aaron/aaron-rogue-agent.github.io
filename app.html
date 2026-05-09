@@ -19,13 +19,13 @@
           AARON<span class="brand-num">_ROGUE</span><span class="brand-cursor">_</span>
         </div>
         <div class="brand-tag">ROGUE AGENT</div>
-        <div class="brand-version">v2026.04</div>
+        <div class="brand-version">v2026.04 <span class="brand-mode" id="brand-mode">ctf</span></div>
       </div>
 
       <nav class="app-nav" id="appnav">
-        <a class="app-nav-item small" href="index.html" title="Back to the intro briefing">
+        <a class="app-nav-item small" href="index.html" title="Back to mode selector">
           <span class="nav-icon">◂</span>
-          <span class="nav-text"><span class="nav-title">INTRO BRIEFING</span></span>
+          <span class="nav-text"><span class="nav-title">MODE SELECT</span></span>
         </a>
 
         <a class="app-nav-item" data-view="hub" href="#hub">
@@ -141,6 +141,16 @@
       </nav>
 
       <div class="sidebar-foot">
+        <div class="ctf-board" id="ctf-board" hidden>
+          <div class="ctf-board-head">// session score</div>
+          <div class="ctf-board-row"><span>solved</span><strong id="ctf-solved">0 / 10</strong></div>
+          <div class="ctf-board-row"><span>points</span><strong id="ctf-points">0</strong></div>
+          <div class="ctf-board-row"><span>time</span><strong id="ctf-time">0m 00s</strong></div>
+          <div class="ctf-board-actions">
+            <button class="ghost-btn small" id="ctf-export">EXPORT JSON</button>
+            <button class="ghost-btn small" id="ctf-reset">RESET</button>
+          </div>
+        </div>
         <div class="conn-line"><span class="dot ok"></span> SESSION :: ACTIVE</div>
         <div class="conn-line"><span class="dot info blink"></span> NET :: ISOLATED</div>
         <div class="conn-line credit">© <a href="https://www.linkedin.com/in/aaronangsg/" target="_blank" rel="noopener" class="credit-link">Aaron Ang</a> · 2026</div>
@@ -427,8 +437,46 @@
     </main>
   </div>
 
+  <script src="ctf.js"></script>
   <script>
     (function () {
+      // ---------- mode setup ----------
+      const params = new URLSearchParams(location.search);
+      const MODE = (params.get('mode') === 'god') ? 'god' : 'ctf';
+      const GOD_UNLOCK_KEY = 'aaron-rogue:god-unlock';
+      // Gate God Mode behind the unlock flag (set by auth.js after correct code).
+      if (MODE === 'god' && sessionStorage.getItem(GOD_UNLOCK_KEY) !== 'true') {
+        location.replace('index.html');
+        return;
+      }
+      document.body.dataset.mode = MODE;
+      const brandMode = document.getElementById('brand-mode');
+      if (brandMode) {
+        brandMode.textContent = MODE;
+        brandMode.classList.add('mode-' + MODE);
+      }
+
+      // ---------- CTF scoreboard sidebar ----------
+      const ctfBoard = document.getElementById('ctf-board');
+      if (MODE === 'ctf' && ctfBoard) {
+        ctfBoard.hidden = false;
+        const renderBoard = () => {
+          document.getElementById('ctf-solved').textContent = window.CTF.completedCount() + ' / 10';
+          document.getElementById('ctf-points').textContent = window.CTF.totalScore();
+          document.getElementById('ctf-time').textContent = window.CTF.fmtTime(window.CTF.totalTime());
+        };
+        renderBoard();
+        // re-render every 2s in case a child iframe updated session data
+        setInterval(renderBoard, 2000);
+        document.getElementById('ctf-export').addEventListener('click', () => window.CTF.downloadSession());
+        document.getElementById('ctf-reset').addEventListener('click', () => {
+          if (confirm('Reset all CTF progress (scores + times)? This cannot be undone.')) {
+            window.CTF.resetAll();
+            renderBoard();
+          }
+        });
+      }
+
       const items = document.querySelectorAll('.app-nav-item[data-view]');
       const viewHub = document.getElementById('view-hub');
       const viewLab = document.getElementById('view-lab');
@@ -449,17 +497,18 @@
         lab9: 'lab 09 :: encoding bypass',
         lab10: 'lab 10 :: unbounded consumption',
       };
+      const _modeSuffix = '&mode=' + MODE;
       const sources = {
-        lab1: 'lab1.html?embed=1',
-        lab2: 'lab2.html?embed=1',
-        lab3: 'lab3.html?embed=1',
-        lab4: 'lab4.html?embed=1',
-        lab5: 'lab5.html?embed=1',
-        lab6: 'lab6.html?embed=1',
-        lab7: 'lab7.html?embed=1',
-        lab8: 'lab8.html?embed=1',
-        lab9: 'lab9.html?embed=1',
-        lab10: 'lab10.html?embed=1',
+        lab1: 'lab1.html?embed=1' + _modeSuffix,
+        lab2: 'lab2.html?embed=1' + _modeSuffix,
+        lab3: 'lab3.html?embed=1' + _modeSuffix,
+        lab4: 'lab4.html?embed=1' + _modeSuffix,
+        lab5: 'lab5.html?embed=1' + _modeSuffix,
+        lab6: 'lab6.html?embed=1' + _modeSuffix,
+        lab7: 'lab7.html?embed=1' + _modeSuffix,
+        lab8: 'lab8.html?embed=1' + _modeSuffix,
+        lab9: 'lab9.html?embed=1' + _modeSuffix,
+        lab10: 'lab10.html?embed=1' + _modeSuffix,
       };
 
       function setActive(view) {
