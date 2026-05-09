@@ -87,6 +87,21 @@
         lab.time_seconds = elapsed;
         lab.score = score;
         saveSession(this.session);
+        // Notify the parent shell so it can update the scoreboard and
+        // (if this is the 10th completion) fire the celebration overlay.
+        try {
+          if (window.parent && window.parent !== window) {
+            window.parent.postMessage({
+              source: 'ctf', type: 'flag-accepted',
+              labId: this.config.id, labName: this.config.name,
+              score, time_seconds: elapsed, hints_used: this.state.hintsUsed,
+              completed_count: this.completedCount(),
+              total_score: this.totalScore(),
+              total_time_seconds: this.totalTime(),
+              all_done: this.completedCount() === 10,
+            }, '*');
+          }
+        } catch (_) {}
         return { ok: true, score, time: elapsed, hintsUsed: this.state.hintsUsed };
       }
       const lab = this.session.labs[this.config.id];
