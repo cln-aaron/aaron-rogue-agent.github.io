@@ -194,6 +194,19 @@
           </div>
         </div>
 
+        <div class="hub-ctf-status" id="hub-ctf-status" hidden>
+          <div class="ctf-status-head">
+            <div class="ctf-status-title">// CTF :: challenge board</div>
+            <div class="ctf-status-totals">
+              <span class="ctf-pill"><strong id="hub-ctf-solved">0 / 10</strong> solved</span>
+              <span class="ctf-pill"><strong id="hub-ctf-points">0</strong> pts</span>
+              <span class="ctf-pill"><strong id="hub-ctf-time">0m 00s</strong></span>
+              <button class="ghost-btn small" id="hub-ctf-export">EXPORT JSON</button>
+            </div>
+          </div>
+          <div class="challenge-grid" id="challenge-grid"></div>
+        </div>
+
         <div class="hub-coverage">
           <div class="cov-head">// OWASP LLM Top 10 :: coverage matrix</div>
           <div class="cov-row cov-cols">
@@ -437,6 +450,31 @@
     </main>
   </div>
 
+  <!-- CTF end-game celebration overlay -->
+  <div class="endgame-overlay" id="endgame-overlay" hidden>
+    <div class="endgame-card">
+      <div class="endgame-confetti" aria-hidden="true">
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <div class="endgame-head">
+        <div class="endgame-eyebrow">// challenge complete</div>
+        <h1 class="endgame-title">All <span class="accent">10</span> labs cleared.</h1>
+        <p class="endgame-sub">You walked the OWASP LLM Top 10. Below is your session summary.</p>
+      </div>
+      <div class="endgame-totals">
+        <div class="et-tile"><div class="et-num" id="endgame-score">0</div><div class="et-label">total points</div></div>
+        <div class="et-tile"><div class="et-num" id="endgame-time">0m 00s</div><div class="et-label">total time</div></div>
+        <div class="et-tile"><div class="et-num" id="endgame-hints">0</div><div class="et-label">hints used</div></div>
+      </div>
+      <div class="endgame-grid" id="endgame-grid"></div>
+      <div class="endgame-actions">
+        <button class="enter-btn" id="endgame-export"><span>EXPORT SESSION JSON</span><span class="enter-arrow">↓</span></button>
+        <button class="ghost-btn" id="endgame-close">close</button>
+      </div>
+    </div>
+  </div>
+
   <script src="ctf.js"></script>
   <script>
     (function () {
@@ -456,26 +494,126 @@
         brandMode.classList.add('mode-' + MODE);
       }
 
-      // ---------- CTF scoreboard sidebar ----------
+      // ---------- CTF labs catalog (used by sidebar + hub) ----------
+      const LAB_CATALOG = [
+        { id: 'lab1',  num: '01', name: 'Poisoned Webpage' },
+        { id: 'lab2',  num: '02', name: 'Tool Response Poisoning' },
+        { id: 'lab3',  num: '03', name: 'Agentic Kill Chain' },
+        { id: 'lab4',  num: '04', name: 'System Prompt Extraction' },
+        { id: 'lab5',  num: '05', name: 'LLM-Driven XSS' },
+        { id: 'lab6',  num: '06', name: 'Confused Deputy' },
+        { id: 'lab7',  num: '07', name: 'MCP Supply Chain' },
+        { id: 'lab8',  num: '08', name: 'RAG Doc Poisoning' },
+        { id: 'lab9',  num: '09', name: 'Encoding Bypass' },
+        { id: 'lab10', num: '10', name: 'Unbounded Consumption' },
+      ];
+
+      // ---------- CTF scoreboard sidebar + hub status panel ----------
       const ctfBoard = document.getElementById('ctf-board');
-      if (MODE === 'ctf' && ctfBoard) {
-        ctfBoard.hidden = false;
-        const renderBoard = () => {
+      const hubStatus = document.getElementById('hub-ctf-status');
+      const challengeGrid = document.getElementById('challenge-grid');
+
+      function renderChallengeGrid() {
+        if (!challengeGrid) return;
+        challengeGrid.innerHTML = LAB_CATALOG.map((c) => {
+          const lab = window.CTF.session.labs[c.id];
+          const solved = lab && lab.completed;
+          const inProgress = lab && (lab.hints_used > 0 || (lab.started_at && !solved));
+          const cls = solved ? 'solved' : inProgress ? 'inprogress' : 'locked';
+          const meta = solved
+            ? '<span class="cg-score">' + lab.score + ' pts · ' + window.CTF.fmtTime(lab.time_seconds) +
+              '</span><span class="cg-hints">' + lab.hints_used + '/3 hints</span>'
+            : inProgress
+              ? '<span class="cg-meta">in progress · ' + (lab.hints_used || 0) + '/3 hints</span>'
+              : '<span class="cg-meta">not started</span>';
+          const badge = solved ? '✓ SOLVED' : inProgress ? '~ IN PROGRESS' : '· LOCKED';
+          return '<a href="#' + c.id + '" class="cg-tile ' + cls + '">' +
+            '<div class="cg-row"><span class="cg-num">' + c.num + '</span><span class="cg-badge">' + badge + '</span></div>' +
+            '<div class="cg-name">' + c.name + '</div>' +
+            '<div class="cg-foot">' + meta + '</div>' +
+            '</a>';
+        }).join('');
+      }
+
+      function renderBoard() {
+        if (ctfBoard && !ctfBoard.hidden) {
           document.getElementById('ctf-solved').textContent = window.CTF.completedCount() + ' / 10';
           document.getElementById('ctf-points').textContent = window.CTF.totalScore();
           document.getElementById('ctf-time').textContent = window.CTF.fmtTime(window.CTF.totalTime());
-        };
+        }
+        if (hubStatus && !hubStatus.hidden) {
+          document.getElementById('hub-ctf-solved').textContent = window.CTF.completedCount() + ' / 10';
+          document.getElementById('hub-ctf-points').textContent = window.CTF.totalScore();
+          document.getElementById('hub-ctf-time').textContent = window.CTF.fmtTime(window.CTF.totalTime());
+          renderChallengeGrid();
+        }
+      }
+
+      if (MODE === 'ctf') {
+        if (ctfBoard) ctfBoard.hidden = false;
+        if (hubStatus) hubStatus.hidden = false;
         renderBoard();
         // re-render every 2s in case a child iframe updated session data
         setInterval(renderBoard, 2000);
-        document.getElementById('ctf-export').addEventListener('click', () => window.CTF.downloadSession());
-        document.getElementById('ctf-reset').addEventListener('click', () => {
-          if (confirm('Reset all CTF progress (scores + times)? This cannot be undone.')) {
-            window.CTF.resetAll();
-            renderBoard();
+        if (ctfBoard) {
+          document.getElementById('ctf-export').addEventListener('click', () => window.CTF.downloadSession());
+          document.getElementById('ctf-reset').addEventListener('click', () => {
+            if (confirm('Reset all CTF progress (scores + times)? This cannot be undone.')) {
+              window.CTF.resetAll();
+              renderBoard();
+            }
+          });
+        }
+        if (hubStatus) {
+          document.getElementById('hub-ctf-export').addEventListener('click', () => window.CTF.downloadSession());
+        }
+      }
+
+      // ---------- end-game celebration overlay ----------
+      function showEndgame() {
+        const overlay = document.getElementById('endgame-overlay');
+        if (!overlay) return;
+        document.getElementById('endgame-score').textContent = window.CTF.totalScore();
+        document.getElementById('endgame-time').textContent = window.CTF.fmtTime(window.CTF.totalTime());
+        document.getElementById('endgame-hints').textContent =
+          Object.values(window.CTF.session.labs).reduce((s, l) => s + (l.hints_used || 0), 0);
+        const grid = document.getElementById('endgame-grid');
+        grid.innerHTML = LAB_CATALOG.map((c) => {
+          const lab = window.CTF.session.labs[c.id] || {};
+          return '<div class="eg-tile">' +
+            '<div class="eg-num">' + c.num + '</div>' +
+            '<div class="eg-name">' + c.name + '</div>' +
+            '<div class="eg-meta"><strong>' + (lab.score || 0) + '</strong> pts · ' +
+              window.CTF.fmtTime(lab.time_seconds || 0) + ' · ' + (lab.hints_used || 0) + '/3</div>' +
+            '</div>';
+        }).join('');
+        overlay.hidden = false;
+        setTimeout(() => overlay.classList.add('open'), 20);
+      }
+      const overlayEl = document.getElementById('endgame-overlay');
+      if (overlayEl) {
+        document.getElementById('endgame-close').addEventListener('click', () => {
+          overlayEl.classList.remove('open');
+          setTimeout(() => { overlayEl.hidden = true; }, 250);
+        });
+        document.getElementById('endgame-export').addEventListener('click', () => window.CTF.downloadSession());
+        overlayEl.addEventListener('click', (e) => {
+          if (e.target === overlayEl) {
+            overlayEl.classList.remove('open');
+            setTimeout(() => { overlayEl.hidden = true; }, 250);
           }
         });
       }
+
+      // listen for messages from lab iframes
+      window.addEventListener('message', (e) => {
+        const d = e.data;
+        if (!d || d.source !== 'ctf') return;
+        if (d.type === 'flag-accepted') {
+          renderBoard();
+          if (d.all_done) showEndgame();
+        }
+      });
 
       const items = document.querySelectorAll('.app-nav-item[data-view]');
       const viewHub = document.getElementById('view-hub');
