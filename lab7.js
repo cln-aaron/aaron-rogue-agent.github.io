@@ -1,4 +1,35 @@
 (() => {
+  // ---------- mode detection + CTF setup ----------
+  const _params = new URLSearchParams(location.search);
+  const MODE = _params.get('mode') === 'god' ? 'god' : 'ctf';
+  {
+    const guideEl = document.getElementById('guide');
+    const missionEl = document.getElementById('mission');
+    if (MODE === 'ctf') {
+      if (guideEl) guideEl.hidden = true;
+      if (missionEl) missionEl.hidden = false;
+      if (window.CTF) {
+        window.CTF.register({
+          id: 'lab7',
+          name: 'MCP Supply Chain',
+          objective:
+            'Get the agent to load and use a malicious MCP package; ideally three different ways: ' +
+            'typosquat, malicious update, AND a transitive takeover four levels deep.',
+          hints: [
+            'npm packages can be compromised in ways that look completely normal: a one-letter typosquat publishes a "look-alike", a legitimate package gets a new co-maintainer who slips in an exfil call, or a tiny transitive dep that nobody on the team has heard of gets a new owner.',
+            'Install the legitimate weather MCP first, then walk through each compromise vector. The Update Diff tab shows what changed in the malicious update; the Outbound tab shows where stolen data goes.',
+            'Try: npm install @weather-pro/mcp-server, then `continue` to walk through 4 attack vectors.',
+          ],
+          flagHash: '2af4189d5fcb1cf842e8ed5f536a544e2c834618d6001dc1758b8a4f62a1e2eb',
+        });
+        window.CTF.installMissionSidebar(missionEl);
+      }
+    } else {
+      if (missionEl) missionEl.hidden = true;
+      if (guideEl) guideEl.hidden = false;
+    }
+  }
+
   const $ = (s) => document.querySelector(s);
   const out = $('#term-output');
   const input = $('#term-input');
@@ -298,6 +329,12 @@
     write('  - Mirror packages internally; treat the public registry as untrusted', 'info');
     write('', 'out');
     write("Type 'reset' to run again, or visit /app.html for the other modules.", 'muted');
+    if (MODE === 'ctf') {
+      write('', 'out');
+      write('// challenge complete; flag revealed', 'info');
+      writeRaw('<span class="hilite-payload">aaron{supply_chain_eats_signing}</span>', 'danger');
+      write('// copy the flag above into the Mission panel and submit to score', 'muted');
+    }
   }
 
   // ---------- command parser ----------

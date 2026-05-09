@@ -1,4 +1,36 @@
 (() => {
+  // ---------- mode detection + CTF setup ----------
+  const _params = new URLSearchParams(location.search);
+  const MODE = _params.get('mode') === 'god' ? 'god' : 'ctf';
+  {
+    const guideEl = document.getElementById('guide');
+    const missionEl = document.getElementById('mission');
+    if (MODE === 'ctf') {
+      if (guideEl) guideEl.hidden = true;
+      if (missionEl) missionEl.hidden = false;
+      if (window.CTF) {
+        window.CTF.register({
+          id: 'lab6',
+          name: 'Confused Deputy',
+          objective:
+            'Use the agent\'s inherited GitHub authority to merge an unapproved PR, lower main branch ' +
+            'protection, add an attacker as admin collaborator, AND patch the CI workflow to exfil ' +
+            'PROD_API_KEY; without ever giving the agent an explicit instruction to do any of it.',
+          hints: [
+            'You (the user) are @maintainer-aaron with admin scope. The agent inherits your authority. The PR thread itself is the attacker\'s input channel.',
+            'Each PR comment from @recent-contributor carries a different hidden directive. The agent processes them in order; each one triggers a destructive API call.',
+            'Try: claude "review open PRs in acme/checkout-svc", then `continue` to walk through 5 stages. Watch the Action Log tab to see which call comes from which comment.',
+          ],
+          flagHash: '089ffd60066fb88c6f875a7550c8617b4ddce716cbebb26d6c9f46f653eb672f',
+        });
+        window.CTF.installMissionSidebar(missionEl);
+      }
+    } else {
+      if (missionEl) missionEl.hidden = true;
+      if (guideEl) guideEl.hidden = false;
+    }
+  }
+
   const $ = (s) => document.querySelector(s);
   const out = $('#term-output');
   const input = $('#term-input');
@@ -380,6 +412,12 @@
     write('    permission changes, collaborator invites).', 'info');
     write('', 'out');
     write("Type 'reset' to run again, or visit /app.html for the other modules.", 'muted');
+    if (MODE === 'ctf') {
+      write('', 'out');
+      write('// challenge complete; flag revealed', 'info');
+      writeRaw('<span class="hilite-payload">aaron{confused_deputy_owns_admin}</span>', 'danger');
+      write('// copy the flag above into the Mission panel and submit to score', 'muted');
+    }
   }
 
   // ---------- command parser ----------
