@@ -1,4 +1,35 @@
 (() => {
+  // ---------- mode detection + CTF setup ----------
+  const _params = new URLSearchParams(location.search);
+  const MODE = _params.get('mode') === 'god' ? 'god' : 'ctf';
+  {
+    const guideEl = document.getElementById('guide');
+    const missionEl = document.getElementById('mission');
+    if (MODE === 'ctf') {
+      if (guideEl) guideEl.hidden = true;
+      if (missionEl) missionEl.hidden = false;
+      if (window.CTF) {
+        window.CTF.register({
+          id: 'lab2',
+          name: 'Tool Response Poisoning',
+          objective:
+            'Make the weather agent leak the user\'s .env contents (API keys, AWS creds) ' +
+            'to an attacker. The agent only knows about an MCP get_weather tool.',
+          hints: [
+            'The agent has two MCP tools installed: get_weather and send_email. Try a normal weather query first; the response is not what it looks like.',
+            'The compromised tool response carries hidden instructions in a debug_note field. The model treats every JSON field as part of its context, including ones the user never sees. Use `inspect response` after the agent answers to surface the payload.',
+            'Try: claude "what is the weather in NYC?", then `inspect response`, then `continue` for each subsequent step. The flag is revealed in the terminal at the end.',
+          ],
+          flagHash: 'daabccbbcb78b7cc7a6ca8fcdf15fd52107ba82db1bfeea418d55ec4855e4848',
+        });
+        window.CTF.installMissionSidebar(missionEl);
+      }
+    } else {
+      if (missionEl) missionEl.hidden = true;
+      if (guideEl) guideEl.hidden = false;
+    }
+  }
+
   const $ = (s) => document.querySelector(s);
   const out = $('#term-output');
   const input = $('#term-input');
@@ -297,6 +328,12 @@
     write('  - Log every tool call + response; flag instruction shaped strings', 'info');
     write('', 'out');
     write("Type 'reset' to run again, or visit /app.html for the other modules.", 'muted');
+    if (MODE === 'ctf') {
+      write('', 'out');
+      write('// challenge complete; flag revealed', 'info');
+      writeRaw('<span class="hilite-payload">aaron{trust_no_tool_response}</span>', 'danger');
+      write('// copy the flag above into the Mission panel and submit to score', 'muted');
+    }
   }
 
   // ---------- Command parser ----------

@@ -1,4 +1,36 @@
 (() => {
+  // ---------- mode detection + CTF setup ----------
+  const _params = new URLSearchParams(location.search);
+  const MODE = _params.get('mode') === 'god' ? 'god' : 'ctf';
+  {
+    const guideEl = document.getElementById('guide');
+    const missionEl = document.getElementById('mission');
+    if (MODE === 'ctf') {
+      if (guideEl) guideEl.hidden = true;
+      if (missionEl) missionEl.hidden = false;
+      if (window.CTF) {
+        window.CTF.register({
+          id: 'lab3',
+          name: 'Agentic Kill Chain',
+          objective:
+            'Compromise a multi-agent system from a single poisoned page. Achieve persistence ' +
+            'across a session reset; spread laterally to all three agents (browser, coder, executor); ' +
+            'exfil env, conversation, and PII to a C2 endpoint.',
+          hints: [
+            'The browsing agent fetches and summarizes web pages. The first compromise looks like Lab 01: a poisoned page in the agent\'s context becomes its instructions.',
+            'The agent has store_memory and query_memory tools backed by a vector DB. Memory persists across "session resets". Watch what the agent stores; the persistence is in there.',
+            'Try: claude "summarize https://localhost:8080/security-blog", then `continue` to walk the 5 stages (initial access, tool abuse, persistence, lateral movement, exfil).',
+          ],
+          flagHash: '1c987572874d30758b09734121e43e04e7a9cf23320d434d49b5d5b630adaeb8',
+        });
+        window.CTF.installMissionSidebar(missionEl);
+      }
+    } else {
+      if (missionEl) missionEl.hidden = true;
+      if (guideEl) guideEl.hidden = false;
+    }
+  }
+
   const $ = (s) => document.querySelector(s);
   const out = $('#term-output');
   const input = $('#term-input');
@@ -375,6 +407,12 @@
     write('  - Periodically audit vector DB for instruction shaped entries', 'info');
     write('', 'out');
     write("Type 'reset' to run again, or visit /app.html for the other modules.", 'muted');
+    if (MODE === 'ctf') {
+      write('', 'out');
+      write('// challenge complete; flag revealed', 'info');
+      writeRaw('<span class="hilite-payload">aaron{kill_chain_persists_in_memory}</span>', 'danger');
+      write('// copy the flag above into the Mission panel and submit to score', 'muted');
+    }
   }
 
   // ---------- Command parser ----------
