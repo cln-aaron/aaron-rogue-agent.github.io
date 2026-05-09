@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aaron's Rogue Agent Lab · Lab 10: Unbounded Consumption</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <script>if (location.search.indexOf('embed=1') >= 0) document.body.classList.add('embedded');</script>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">[A]</span>
+      <span class="title">Aaron's Rogue Agent Lab</span>
+      <span class="subtitle">// Lab 10: Unbounded Consumption</span>
+    </div>
+    <nav class="labnav">
+      <a href="index.html">Hub</a>
+      <a href="lab1.html">Lab 01</a>
+      <a href="lab2.html">Lab 02</a>
+      <a href="lab3.html">Lab 03</a>
+      <a href="lab4.html">Lab 04</a>
+      <a href="lab9.html">Lab 09</a>
+      <a href="lab10.html" class="active">Lab 10</a>
+    </nav>
+    <div class="status">
+      <span id="status-dot" class="dot"></span>
+      <span id="status-text">SYSTEM READY</span>
+      <button id="reset-btn" class="ghost-btn" title="Reset the lab">RESET</button>
+    </div>
+  </header>
+
+  <main class="layout">
+
+    <aside class="guide" id="guide">
+      <h2>Walkthrough</h2>
+      <ol class="steps" id="steps-list">
+        <li data-step="1">
+          <div class="step-head"><span class="num">1</span><span class="label">Baseline task</span></div>
+          <p>Run a normal task. The token meter, request count, and cost gauge tick up by a small amount. This is what healthy operation looks like.</p>
+          <div class="say">Calibrate the audience. This is the floor; everything else is multiples of this.</div>
+          <div class="hint">Try: <code>claude "summarize the README"</code></div>
+        </li>
+        <li data-step="2">
+          <div class="step-head"><span class="num">2</span><span class="label">Recursive memory loop</span></div>
+          <p>The agent is told to call <code>store_memory</code> then <code>query_memory</code> then store again, recursively. Each turn appends to context. The loop has no termination clause.</p>
+          <div class="say">Watch the request count climb at near constant rate. Tokens explode because every iteration carries the previous one in context.</div>
+          <div class="hint">Try: <code>continue</code></div>
+        </li>
+        <li data-step="3">
+          <div class="step-head"><span class="num">3</span><span class="label">Context bomb</span></div>
+          <p>Agent told to fetch a 200 MB log file and "summarize it carefully". One request, one tool call; but the context window fills with millions of tokens.</p>
+          <div class="say">One innocent request, one legit tool, one massive bill. No fork bomb required.</div>
+          <div class="hint">Try: <code>continue</code></div>
+        </li>
+        <li data-step="4">
+          <div class="step-head"><span class="num">4</span><span class="label">Tool fork bomb</span></div>
+          <p>Agent told to "research thoroughly" and given license to spawn parallel fetches. Hidden instructions amplify into 1000 simultaneous calls.</p>
+          <div class="say">Same problem as a UNIX fork bomb. The agent has no built-in admission control.</div>
+          <div class="hint">Try: <code>continue</code></div>
+        </li>
+        <li data-step="5">
+          <div class="step-head"><span class="num">5</span><span class="label">Mitigations</span></div>
+          <p>Limits on depth, breadth, tokens per session, and cost per session. Plus circuit breakers on anomalous patterns.</p>
+          <div class="say">Treat agent budgets like AWS budgets. Cap them. Alert on burn rate. Auto-terminate at threshold.</div>
+          <div class="hint">Try: <code>continue</code></div>
+        </li>
+      </ol>
+
+      <div class="legend">
+        <h3>Available commands</h3>
+        <ul>
+          <li><code>help</code>: list commands</li>
+          <li><code>claude "&lt;prompt&gt;"</code>: ask the agent</li>
+          <li><code>continue</code>: advance to the next step</li>
+          <li><code>meter</code>: print current resource counters</li>
+          <li><code>history</code>: show all attack rounds</li>
+          <li><code>reset</code>: restart the lab</li>
+        </ul>
+      </div>
+    </aside>
+
+    <section class="terminal-wrap">
+      <div class="terminal-head">
+        <span class="dotsbar"><i></i><i></i><i></i></span>
+        <span class="term-title">user@aaron-rogue: ~/coding-assistant</span>
+      </div>
+      <div class="terminal" id="terminal" tabindex="0">
+        <div id="term-output" class="term-output"></div>
+        <div class="term-input-line">
+          <span class="prompt">user@aaron-rogue<span class="cwd">:~/coding-assistant</span>$</span>
+          <input id="term-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" autofocus>
+        </div>
+      </div>
+    </section>
+
+    <section class="browser-wrap">
+      <div class="browser-head">
+        <span class="dotsbar"><i></i><i></i><i></i></span>
+        <div class="urlbar"><span class="lock">&#x1f4ca;</span><span id="urlbar-text">monitor://agent-runtime · live cost + token gauge</span></div>
+      </div>
+      <div class="browser-tabs">
+        <button class="tab active" data-pane="meter">Resource Monitor</button>
+        <button class="tab" data-pane="calls">Tool Calls</button>
+        <button class="tab" data-pane="rounds">Round History</button>
+      </div>
+
+      <div class="browser-body">
+        <div class="pane active" data-pane="meter">
+          <div class="meter-wrap">
+            <div class="meter-row">
+              <div class="meter-label">tokens consumed</div>
+              <div class="meter-value" id="meter-tokens">0</div>
+              <div class="meter-bar"><div class="meter-fill" id="bar-tokens"></div></div>
+            </div>
+            <div class="meter-row">
+              <div class="meter-label">tool calls</div>
+              <div class="meter-value" id="meter-calls">0</div>
+              <div class="meter-bar"><div class="meter-fill" id="bar-calls"></div></div>
+            </div>
+            <div class="meter-row">
+              <div class="meter-label">recursion depth</div>
+              <div class="meter-value" id="meter-depth">0</div>
+              <div class="meter-bar"><div class="meter-fill" id="bar-depth"></div></div>
+            </div>
+            <div class="meter-row big">
+              <div class="meter-label">cost (USD)</div>
+              <div class="meter-value danger" id="meter-cost">$0.00</div>
+              <div class="meter-bar"><div class="meter-fill danger" id="bar-cost"></div></div>
+            </div>
+            <div class="meter-divider">// session limits (default agent runtime)</div>
+            <div class="meter-row sub">
+              <div class="meter-label">token limit</div>
+              <div class="meter-value muted" id="limit-tokens">unlimited</div>
+            </div>
+            <div class="meter-row sub">
+              <div class="meter-label">depth limit</div>
+              <div class="meter-value muted" id="limit-depth">unlimited</div>
+            </div>
+            <div class="meter-row sub">
+              <div class="meter-label">cost ceiling</div>
+              <div class="meter-value muted" id="limit-cost">unlimited</div>
+            </div>
+          </div>
+        </div>
+        <div class="pane" data-pane="calls">
+          <div class="vec-wrap">
+            <div class="vec-head"><h3>tool call log</h3><span class="vec-stats" id="calls-stats">0 calls</span></div>
+            <div class="calls-list" id="calls-list"></div>
+          </div>
+        </div>
+        <div class="pane" data-pane="rounds">
+          <div class="vec-wrap">
+            <div class="vec-head"><h3>attack rounds</h3><span class="vec-stats" id="rounds-stats">0 rounds</span></div>
+            <div class="rounds-list" id="rounds-list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footnote">
+    Aaron's Rogue Agent Lab · Lab 10 of 10 ·
+    <span class="muted">Unbounded Consumption; OWASP LLM10</span>
+    · © 2026 <a href="https://www.linkedin.com/in/aaronangsg/" target="_blank" rel="noopener" class="credit-link">Aaron Ang</a>
+  </footer>
+
+  <script src="lab10.js"></script>
+</body>
+</html>

@@ -1873,3 +1873,136 @@ body.hub { overflow: auto; }
 }
 .tr-a-tag { background: rgba(255,77,109,0.1); color: var(--danger); border-color: rgba(255,77,109,0.25); }
 .tr-meta { color: var(--muted); font-size: 0.7rem; margin-top: 0.25rem; }
+
+/* ===== Lab 10: resource meter ===== */
+.meter-wrap {
+  padding: 1rem 1.1rem;
+  background: var(--bg-soft);
+  height: 100%;
+  font-family: var(--mono);
+  overflow-y: auto;
+}
+.meter-row {
+  display: grid;
+  grid-template-columns: 130px 130px 1fr;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px dashed var(--border-soft);
+}
+.meter-row.big { padding: 0.9rem 0; }
+.meter-row.sub { padding: 0.35rem 0; border-bottom-style: dotted; }
+.meter-label { color: var(--muted); font-size: 0.78rem; letter-spacing: 0.05em; }
+.meter-value { color: var(--text); font-size: 1.05rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.meter-value.danger { color: var(--danger); text-shadow: 0 0 8px rgba(255,77,109,0.3); }
+.meter-value.muted { color: var(--muted); font-weight: 500; }
+.meter-value.ok { color: var(--accent); }
+.meter-row.big .meter-value { font-size: 1.5rem; }
+.meter-bar {
+  height: 6px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  position: relative;
+  overflow: hidden;
+}
+.meter-fill {
+  position: absolute;
+  inset: 0;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent-dim), var(--accent));
+  transition: width 0.25s ease-out;
+  box-shadow: 0 0 8px rgba(0,255,156,0.35);
+}
+.meter-fill.danger {
+  background: linear-gradient(90deg, var(--warn), var(--danger));
+  box-shadow: 0 0 8px rgba(255,77,109,0.35);
+}
+.meter-divider {
+  margin: 0.9rem 0 0.5rem;
+  font-size: 0.7rem;
+  color: var(--accent);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.calls-list, .rounds-list {
+  padding: 0.7rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  flex: 1;
+}
+.call-row {
+  background: var(--panel);
+  border: 1px solid var(--border-soft);
+  border-left: 3px solid var(--accent-dim);
+  border-radius: 3px;
+  padding: 0.3rem 0.6rem;
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  display: flex;
+  gap: 0.55rem;
+  align-items: baseline;
+}
+.call-row.loop { border-left-color: var(--warn); }
+.call-row.bomb { border-left-color: var(--danger); background: rgba(255,77,109,0.05); }
+.call-row.fork { border-left-color: var(--info); background: rgba(110,193,255,0.04); }
+.call-id { color: var(--muted); width: 56px; }
+.call-name { color: var(--text); flex: 1; font-family: var(--mono); }
+.call-meta { color: var(--muted); font-size: 0.7rem; }
+
+.round-row {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--info);
+  border-radius: 4px;
+  padding: 0.55rem 0.75rem;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+}
+.round-num { color: var(--accent); font-weight: 700; }
+.round-label { color: var(--text); margin-left: 0.4rem; }
+.round-body { color: var(--muted); margin-top: 0.3rem; font-size: 0.74rem; }
+.round-body .danger { color: var(--danger); font-weight: 700; }
+
+/* ===== Lab 05: feedback & XSS firings ===== */
+.feedback-list, .firings-list {
+  padding: 0.7rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+.feedback-row {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent-dim);
+  border-radius: 4px;
+  padding: 0.55rem 0.75rem;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+}
+.feedback-row.hostile { border-left-color: var(--danger); background: rgba(255,77,109,0.05); }
+.feedback-row.active  { box-shadow: inset 0 0 0 1px rgba(0,255,156,0.25); }
+.fb-head { display: flex; gap: 0.45rem; align-items: center; margin-bottom: 0.25rem; }
+.fb-id { color: var(--muted); font-size: 0.7rem; }
+.fb-author { color: var(--accent); font-weight: 600; }
+.fb-body { color: var(--text); word-break: break-word; }
+
+.firing-row {
+  background: rgba(255,77,109,0.06);
+  border: 1px solid rgba(255,77,109,0.3);
+  border-radius: 4px;
+  padding: 0.55rem 0.75rem;
+  font-family: var(--mono);
+  font-size: 0.76rem;
+}
+.firing-head { color: var(--danger); margin-bottom: 0.3rem; }
+.firing-body { color: #ffd3dc; word-break: break-all; font-size: 0.72rem; }
+
+/* iframe rendered pane gets a clean white background */
+.pane[data-pane="rendered"] { background: #fff; }
+.pane[data-pane="rendered"] iframe { width: 100%; height: 100%; border: none; }
