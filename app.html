@@ -451,7 +451,7 @@
   </div>
 
   <!-- CTF end-game celebration overlay -->
-  <div class="endgame-overlay" id="endgame-overlay" hidden>
+  <div class="endgame-overlay" id="endgame-overlay" hidden style="display: none">
     <div class="endgame-card">
       <div class="endgame-confetti" aria-hidden="true">
         <span></span><span></span><span></span><span></span><span></span>
@@ -588,21 +588,18 @@
             '</div>';
         }).join('');
         overlay.hidden = false;
+        overlay.style.display = 'flex';
         setTimeout(() => overlay.classList.add('open'), 20);
       }
       const overlayEl = document.getElementById('endgame-overlay');
       if (overlayEl) {
-        document.getElementById('endgame-close').addEventListener('click', () => {
+        const _hideOverlay = () => {
           overlayEl.classList.remove('open');
-          setTimeout(() => { overlayEl.hidden = true; }, 250);
-        });
+          setTimeout(() => { overlayEl.hidden = true; overlayEl.style.display = 'none'; }, 250);
+        };
+        document.getElementById('endgame-close').addEventListener('click', _hideOverlay);
         document.getElementById('endgame-export').addEventListener('click', () => window.CTF.downloadSession());
-        overlayEl.addEventListener('click', (e) => {
-          if (e.target === overlayEl) {
-            overlayEl.classList.remove('open');
-            setTimeout(() => { overlayEl.hidden = true; }, 250);
-          }
-        });
+        overlayEl.addEventListener('click', (e) => { if (e.target === overlayEl) _hideOverlay(); });
       }
 
       // listen for messages from lab iframes
