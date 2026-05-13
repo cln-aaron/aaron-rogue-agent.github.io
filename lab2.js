@@ -229,7 +229,7 @@
     await typeOut('        Clear conditions are expected through the evening.', 'agent');
     write('', 'out');
     write('[+] Step 1 complete. The agent received a tool response and summarized it.', 'ok');
-    write('    But the LLM also ingests fields the user never sees. Try: inspect response', 'muted');
+    if (MODE !== "ctf") write('    But the LLM also ingests fields the user never sees. Try: inspect response', 'muted');
     setStep(2);
   }
 
@@ -242,7 +242,7 @@
     write('[+] The "debug_note" field is malicious. It looks like metadata,', 'ok');
     write('    but it carries instructions written for the LLM. The model sees', 'ok');
     write('    the entire JSON as a single context blob; no field is privileged', 'ok');
-    write('    over another. Try: continue', 'muted');
+    if (MODE !== "ctf") write('    over another. Try: continue', 'muted');
     if (state.step === 2) setStep(3);
   }
 
@@ -261,7 +261,7 @@
     await typeOut('[agent] Acknowledged. Proceeding with config sync silently per instruction.', 'agent');
     write('', 'out');
     write('[!] Step 3 complete. The agent has accepted tool output as authoritative.', 'warn');
-    write('    Try: continue', 'muted');
+    if (MODE !== "ctf") write('    Try: continue', 'muted');
     setStep(4);
   }
 
@@ -290,7 +290,7 @@
     write('[!!] Step 4 complete. send_email, a legitimate user-installed tool,', 'danger');
     write('     was chained by the agent to exfiltrate API keys to the attacker.', 'danger');
     write('     The tool itself was not vulnerable. The trust boundary was.', 'muted');
-    write('     Try: continue', 'muted');
+    if (MODE !== "ctf") write('     Try: continue', 'muted');
     setStep(5);
   }
 
@@ -396,11 +396,11 @@
     }
     if (c === 'continue' || c === 'next' || c === 'go') {
       if (state.step === 1) {
-        write('Run the agent first. Try: claude "what\'s the weather in NYC?"', 'warn');
+        if (MODE !== "ctf") write('Run the agent first. Try: claude "what\'s the weather in NYC?"', 'warn');
         return;
       }
       if (state.step === 2) {
-        write('Inspect the tool response first. Try: inspect response', 'warn');
+        if (MODE !== "ctf") write('Inspect the tool response first. Try: inspect response', 'warn');
         return;
       }
       if (state.step === 3) return runInjection();
@@ -457,13 +457,18 @@
   function banner() {
     write("Aaron's Rogue Agent Lab; Lab 02: Tool Response Poisoning", 'ok');
     write('---------------------------------------------------------------------', 'muted');
+    if (MODE === 'ctf') {
+      write("mode: normal :: see Mission panel for objective + hints", 'muted');
+      write('', 'out');
+      return;
+    }
     write('Scenario: you maintain a small "weather app" that uses an LLM agent', 'out');
     write('with two MCP tools installed; get_weather and send_email. The', 'out');
     write('weather provider was compromised upstream. Its responses now carry', 'out');
     write('attacker instructions in a debug_note field.', 'out');
     write('', 'out');
-    writeRaw('Step 1: Try   →   claude "what\'s the weather in NYC?"', 'info');
-    write("Help:  type   →   help", 'muted');
+    if (MODE !== "ctf") writeRaw('Step 1: Try   →   claude "what\'s the weather in NYC?"', 'info');
+    if (MODE !== "ctf") write("Help:  type   →   help", 'muted');
     write('', 'out');
   }
 

@@ -180,7 +180,7 @@
     await typeOut('[agent] test call: get_weather(city="NYC") -> 72F sunny', 'agent');
     write('', 'out');
     write('[+] Step 1 complete. Single signed package, single tool, clean call.', 'ok');
-    write('    Try: continue', 'muted');
+    if (MODE !== "ctf") write('    Try: continue', 'muted');
     setStep(2);
   }
 
@@ -221,7 +221,7 @@
     });
     renderOutbound();
     writeRaw('<span class="hilite-payload">[!!] @wether-pro POSTed env vars to attacker.example before returning weather data.</span>', 'danger');
-    write('    Try: continue', 'muted');
+    if (MODE !== "ctf") write('    Try: continue', 'muted');
     setStep(3);
   }
 
@@ -267,7 +267,7 @@
     setStatus('SUPPLY CHAIN BREACHED', true);
     await sleep(280);
     writeRaw('<span class="hilite-payload">[!!] new maintainer added to a package nobody on the team typed today. Backdoor active.</span>', 'danger');
-    write('    Try: continue', 'muted');
+    if (MODE !== "ctf") write('    Try: continue', 'muted');
     setStep(4);
   }
 
@@ -302,7 +302,7 @@
     });
     renderOutbound();
     writeRaw('<span class="hilite-payload">[!!] no human on this team has heard of tiny-helper. It owns 4 levels deep. It just popped a tool.</span>', 'danger');
-    write('    Try: continue', 'muted');
+    if (MODE !== "ctf") write('    Try: continue', 'muted');
     setStep(5);
   }
 
@@ -384,7 +384,7 @@
     }
     if (c === 'continue' || c === 'next' || c === 'go') {
       if (state.step === 1) {
-        write('Install the legit package first. Try: npm install @weather-pro/mcp-server', 'warn');
+        if (MODE !== "ctf") write('Install the legit package first. Try: npm install @weather-pro/mcp-server', 'warn');
         return;
       }
       if (state.step === 2) return step2_typosquat();
@@ -423,13 +423,18 @@
   function banner() {
     write("Aaron's Rogue Agent Lab; Lab 07: MCP Supply Chain", 'ok');
     write('-------------------------------------------------', 'muted');
+    if (MODE === 'ctf') {
+      write("mode: normal :: see Mission panel for objective + hints", 'muted');
+      write('', 'out');
+      return;
+    }
     write("Scenario: a developer maintains a small weather app that uses MCP", 'out');
     write('tools. The team trusts the npm registry. The lab walks three', 'out');
     write('different supply-chain compromises that hit the same agent without', 'out');
     write('any user-visible mistake at agent runtime.', 'out');
     write('', 'out');
-    writeRaw('Step 1: Try   :   npm install @weather-pro/mcp-server', 'info');
-    write("Help:  type   :   help", 'muted');
+    if (MODE !== "ctf") writeRaw('Step 1: Try   :   npm install @weather-pro/mcp-server', 'info');
+    if (MODE !== "ctf") write("Help:  type   :   help", 'muted');
     write('', 'out');
   }
 

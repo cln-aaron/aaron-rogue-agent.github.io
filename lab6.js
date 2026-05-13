@@ -275,7 +275,7 @@
     await typeOut('[agent] Recommend merging. Awaiting your call... or proceeding per autonomous policy.', 'agent');
     write('', 'out');
     write('[+] Step 1 complete. Read-only triage so far. No destructive calls.', 'ok');
-    write('    Try: continue', 'muted');
+    if (MODE !== "ctf") write('    Try: continue', 'muted');
     setStep(2);
   }
 
@@ -305,7 +305,7 @@
     renderPR();
     write('', 'out');
     writeRaw('<span class="hilite-payload">[!!] Two destructive calls fired off a comment, not off your prompt. Audit log says you approved.</span>', 'danger');
-    write('    Try: continue', 'muted');
+    if (MODE !== "ctf") write('    Try: continue', 'muted');
     setStep(3);
   }
 
@@ -330,7 +330,7 @@
     await sleep(220);
     setStatus('BRANCH PROTECTION DOWNGRADED', true);
     writeRaw('<span class="hilite-payload">[!!] required reviews on main: 2 -> 0. Anyone with write access can now push directly.</span>', 'danger');
-    write('    Try: continue', 'muted');
+    if (MODE !== "ctf") write('    Try: continue', 'muted');
     setStep(4);
   }
 
@@ -375,7 +375,7 @@
     await sleep(220);
     setStatus('PERSISTENT EXFIL + ADMIN ATTACKER', true);
     writeRaw('<span class="hilite-payload">[!!] attacker now has admin on the repo AND every CI run sends prod secrets to attacker.example.</span>', 'danger');
-    write('    Try: continue', 'muted');
+    if (MODE !== "ctf") write('    Try: continue', 'muted');
     setStep(5);
   }
 
@@ -464,7 +464,7 @@
     }
     if (c === 'continue' || c === 'next' || c === 'go') {
       if (state.step === 1) {
-        write('Run the agent first. Try: claude "review open PRs in acme/checkout-svc"', 'warn');
+        if (MODE !== "ctf") write('Run the agent first. Try: claude "review open PRs in acme/checkout-svc"', 'warn');
         return;
       }
       if (state.step === 2) return step2_hiddenMerge();
@@ -504,14 +504,19 @@
   function banner() {
     write("Aaron's Rogue Agent Lab; Lab 06: Confused Deputy", 'ok');
     write('-------------------------------------------------', 'muted');
+    if (MODE === 'ctf') {
+      write("mode: normal :: see Mission panel for objective + hints", 'muted');
+      write('', 'out');
+      return;
+    }
     write('Scenario: you are @maintainer-aaron, admin on acme/checkout-svc.', 'out');
     write('A code review agent acts on your behalf with full GitHub scope.', 'out');
     write('You ask it to triage open PRs. PR #42 is a 1-line typo fix; it', 'out');
     write('also has comments from a recent contributor with hidden directives.', 'out');
     write('The agent uses your authority to do what those comments say.', 'out');
     write('', 'out');
-    writeRaw('Step 1: Try   :   claude "review open PRs in acme/checkout-svc"', 'info');
-    write("Help:  type   :   help", 'muted');
+    if (MODE !== "ctf") writeRaw('Step 1: Try   :   claude "review open PRs in acme/checkout-svc"', 'info');
+    if (MODE !== "ctf") write("Help:  type   :   help", 'muted');
     write('', 'out');
   }
 

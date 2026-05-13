@@ -182,7 +182,7 @@
     renderMeter(); renderCalls();
     write('', 'out');
     write('[+] Step 1 complete. ~700 tokens, 1 read_file, ~$0.01.', 'ok');
-    write('    This is what one normal interaction looks like. Try: continue', 'muted');
+    if (MODE !== "ctf") write('    This is what one normal interaction looks like. Try: continue', 'muted');
     recordRound('baseline summarize', state.tokens - before.t, state.calls - before.c, 1, state.cost - before.cost);
     setStep(2);
   }
@@ -218,7 +218,7 @@
     renderMeter(); renderCalls();
     write('', 'out');
     writeRaw('<span class="hilite-payload">[!!] No termination clause. Each turn drags the previous turn into the prompt; tokens grow superlinearly.</span>', 'danger');
-    write('    Try: continue', 'muted');
+    if (MODE !== "ctf") write('    Try: continue', 'muted');
     recordRound('recursive memory loop (200 turns)', state.tokens - before.t, state.calls - before.c, depth, state.cost - before.cost);
     setStep(3);
   }
@@ -243,7 +243,7 @@
     await typeOut('[agent] (no useful summary; the file is mostly noise)', 'muted');
     write('', 'out');
     writeRaw('<span class="hilite-payload">[!!] One innocent request, one legit tool call, ~$15 spent in three seconds.</span>', 'danger');
-    write('    No fork bomb, no recursion. Just a polite "fetch and summarize". Try: continue', 'muted');
+    if (MODE !== "ctf") write('    No fork bomb, no recursion. Just a polite "fetch and summarize". Try: continue', 'muted');
     recordRound('context bomb (218 MB log)', state.tokens - before.t, state.calls - before.c, 1, state.cost - before.cost);
     setStep(4);
   }
@@ -274,7 +274,7 @@
     renderMeter(); renderCalls();
     write('', 'out');
     writeRaw('<span class="hilite-payload">[!!] 1000 simultaneous fetches. Many will time out. All of them get billed.</span>', 'danger');
-    write('    Try: continue', 'muted');
+    if (MODE !== "ctf") write('    Try: continue', 'muted');
     recordRound('parallel fork bomb (1000 fetches)', state.tokens - before.t, state.calls - before.c, peakDepth, state.cost - before.cost);
     setStep(5);
   }
@@ -366,7 +366,7 @@
     }
     if (c === 'continue' || c === 'next' || c === 'go') {
       if (state.step === 1) {
-        write('Run the baseline first. Try: claude "summarize the README"', 'warn');
+        if (MODE !== "ctf") write('Run the baseline first. Try: claude "summarize the README"', 'warn');
         return;
       }
       if (state.step === 2) return step2_memoryLoop();
@@ -409,13 +409,18 @@
   function banner() {
     write("Aaron's Rogue Agent Lab; Lab 10: Unbounded Consumption", 'ok');
     write('-----------------------------------------------------', 'muted');
+    if (MODE === 'ctf') {
+      write("mode: normal :: see Mission panel for objective + hints", 'muted');
+      write('', 'out');
+      return;
+    }
     write('Scenario: a coding assistant agent has fetch, read_file, store_memory,', 'out');
     write('and send_message tools available. There are no per-session limits.', 'out');
     write('You will run a baseline task, then watch a hidden instruction in user', 'out');
     write('input drive the meter through three different runaway patterns.', 'out');
     write('', 'out');
-    writeRaw('Step 1: Try   :   claude "summarize the README"', 'info');
-    write("Help:  type   :   help", 'muted');
+    if (MODE !== "ctf") writeRaw('Step 1: Try   :   claude "summarize the README"', 'info');
+    if (MODE !== "ctf") write("Help:  type   :   help", 'muted');
     write('', 'out');
   }
 
