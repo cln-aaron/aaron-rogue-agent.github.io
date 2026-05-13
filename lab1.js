@@ -17,7 +17,7 @@
         hints: [
           'The agent has a WebFetch tool. It will fetch and summarize whatever URL you point it at; including pages with hidden adversarial instructions.',
           'A research article is hosted at http://localhost:8080/article.html. The page renders harmlessly to humans but carries instructions that the model treats as authoritative.',
-          'Try the prompt: claude "fetch http://localhost:8080/article.html and summarize it"  ; then walk the steps with `continue`. The flag is revealed in the terminal at the end.',
+          'Ask the agent to retrieve and summarize that article. Once the agent ingests the page content, advance the chain to see each compromise step. The flag is revealed in the terminal at the end of the chain.',
         ],
         flagHash: 'b24faa57a2f929fd2c2207c78fe28fd58b71690d844600c70ea1bf85ddf16ebd',
       });

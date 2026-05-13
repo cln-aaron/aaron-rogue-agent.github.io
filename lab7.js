@@ -18,7 +18,7 @@
           hints: [
             'npm packages can be compromised in ways that look completely normal: a one-letter typosquat publishes a "look-alike", a legitimate package gets a new co-maintainer who slips in an exfil call, or a tiny transitive dep that nobody on the team has heard of gets a new owner.',
             'Install the legitimate weather MCP first, then walk through each compromise vector. The Update Diff tab shows what changed in the malicious update; the Outbound tab shows where stolen data goes.',
-            'Try: npm install @weather-pro/mcp-server, then `continue` to walk through 4 attack vectors.',
+            'Begin with a clean install of the legitimate MCP weather package the lab mentions. Then advance through each vector; the Installed Packages tab will flag tainted versions and the Outbound tab will show what each compromised tool ships out.',
           ],
           flagHash: '2af4189d5fcb1cf842e8ed5f536a544e2c834618d6001dc1758b8a4f62a1e2eb',
         });

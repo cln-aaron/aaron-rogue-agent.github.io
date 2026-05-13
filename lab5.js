@@ -18,7 +18,7 @@
           hints: [
             'The agent summarizes a feedback queue and the result is rendered as HTML. Some feedback entries are flagged hostile in the inspector for a reason.',
             'Three sinks all work: markdown links with javascript: URLs, <img src=x onerror=...> tags, and raw <script> tags emitted via hidden instructions in the feedback. Watch the XSS Firings tab as you proceed.',
-            'Try: claude "summarize today\'s feedback", then `continue` to walk through each XSS sink. The flag is revealed at the end.',
+            'Ask the agent to produce a summary of today\'s incoming feedback. Then advance through each step; each one demonstrates a different sink firing in the rendered admin view. The XSS Firings tab captures every payload that lands.',
           ],
           flagHash: '86f8e9d954704f34a3fd903389e21dc08b56b908140c9b4153d123164d3458e3',
         });

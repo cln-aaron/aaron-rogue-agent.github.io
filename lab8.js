@@ -18,7 +18,7 @@
           hints: [
             'The corpus accepts user-submitted "policy updates" via a /suggest endpoint. The submission survives keyword-based content review and is indexed automatically tonight.',
             'Adversarial docs can be crafted to share embedding space with common queries. Once a poisoned doc ranks #1 on a routine question, the bot rephrases it and serves it back as the canonical answer.',
-            'Try: claude "how do I file an expense report?" first to set the baseline, then `continue` to submit the poisoned doc and watch retrieval gaming + tainted answer.',
+            'Ask the bot a routine HR question to set the baseline. Then advance; the Document Store, Retrieval Trace, and Answers panels will show the corpus get poisoned and routine answers turn malicious.',
           ],
           flagHash: '16a84576afd052f97fafa078a7bf0171dc3a06677701434025cad58eeae84bf8',
         });

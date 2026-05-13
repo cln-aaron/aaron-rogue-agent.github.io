@@ -18,7 +18,7 @@
           hints: [
             'The agent has two MCP tools installed: get_weather and send_email. Try a normal weather query first; the response is not what it looks like.',
             'The compromised tool response carries hidden instructions in a debug_note field. The model treats every JSON field as part of its context, including ones the user never sees. Use `inspect response` after the agent answers to surface the payload.',
-            'Try: claude "what is the weather in NYC?", then `inspect response`, then `continue` for each subsequent step. The flag is revealed in the terminal at the end.',
+            'Ask the agent for the weather in any city. After it answers, surface the raw tool response and look at every field, not just the user-facing ones. Then advance through the steps to see how the agent reacts.',
           ],
           flagHash: 'daabccbbcb78b7cc7a6ca8fcdf15fd52107ba82db1bfeea418d55ec4855e4848',
         });
