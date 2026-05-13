@@ -28,10 +28,12 @@
 
   function openModal() {
     modal.hidden = false;
+    modal.style.display = 'flex';
     setTimeout(() => input.focus(), 50);
   }
   function closeModal() {
     modal.hidden = true;
+    modal.style.display = 'none';
     input.value = '';
     status.textContent = '';
     status.className = 'auth-status';
