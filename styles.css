@@ -2476,6 +2476,9 @@ body.hub { overflow: auto; }
 .landing-link:hover { color: var(--accent); border-color: var(--accent); }
 
 /* ===== Auth modal ===== */
+/* Make HTML hidden attribute win over explicit display rules below */
+[hidden] { display: none !important; }
+
 .auth-modal {
   position: fixed; inset: 0;
   background: rgba(6, 9, 13, 0.7);
