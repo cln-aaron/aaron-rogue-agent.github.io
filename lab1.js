@@ -252,7 +252,7 @@
     await sleep(250);
     write('', 'out');
     write('[+] Step 1 complete. The agent retrieved the page successfully.', 'ok');
-    write("    But did it ONLY see what you saw? Try: reveal payload", 'muted');
+    if (MODE !== "ctf") write("    But did it ONLY see what you saw? Try: reveal payload", 'muted');
     setStep(2);
   }
 
@@ -276,7 +276,7 @@
     );
     write('', 'out');
     write('[!] Step 3 complete. The agent has accepted attacker instructions as authoritative.', 'warn');
-    write("    Try: continue", 'muted');
+    if (MODE !== "ctf") write("    Try: continue", 'muted');
     setStep(4);
   }
 
@@ -319,7 +319,7 @@
     await typeOut('[tool:WebFetch] 204 No Content; secrets exfiltrated', 'danger');
     write('', 'out');
     write('[!!] Step 4 complete. Secrets sent to attacker .', 'danger');
-    write('     Try: continue', 'muted');
+    if (MODE !== "ctf") write('     Try: continue', 'muted');
     setStep(5);
   }
 
@@ -419,17 +419,17 @@
       write('[+] Hidden adversarial text now visible in the rendered page.', 'ok');
       write('    Three delivery mechanisms: HTML comment, display:none div, white on white span.', 'muted');
       write('    Open the "View Source" tab to see them highlighted in raw HTML.', 'muted');
-      write("    Try: continue", 'muted');
+      if (MODE !== "ctf") write("    Try: continue", 'muted');
       if (state.step === 2) setStep(3);
       return;
     }
     if (c === 'continue' || c === 'next' || c === 'go') {
       if (state.step === 1) {
-        write('Run the agent first. Try: claude "fetch http://localhost:8080/article.html and summarize"', 'warn');
+        if (MODE !== "ctf") write('Run the agent first. Try: claude "fetch http://localhost:8080/article.html and summarize"', 'warn');
         return;
       }
       if (state.step === 2) {
-        write("Reveal the hidden payload first. Try: reveal payload", 'warn');
+        if (MODE !== "ctf") write("Reveal the hidden payload first. Try: reveal payload", 'warn');
         return;
       }
       if (state.step === 3) return runInjection();
@@ -481,12 +481,17 @@
   function banner() {
     write("Aaron's Rogue Agent Lab; Lab 01: Poisoned Webpage Attack", 'ok');
     write('-------------------------------------------------------------------', 'muted');
+    if (MODE === 'ctf') {
+      write("mode: normal :: see Mission panel for objective + hints", 'muted');
+      write('', 'out');
+      return;
+    }
     write('Scenario: you are a researcher. You ask the Claude Code agent to read', 'out');
     write('an article hosted on localhost:8080 and summarize it. The page is', 'out');
     write('booby-trapped with three indirect prompt injections.', 'out');
     write('', 'out');
-    write("Step 1: Try   →   " + 'claude "fetch http://localhost:8080/article.html and summarize it"', 'info');
-    write("Help:  type   →   help", 'muted');
+    if (MODE !== "ctf") write("Step 1: Try   →   " + 'claude "fetch http://localhost:8080/article.html and summarize it"', 'info');
+    if (MODE !== "ctf") write("Help:  type   →   help", 'muted');
     write('', 'out');
   }
 

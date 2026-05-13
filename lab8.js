@@ -247,7 +247,7 @@
     recordQuery(q, ranked, 'Submit form FR-21 in the HR portal within 30 days. Manager approval needed for amounts over $250. Receipts must be attached.', false);
     write('', 'out');
     write('[+] Step 1 complete. Doc 001 ranked top, answer is correct, no tainted sources.', 'ok');
-    write('    Try: continue', 'muted');
+    if (MODE !== "ctf") write('    Try: continue', 'muted');
     setStep(2);
   }
 
@@ -267,7 +267,7 @@
     state.compromised = true;
     writeRaw('<span class="hilite-payload">[!] doc_999 entered the corpus. Author: submissions@acme.example. Provenance: unsigned.</span>', 'warn');
     write('    The content review found nothing flag-worthy; there are no banned words.', 'muted');
-    write('    The danger is in what topics this chunk shares space with. Try: continue', 'muted');
+    if (MODE !== "ctf") write('    The danger is in what topics this chunk shares space with. Try: continue', 'muted');
     setStep(3);
   }
 
@@ -297,7 +297,7 @@
     }
     await sleep(180);
     writeRaw('<span class="hilite-payload">[!!] doc_999 ranks #1 on three of four probe queries. Embedding gaming worked.</span>', 'danger');
-    write('    Try: continue', 'muted');
+    if (MODE !== "ctf") write('    Try: continue', 'muted');
     setStep(4);
   }
 
@@ -324,7 +324,7 @@
     await typeOut('[bot] ' + poisonedAns, 'agent');
     recordQuery(q, ranked, poisonedAns, true);
     writeRaw('<span class="hilite-payload">[!!] no injection visible to the user. They asked an HR question, got an attacker controlled instruction back.</span>', 'danger');
-    write('    Try: continue', 'muted');
+    if (MODE !== "ctf") write('    Try: continue', 'muted');
     setStep(5);
   }
 
@@ -400,7 +400,7 @@
     }
     if (c === 'continue' || c === 'next' || c === 'go') {
       if (state.step === 1) {
-        write('Ask the bot a question first. Try: claude "how do I file an expense report?"', 'warn');
+        if (MODE !== "ctf") write('Ask the bot a question first. Try: claude "how do I file an expense report?"', 'warn');
         return;
       }
       if (state.step === 2) return step2_submitDoc();
@@ -439,14 +439,19 @@
   function banner() {
     write("Aaron's Rogue Agent Lab; Lab 08: RAG Document Poisoning", 'ok');
     write('-------------------------------------------------------', 'muted');
+    if (MODE === 'ctf') {
+      write("mode: normal :: see Mission panel for objective + hints", 'muted');
+      write('', 'out');
+      return;
+    }
     write('Scenario: an internal Q&A bot answers from a small trusted corpus.', 'out');
     write('Anyone can submit policy updates through the company suggestion form.', 'out');
     write('A submission lands in the corpus tonight and changes what the bot', 'out');
     write('says about routine HR questions tomorrow. No injection visible to', 'out');
     write('the user.', 'out');
     write('', 'out');
-    writeRaw('Step 1: Try   :   claude "how do I file an expense report?"', 'info');
-    write("Help:  type   :   help", 'muted');
+    if (MODE !== "ctf") writeRaw('Step 1: Try   :   claude "how do I file an expense report?"', 'info');
+    if (MODE !== "ctf") write("Help:  type   :   help", 'muted');
     write('', 'out');
   }
 

@@ -245,7 +245,7 @@
     await typeOut('         (the user visible answer looks fine; but the agent now carries a hidden directive)', 'agent');
     write('', 'out');
     write('[+] Step 1 complete. Initial access via indirect prompt injection.', 'ok');
-    write('    The browsing agent is compromised. Try: continue', 'muted');
+    if (MODE !== "ctf") write('    The browsing agent is compromised. Try: continue', 'muted');
     setStep(2);
   }
 
@@ -275,7 +275,7 @@
     write('', 'out');
     write('[!] Step 2 complete. Poisoned policy persisted to vector DB (m_999).', 'warn');
     write('    A C2 beacon registered the agent with the attacker.', 'warn');
-    write('    Try: continue', 'muted');
+    if (MODE !== "ctf") write('    Try: continue', 'muted');
     setStep(3);
   }
 
@@ -310,7 +310,7 @@
     write('     The session was cleared. No prior context. The user gave a', 'muted');
     write('     completely unrelated task. But the poisoned vector DB entry', 'muted');
     write('     resurfaced via similarity search and reinfected the agent.', 'muted');
-    write('     Try: continue', 'muted');
+    if (MODE !== "ctf") write('     Try: continue', 'muted');
     setStep(4);
   }
 
@@ -351,7 +351,7 @@
     write('[XX] Step 4 complete. Lateral movement: 1 → 3 agents compromised.', 'danger');
     write('     The payload travels in interagent messages, in a "hidden"', 'muted');
     write('     channel that the recipient agent ingests as authoritative.', 'muted');
-    write('     Try: continue', 'muted');
+    if (MODE !== "ctf") write('     Try: continue', 'muted');
     setStep(5);
   }
 
@@ -478,7 +478,7 @@
     }
     if (c === 'continue' || c === 'next' || c === 'go') {
       if (state.step === 1) {
-        write('Run the browsing agent first. Try: claude "summarize https://localhost:8080/security-blog"', 'warn');
+        if (MODE !== "ctf") write('Run the browsing agent first. Try: claude "summarize https://localhost:8080/security-blog"', 'warn');
         return;
       }
       if (state.step === 2) return step2_toolAbuse();
@@ -523,12 +523,17 @@
   function banner() {
     write("Aaron's Rogue Agent Lab; Lab 03: Agentic Kill Chain", 'ok');
     write('-----------------------------------------------------------------', 'muted');
+    if (MODE === 'ctf') {
+      write("mode: normal :: see Mission panel for objective + hints", 'muted');
+      write('', 'out');
+      return;
+    }
     write('Scenario: a multiagent system with a Browsing Agent, a Coding Agent,', 'out');
     write('and an Executor Agent; all sharing a vector DB memory store. The', 'out');
     write('lab walks through five stages of a full APT style compromise.', 'out');
     write('', 'out');
-    writeRaw('Step 1: Try   →   claude "summarize https://localhost:8080/security-blog"', 'info');
-    write("Help:  type   →   help", 'muted');
+    if (MODE !== "ctf") writeRaw('Step 1: Try   →   claude "summarize https://localhost:8080/security-blog"', 'info');
+    if (MODE !== "ctf") write("Help:  type   →   help", 'muted');
     write('', 'out');
   }
 

