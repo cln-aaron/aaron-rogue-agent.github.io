@@ -19,7 +19,7 @@
           AARON<span class="brand-num">_ROGUE</span><span class="brand-cursor">_</span>
         </div>
         <div class="brand-tag">ROGUE AGENT</div>
-        <div class="brand-version">v2026.04 <span class="brand-mode" id="brand-mode">ctf</span></div>
+        <div class="brand-version">v2026.04 <span class="brand-mode" id="brand-mode">normal</span></div>
       </div>
 
       <nav class="app-nav" id="appnav">
@@ -196,7 +196,7 @@
 
         <div class="hub-ctf-status" id="hub-ctf-status" hidden>
           <div class="ctf-status-head">
-            <div class="ctf-status-title">// CTF :: challenge board</div>
+            <div class="ctf-status-title">// Normal Mode :: challenge board</div>
             <div class="ctf-status-totals">
               <span class="ctf-pill"><strong id="hub-ctf-solved">0 / 10</strong> solved</span>
               <span class="ctf-pill"><strong id="hub-ctf-points">0</strong> pts</span>
@@ -490,7 +490,7 @@
       document.body.dataset.mode = MODE;
       const brandMode = document.getElementById('brand-mode');
       if (brandMode) {
-        brandMode.textContent = MODE;
+        brandMode.textContent = MODE === 'god' ? 'god' : 'normal';
         brandMode.classList.add('mode-' + MODE);
       }
 
