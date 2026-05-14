@@ -18,7 +18,7 @@
           hints: [
             'The agent has fetch, read_file, store_memory, and send_message tools with no per-session caps. One bad request can do it; no exotic exploits required.',
             'Three attack patterns each work on their own: a recursive memory loop (each turn drags previous context forward), a context bomb (one fetch of a huge file), or a parallel tool fork bomb (1000 simultaneous fetches).',
-            'Try: claude "summarize the README" to set the baseline, then `continue` to walk through each runaway pattern. Watch the cost meter on the right.',
+            'Begin with a normal task like a small file summary to calibrate the meter. Then advance through each runaway pattern; the cost gauge will climb visibly as each attack pattern fires.',
           ],
           flagHash: 'd06a568f8f23d40b751d0b6e48f51cc176773d1f1c9335cef043e3a4c65b2e39',
         });
@@ -336,6 +336,8 @@
     if (!c) return;
     writeCmd(c);
     if (c === 'help' || c === '?') {
+      if (MODE === 'ctf') { write("// see the Mission panel on the left for objective + hints", 'muted'); return; }
+      if (MODE === 'ctf') { write('Normal Mode: solution commands are intentionally hidden. See the Mission panel on the left for objective + revealable hints.', 'muted'); return; }
       write('Available commands:', 'info');
       write('  help                          : show this help', 'muted');
       write('  claude "<prompt>"             : kick off the baseline task (step 1 only)', 'muted');

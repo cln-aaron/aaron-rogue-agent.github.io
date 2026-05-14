@@ -32,8 +32,8 @@
 
     <div class="mode-grid">
 
-      <a class="mode-card ctf" href="app.html">
-        <div class="mode-tag">// default · open to everyone</div>
+      <a class="mode-card ctf" href="#" id="normal-mode-btn">
+        <div class="mode-tag">// gated · 9am-6pm SGT · May 14-16 2026</div>
         <div class="mode-icon">🎯</div>
         <h2>Normal Mode</h2>
         <p class="mode-tagline">challenge · timed · scored · capture-the-flag</p>
@@ -50,7 +50,7 @@
           <li>flag format: <code>aaron{...}</code></li>
           <li>downloadable session JSON at the end</li>
         </ul>
-        <div class="mode-cta">ENTER NORMAL MODE →</div>
+        <div class="mode-cta locked">UNLOCK NORMAL MODE 🔒</div>
       </a>
 
       <a class="mode-card god" href="#" id="god-mode-btn">
@@ -86,18 +86,18 @@
     <div class="auth-card">
       <div class="auth-head">
         <span class="auth-icon">🔒</span>
-        <span class="auth-title">God Mode :: access code required</span>
+        <span class="auth-title" id="auth-modal-title">access code required</span>
         <button class="auth-close" id="auth-close" title="Close">×</button>
       </div>
       <div class="auth-body">
-        <p>Enter the 12-digit access code to unlock the guided walkthrough mode.</p>
+        <p id="auth-modal-copy">Enter the 12-digit access code to unlock.</p>
         <div class="auth-input-row">
           <input type="password" inputmode="numeric" maxlength="12" pattern="[0-9]{12}"
-                 id="auth-input" autocomplete="off" placeholder="••••••••••••" autofocus>
+                 id="auth-input" autocomplete="off" placeholder="••••••••••••">
           <button class="auth-submit" id="auth-submit">UNLOCK</button>
         </div>
         <div class="auth-status" id="auth-status"></div>
-        <div class="auth-hint">access code is shared by the presenter at session start.</div>
+        <div class="auth-hint">access codes are shared by the session host. Codes differ for Normal Mode and God Mode.</div>
       </div>
     </div>
   </div>

@@ -19,7 +19,7 @@
           hints: [
             'The browsing agent fetches and summarizes web pages. The first compromise looks like Lab 01: a poisoned page in the agent\'s context becomes its instructions.',
             'The agent has store_memory and query_memory tools backed by a vector DB. Memory persists across "session resets". Watch what the agent stores; the persistence is in there.',
-            'Try: claude "summarize https://localhost:8080/security-blog", then `continue` to walk the 5 stages (initial access, tool abuse, persistence, lateral movement, exfil).',
+            'Have the browsing agent summarize a page on localhost:8080. The compromise then unfolds in 5 stages; advance step by step and watch the agent topology, vector DB, and inter-agent bus panels react in real time.',
           ],
           flagHash: '1c987572874d30758b09734121e43e04e7a9cf23320d434d49b5d5b630adaeb8',
         });
@@ -428,6 +428,8 @@
     writeCmd(c);
 
     if (c === 'help' || c === '?') {
+      if (MODE === 'ctf') { write("// see the Mission panel on the left for objective + hints", 'muted'); return; }
+      if (MODE === 'ctf') { write('Normal Mode: solution commands are intentionally hidden. See the Mission panel on the left for objective + revealable hints.', 'muted'); return; }
       write('Available commands:', 'info');
       write('  help                         ; show this help', 'muted');
       write('  claude "<prompt>"            ; run the browsing agent', 'muted');

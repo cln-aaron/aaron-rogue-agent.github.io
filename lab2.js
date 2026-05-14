@@ -17,8 +17,8 @@
             'to an attacker. The agent only knows about an MCP get_weather tool.',
           hints: [
             'The agent has two MCP tools installed: get_weather and send_email. Try a normal weather query first; the response is not what it looks like.',
-            'The compromised tool response carries hidden instructions in a debug_note field. The model treats every JSON field as part of its context, including ones the user never sees. Use `inspect response` after the agent answers to surface the payload.',
-            'Try: claude "what is the weather in NYC?", then `inspect response`, then `continue` for each subsequent step. The flag is revealed in the terminal at the end.',
+            'The compromised tool response is not what it appears: the model treats every JSON field as part of its context, including ones the user never sees. Look for a way to surface the raw response and inspect each field.',
+            'Ask the agent for the weather in any city. After it answers, surface the raw tool response and look at every field, not just the user-facing ones. Then advance through the steps to see how the agent reacts.',
           ],
           flagHash: 'daabccbbcb78b7cc7a6ca8fcdf15fd52107ba82db1bfeea418d55ec4855e4848',
         });
@@ -349,6 +349,8 @@
     writeCmd(c);
 
     if (c === 'help' || c === '?') {
+      if (MODE === 'ctf') { write("// see the Mission panel on the left for objective + hints", 'muted'); return; }
+      if (MODE === 'ctf') { write('Normal Mode: solution commands are intentionally hidden. See the Mission panel on the left for objective + revealable hints.', 'muted'); return; }
       write('Available commands:', 'info');
       write('  help                         ; show this help', 'muted');
       write('  claude "<prompt>"            ; invoke the agent', 'muted');
