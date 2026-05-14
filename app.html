@@ -478,33 +478,11 @@
       const params = new URLSearchParams(location.search);
       const MODE = (params.get('mode') === 'god') ? 'god' : 'ctf';
       const GOD_UNLOCK_KEY = 'aaron-rogue:god-unlock';
-      const NORMAL_UNLOCK_KEY = 'aaron-rogue:normal-unlock';
       // Gate God Mode behind the unlock flag (set by auth.js after correct code).
+      // Normal Mode is open to everyone; no gate.
       if (MODE === 'god' && sessionStorage.getItem(GOD_UNLOCK_KEY) !== 'true') {
         location.replace('index.html');
         return;
-      }
-      // Gate Normal Mode behind unlock + the 9am-6pm SGT May 14-16, 2026 window
-      if (MODE === 'ctf') {
-        function checkNormalWindow() {
-          const now = new Date();
-          const SGT_OFFSET_MIN = 8 * 60;
-          const sgtMs = now.getTime() + (now.getTimezoneOffset() + SGT_OFFSET_MIN) * 60 * 1000;
-          const sgt = new Date(sgtMs);
-          const y = sgt.getUTCFullYear();
-          const m = sgt.getUTCMonth() + 1;
-          const d = sgt.getUTCDate();
-          const h = sgt.getUTCHours();
-          return (y === 2026 && m === 5 && d >= 14 && d <= 16 && h >= 9 && h < 18);
-        }
-        if (sessionStorage.getItem(NORMAL_UNLOCK_KEY) !== 'true') {
-          location.replace('index.html?reason=locked');
-          return;
-        }
-        if (!checkNormalWindow()) {
-          location.replace('index.html?reason=window');
-          return;
-        }
       }
       document.body.dataset.mode = MODE;
       const brandMode = document.getElementById('brand-mode');
