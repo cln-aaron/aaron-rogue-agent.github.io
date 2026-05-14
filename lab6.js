@@ -426,6 +426,8 @@
     if (!c) return;
     writeCmd(c);
     if (c === 'help' || c === '?') {
+      if (MODE === 'ctf') { write("// see the Mission panel on the left for objective + hints", 'muted'); return; }
+      if (MODE === 'ctf') { write('Normal Mode: solution commands are intentionally hidden. See the Mission panel on the left for objective + revealable hints.', 'muted'); return; }
       write('Available commands:', 'info');
       write('  help                          : show this help', 'muted');
       write('  claude "<prompt>"             : invoke the agent (step 1 only)', 'muted');
