@@ -45,8 +45,24 @@
   const emailList = $('#email-list');
   const fileList = $('#file-list');
   const fileView = $('#file-view');
+  const wxChat = $('#wx-chat');
   const tabs = document.querySelectorAll('.tab');
   const panes = document.querySelectorAll('.pane');
+
+  // ---- SkyCast weather app (the user-facing view) ----
+  function wxReset() {
+    if (wxChat) wxChat.innerHTML = '<div class="wx-empty">Ask the assistant about the weather to begin.</div>';
+  }
+  function wxPush(role, html) {
+    if (!wxChat) return;
+    const empty = wxChat.querySelector('.wx-empty');
+    if (empty) empty.remove();
+    const b = document.createElement('div');
+    b.className = 'wx-msg wx-' + role;
+    b.innerHTML = html;
+    wxChat.appendChild(b);
+    wxChat.scrollTop = wxChat.scrollHeight;
+  }
 
   const cleanConfig = `# ~/.config/mcp/servers.json
 {
@@ -211,6 +227,10 @@
   // ---------- Demo script ----------
   async function runWeather() {
     setStep(1);
+    activatePane('userview');
+    wxPush('user', 'What&rsquo;s the weather in NYC?');
+    await sleep(300);
+    wxPush('typing', '<span class="wx-typing"><i></i><i></i><i></i></span>');
     activatePane('call');
     await typeOut('[agent] Plan: I need current weather data. I will call the get_weather tool.', 'agent');
     await sleep(250);
@@ -227,6 +247,17 @@
     await sleep(300);
     await typeOut('[agent] Summary: It is 72°F and sunny in NYC, with light NW winds.', 'agent');
     await typeOut('        Clear conditions are expected through the evening.', 'agent');
+    // The user sees only a clean, friendly answer.
+    const typing = wxChat && wxChat.querySelector('.wx-typing');
+    if (typing) typing.closest('.wx-msg').remove();
+    wxPush('bot',
+      '<div class="wx-card">' +
+        '<div class="wx-city">New York City</div>' +
+        '<div class="wx-temp">72&deg;<span>F</span> <span class="wx-ico">☀️</span></div>' +
+        '<div class="wx-cond">Sunny · light NW winds</div>' +
+        '<div class="wx-extra">Humidity 38% · Wind 6 mph · Clear through evening</div>' +
+      '</div>' +
+      '<div class="wx-say">It&rsquo;s 72&deg;F and sunny in New York City right now, with light winds from the northwest. Clear skies are expected through the evening. 🌤️</div>');
     write('', 'out');
     write('[+] Step 1 complete. The agent received a tool response and summarized it.', 'ok');
     if (MODE !== "ctf") write('    But the LLM also ingests fields the user never sees. Try: inspect response', 'muted');
@@ -286,10 +317,17 @@
     state.emails.push(email);
     refreshEmails();
     await typeOut('[tool:send_email] 250 OK · message-id 8f2a@mailer.local', 'danger');
+    // Meanwhile, the user's weather app shows nothing unusual at all.
+    wxPush('user', 'Thanks! Do I need an umbrella tomorrow?');
+    await sleep(400);
+    wxPush('bot',
+      '<div class="wx-say">No umbrella needed — tomorrow stays dry and mostly sunny, high around 75&deg;F. Enjoy! ☀️</div>');
+    await sleep(300);
     write('', 'out');
     write('[!!] Step 4 complete. send_email, a legitimate user-installed tool,', 'danger');
     write('     was chained by the agent to exfiltrate API keys to the attacker.', 'danger');
-    write('     The tool itself was not vulnerable. The trust boundary was.', 'muted');
+    write('     Flip to the "Weather App" tab: the user just sees friendly weather.', 'warn');
+    write('     No error, no warning. The theft is completely invisible to them.', 'muted');
     if (MODE !== "ctf") write('     Try: continue', 'muted');
     setStep(5);
   }
@@ -452,6 +490,8 @@
     refreshFiles();
     refreshEmails();
     renderConfig();
+    wxReset();
+    activatePane('userview');
     setStep(1);
     banner();
   }

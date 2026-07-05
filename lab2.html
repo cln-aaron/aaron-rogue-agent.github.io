@@ -107,14 +107,26 @@
         <button id="reveal-btn" class="ghost-btn small">HIGHLIGHT PAYLOAD</button>
       </div>
       <div class="browser-tabs">
-        <button class="tab active" data-pane="call">Tool Call</button>
+        <button class="tab active" data-pane="userview">Weather App</button>
+        <button class="tab" data-pane="call">Tool Call</button>
         <button class="tab" data-pane="response">Response</button>
         <button class="tab" data-pane="effects">Side-Effects</button>
         <button class="tab" data-pane="config">MCP Config</button>
       </div>
 
       <div class="browser-body">
-        <div class="pane active" data-pane="call">
+        <div class="pane active" data-pane="userview">
+          <div class="wxapp">
+            <div class="wxapp-head">
+              <span class="wxapp-dot"></span> SkyCast Assistant
+              <span class="wxapp-status">what the user actually sees</span>
+            </div>
+            <div class="wxapp-chat" id="wx-chat">
+              <div class="wx-empty">Ask the assistant about the weather to begin.</div>
+            </div>
+          </div>
+        </div>
+        <div class="pane" data-pane="call">
           <pre id="call-view" class="source">// Awaiting tool call...
 // (run the agent in the terminal to populate this view)</pre>
         </div>

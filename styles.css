@@ -2996,20 +2996,24 @@ body.hub { overflow: auto; }
   letter-spacing: 0.06em;
   margin: 0.5rem 0 1.8rem;
 }
-.gate-row { display: flex; gap: 0.6rem; }
+.gate-row { display: flex; gap: 0.6rem; flex-wrap: wrap; }
 #gate-input {
-  flex: 1;
+  flex: 1 1 180px;
+  min-width: 0;               /* allow the flex item to shrink; prevents overflow */
+  box-sizing: border-box;
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 6px;
   color: var(--text);
   font-family: var(--mono);
-  font-size: 1.6rem;
-  letter-spacing: 0.5em;
+  font-size: 1.4rem;
+  letter-spacing: 0.28em;
+  text-indent: 0.28em;        /* re-center against trailing letter-spacing */
   text-align: center;
   padding: 0.7rem 0.5rem;
   outline: none;
 }
+.gate-btn { flex: 0 0 auto; }
 #gate-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,255,156,0.12); }
 .gate-btn {
   background: rgba(0,255,156,0.12);
@@ -3196,3 +3200,82 @@ body.hub { overflow: auto; }
 .event-foot-sep { margin: 0 0.6rem; opacity: 0.5; }
 .event-foot-link { color: var(--info); text-decoration: none; }
 .event-foot-link:hover { color: var(--accent); }
+
+/* ============================================================
+   Lab 02 · SkyCast weather app (the user-facing view)
+   ============================================================ */
+.pane[data-pane="userview"] { background: #0d1117; }
+.wxapp {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #1b2a4a 0%, #0d1117 55%);
+}
+.wxapp-head {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding: 0.7rem 1rem;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #eaf2ff;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03);
+}
+.wxapp-dot { width: 9px; height: 9px; border-radius: 50%; background: #34d399; box-shadow: 0 0 8px #34d399; }
+.wxapp-status {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: #8aa0c0;
+  letter-spacing: 0.04em;
+}
+.wxapp-chat {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  font-family: var(--sans);
+}
+.wx-empty { color: #6b7d99; font-size: 0.9rem; text-align: center; margin: auto; }
+.wx-msg { max-width: 88%; }
+.wx-user {
+  align-self: flex-end;
+  background: linear-gradient(180deg, #2563eb, #1d4ed8);
+  color: #fff;
+  padding: 0.6rem 0.9rem;
+  border-radius: 16px 16px 4px 16px;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.3);
+}
+.wx-bot { align-self: flex-start; width: 88%; }
+.wx-say {
+  background: #f4f7fb;
+  color: #1a2233;
+  padding: 0.7rem 0.95rem;
+  border-radius: 16px 16px 16px 4px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+.wx-bot .wx-say { margin-top: 0.55rem; }
+.wx-card {
+  background: linear-gradient(135deg, #4a90e2 0%, #63b8ff 100%);
+  color: #fff;
+  border-radius: 14px;
+  padding: 1rem 1.2rem;
+  box-shadow: 0 6px 18px rgba(74,144,226,0.35);
+}
+.wx-city { font-size: 0.9rem; opacity: 0.9; letter-spacing: 0.02em; }
+.wx-temp { font-size: 3rem; font-weight: 800; line-height: 1.05; margin: 0.1rem 0; }
+.wx-temp span { font-size: 1.3rem; font-weight: 600; vertical-align: super; opacity: 0.9; }
+.wx-temp .wx-ico { font-size: 2rem; float: right; margin-top: 0.4rem; }
+.wx-cond { font-size: 1.05rem; font-weight: 600; }
+.wx-extra { font-size: 0.8rem; opacity: 0.9; margin-top: 0.4rem; }
+/* typing indicator */
+.wx-typing { display: inline-flex; gap: 4px; padding: 0.55rem 0.8rem; background: #f4f7fb; border-radius: 14px; }
+.wx-typing i { width: 7px; height: 7px; border-radius: 50%; background: #9fb0c8; animation: wxblink 1.2s infinite; }
+.wx-typing i:nth-child(2) { animation-delay: 0.2s; }
+.wx-typing i:nth-child(3) { animation-delay: 0.4s; }
+@keyframes wxblink { 0%,60%,100% { opacity: 0.3; } 30% { opacity: 1; } }
