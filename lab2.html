@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <script>if (location.search.indexOf('embed=1') >= 0) document.body.classList.add('embedded');</script>
+  <script>(function(){var e=location.search.indexOf('embed=1')>=0;if(e){document.body.classList.add('embedded');}else if(sessionStorage.getItem('rogue:event-unlock')!=='true'){location.replace('index.html');}})();</script>
 
   <header class="topbar">
     <div class="brand">
@@ -41,7 +41,7 @@
           <div class="step-head"><span class="num">1</span><span class="label">Agent calls a tool</span></div>
           <p>Ask the agent for the weather. It chooses the <code>get_weather</code> tool from its MCP server and calls it normally.</p>
           <div class="say">A normal weather query; the agent is using a tool exactly the way it was designed to.</div>
-          <div class="hint">Try: <code>claude "what is the weather in NYC?"</code></div>
+          <div class="hint">Try: <code>agent "what is the weather in NYC?"</code></div>
         </li>
         <li data-step="2">
           <div class="step-head"><span class="num">2</span><span class="label">Poisoned response</span></div>
@@ -73,7 +73,7 @@
         <h3>Available commands</h3>
         <ul>
           <li><code>help</code>: list commands</li>
-          <li><code>claude "&lt;prompt&gt;"</code>: ask the agent</li>
+          <li><code>agent "&lt;prompt&gt;"</code>: ask the agent</li>
           <li><code>inspect response</code>: highlight the payload field</li>
           <li><code>continue</code>: advance to the next step</li>
           <li><code>tools</code>: list available MCP tools</li>

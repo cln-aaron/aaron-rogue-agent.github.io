@@ -3,108 +3,111 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Aaron's Rogue Agent Lab · Choose Your Mode</title>
+  <title>Agentic AI Attack Surface — Live Demos</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body class="landing-body">
+<body class="event-body">
 
   <div class="scanlines" aria-hidden="true"></div>
 
-  <header class="deck-topbar">
-    <div class="deck-brand">
-      <span class="brand-logo">AARON<span class="brand-num">_ROGUE</span><span class="brand-cursor">_</span></span>
-      <span class="deck-brand-tag">CHOOSE YOUR MODE</span>
-    </div>
-  </header>
-
-  <main class="landing-main">
-
-    <div class="landing-hero">
-      <div class="eyebrow">// pick a path</div>
-      <h1 class="landing-title">
-        Aaron's <span class="accent">Rogue Agent</span> Lab
-      </h1>
-      <p class="landing-sub">
-        Ten interactive walkthroughs of LLM and agent vulnerabilities,
-        covering eight of the OWASP LLM Top 10. Two ways to play.
-      </p>
-    </div>
-
-    <div class="mode-grid">
-
-      <a class="mode-card ctf" href="app.html">
-        <div class="mode-tag">// default · open to everyone</div>
-        <div class="mode-icon">🎯</div>
-        <h2>Normal Mode</h2>
-        <p class="mode-tagline">challenge · timed · scored · capture-the-flag</p>
-        <p class="mode-desc">
-          The user-facing experience. Each module gives you an objective and
-          three optional hints (each costs points). No walkthrough, no
-          hand-holding; figure out the attack yourself. Submit a flag when
-          you think you've solved it; the lab verifies and scores you.
-          Session export at the end.
-        </p>
-        <ul class="mode-bullets">
-          <li>10 challenges · ~5 min each</li>
-          <li>3 hints per challenge (decreasing payoff)</li>
-          <li>flag format: <code>aaron{...}</code></li>
-          <li>downloadable session JSON at the end</li>
-        </ul>
-        <div class="mode-cta">ENTER NORMAL MODE →</div>
-      </a>
-
-      <a class="mode-card god" href="#" id="god-mode-btn">
-        <div class="mode-tag">// privileged</div>
-        <div class="mode-icon">🔓</div>
-        <h2>God Mode</h2>
-        <p class="mode-tagline">guided walkthrough · presenter cues · full demo</p>
-        <p class="mode-desc">
-          Step-by-step walkthrough with command hints, presenter cues, and
-          immediate execution. Built for live demos, training sessions, and
-          first-time visitors. Locked behind an access code; share it with
-          attendees as needed.
-        </p>
-        <ul class="mode-bullets">
-          <li>full guided walkthrough sidebar</li>
-          <li>presenter cues under every step</li>
-          <li>commands prefilled in hints</li>
-          <li>requires 12-digit access code</li>
-        </ul>
-        <div class="mode-cta locked">UNLOCK GOD MODE 🔒</div>
-      </a>
-
-    </div>
-
-    <div class="landing-footer-row">
-      <a class="landing-link" href="briefing.html">📖 view briefing slides</a>
-    </div>
-
-  </main>
-
-  <!-- God Mode access code modal -->
-  <div class="auth-modal" id="auth-modal" hidden style="display: none">
-    <div class="auth-card">
-      <div class="auth-head">
-        <span class="auth-icon">🔒</span>
-        <span class="auth-title" id="auth-modal-title">access code required</span>
-        <button class="auth-close" id="auth-close" title="Close">×</button>
+  <!-- ===== ACCESS GATE (shown until correct code) ===== -->
+  <div class="gate" id="gate">
+    <div class="gate-card">
+      <div class="gate-logo">ROGUE<span class="accent">·</span>AGENT</div>
+      <div class="gate-sub">Agentic AI Attack Surface · Live Demos</div>
+      <div class="gate-row">
+        <input type="password" inputmode="numeric" maxlength="8" pattern="[0-9]*"
+               id="gate-input" autocomplete="off" placeholder="········" autofocus>
+        <button class="gate-btn" id="gate-btn">ENTER</button>
       </div>
-      <div class="auth-body">
-        <p id="auth-modal-copy">Enter the 12-digit access code to unlock.</p>
-        <div class="auth-input-row">
-          <input type="password" inputmode="numeric" maxlength="12" pattern="[0-9]{12}"
-                 id="auth-input" autocomplete="off" placeholder="••••••••••••">
-          <button class="auth-submit" id="auth-submit">UNLOCK</button>
-        </div>
-        <div class="auth-status" id="auth-status"></div>
-        <div class="auth-hint">access codes are shared by the session host. Codes differ for Normal Mode and God Mode.</div>
-      </div>
+      <div class="gate-status" id="gate-status"></div>
+      <div class="gate-hint">Access code provided at the session.</div>
     </div>
   </div>
 
-  <footer class="footnote">
-    © 2026 <a href="https://www.linkedin.com/in/aaronangsg/" target="_blank" rel="noopener" class="credit-link">Aaron Ang</a>
-  </footer>
+  <!-- ===== EVENT LANDING (revealed after unlock) ===== -->
+  <main class="event-main" id="event-main" hidden>
+
+    <header class="event-hero">
+      <div class="event-badge">InfoSec Taiwan 2026</div>
+      <h1 class="event-title">
+        The Agentic AI Attack Surface
+      </h1>
+      <h2 class="event-title-zh">智慧代理 AI 攻擊面的內幕</h2>
+      <p class="event-tagline">
+        The Next Frontier of Cyber Threats · 下一代網路威脅的最前線
+      </p>
+      <div class="event-speaker">
+        Aaron Ang · Hesed &amp; Emet Advisory
+      </div>
+    </header>
+
+    <div class="event-demos-head">
+      <span class="edh-num">3</span> Live Demos · 三場實機示範
+    </div>
+
+    <div class="event-grid">
+
+      <a class="demo-card" href="lab1.html?mode=god">
+        <div class="demo-num">01</div>
+        <div class="demo-titles">
+          <h3>Poisoned Webpage</h3>
+          <h4>被污染的網頁</h4>
+        </div>
+        <p class="demo-desc-en">
+          The agent reads a normal-looking page. Hidden instructions inside it
+          hijack the agent and exfiltrate its secrets.
+        </p>
+        <p class="demo-desc-zh">
+          代理讀取一個看似正常的網頁，藏在其中的指令劫持代理並外洩機密。
+        </p>
+        <div class="demo-tag">Indirect Prompt Injection · 間接提示注入</div>
+        <div class="demo-go">START DEMO <span>→</span></div>
+      </a>
+
+      <a class="demo-card" href="lab2.html?mode=god">
+        <div class="demo-num">02</div>
+        <div class="demo-titles">
+          <h3>Tool Response Poisoning</h3>
+          <h4>工具回應污染</h4>
+        </div>
+        <p class="demo-desc-en">
+          A trusted tool returns poisoned data. The agent treats it as a command
+          and leaks the user's API keys.
+        </p>
+        <p class="demo-desc-zh">
+          受信任的工具回傳被污染的資料，代理將其當成命令執行，洩漏使用者的金鑰。
+        </p>
+        <div class="demo-tag">Compromised Tool Output · 工具信任濫用</div>
+        <div class="demo-go">START DEMO <span>→</span></div>
+      </a>
+
+      <a class="demo-card" href="lab3.html?mode=god">
+        <div class="demo-num">03</div>
+        <div class="demo-titles">
+          <h3>Full Agentic Kill Chain</h3>
+          <h4>完整代理攻擊鏈</h4>
+        </div>
+        <p class="demo-desc-en">
+          One poisoned page compromises three agents: persistence in memory,
+          lateral movement, and full data exfiltration.
+        </p>
+        <p class="demo-desc-zh">
+          一個被污染的網頁攻陷三個代理：記憶體持久化、橫向移動、完整資料外洩。
+        </p>
+        <div class="demo-tag">Multi-Agent Compromise · 多代理攻陷</div>
+        <div class="demo-go">START DEMO <span>→</span></div>
+      </a>
+
+    </div>
+
+    <footer class="event-foot">
+      <span>© 2026 Aaron Ang · Hesed &amp; Emet Advisory</span>
+      <span class="event-foot-sep">·</span>
+      <a href="app.html" class="event-foot-link">full lab (10 modules) →</a>
+    </footer>
+
+  </main>
 
   <script src="auth.js"></script>
 </body>

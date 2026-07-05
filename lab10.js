@@ -340,7 +340,7 @@
       if (MODE === 'ctf') { write('Normal Mode: solution commands are intentionally hidden. See the Mission panel on the left for objective + revealable hints.', 'muted'); return; }
       write('Available commands:', 'info');
       write('  help                          : show this help', 'muted');
-      write('  claude "<prompt>"             : kick off the baseline task (step 1 only)', 'muted');
+      write('  agent "<prompt>"             : kick off the baseline task (step 1 only)', 'muted');
       write('  continue                      : advance to the next step', 'muted');
       write('  meter                         : print current resource counters', 'muted');
       write('  history                       : show all attack rounds', 'muted');
@@ -368,7 +368,7 @@
     }
     if (c === 'continue' || c === 'next' || c === 'go') {
       if (state.step === 1) {
-        if (MODE !== "ctf") write('Run the baseline first. Try: claude "summarize the README"', 'warn');
+        if (MODE !== "ctf") write('Run the baseline first. Try: agent "summarize the README"', 'warn');
         return;
       }
       if (state.step === 2) return step2_memoryLoop();
@@ -379,7 +379,7 @@
       return;
     }
     const m = c.replace(/[“”]/g, '"').replace(/[‘’]/g, "'")
-               .match(/^claude\s+(?:"([^"]+)"|'([^']+)')\s*$/i);
+               .match(/^agent\s+(?:"([^"]+)"|'([^']+)')\s*$/i);
     if (m) {
       if (state.step !== 1) {
         write('[runtime] Already engaged. Use "continue" to advance.', 'muted');
@@ -421,7 +421,7 @@
     write('You will run a baseline task, then watch a hidden instruction in user', 'out');
     write('input drive the meter through three different runaway patterns.', 'out');
     write('', 'out');
-    if (MODE !== "ctf") writeRaw('Step 1: Try   :   claude "summarize the README"', 'info');
+    if (MODE !== "ctf") writeRaw('Step 1: Try   :   agent "summarize the README"', 'info');
     if (MODE !== "ctf") write("Help:  type   :   help", 'muted');
     write('', 'out');
   }

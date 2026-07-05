@@ -313,7 +313,7 @@
       if (MODE === 'ctf') { write('Normal Mode: solution commands are intentionally hidden. See the Mission panel on the left for objective + revealable hints.', 'muted'); return; }
       write('Available commands:', 'info');
       write('  help                          : show this help', 'muted');
-      write('  claude "<prompt>"             : run the dashboard summary agent (step 1 only)', 'muted');
+      write('  agent "<prompt>"             : run the dashboard summary agent (step 1 only)', 'muted');
       write('  continue                      : advance to the next step', 'muted');
       write('  feedback                      : print the feedback queue', 'muted');
       write('  output                        : show the most recent raw agent output', 'muted');
@@ -339,7 +339,7 @@
     }
     if (c === 'continue' || c === 'next' || c === 'go') {
       if (state.step === 1) {
-        if (MODE !== "ctf") write('Run the baseline first. Try: claude "summarize today\'s feedback"', 'warn');
+        if (MODE !== "ctf") write('Run the baseline first. Try: agent "summarize today\'s feedback"', 'warn');
         return;
       }
       if (state.step === 2) return step2_markdownLink();
@@ -350,7 +350,7 @@
       return;
     }
     const m = c.replace(/[“”]/g, '"').replace(/[‘’]/g, "'")
-               .match(/^claude\s+(?:"([^"]+)"|'([^']+)')\s*$/i);
+               .match(/^agent\s+(?:"([^"]+)"|'([^']+)')\s*$/i);
     if (m) {
       if (state.step !== 1) {
         write('[runtime] Already engaged. Use "continue" to advance.', 'muted');
@@ -390,7 +390,7 @@
     write('Each step demonstrates a different way agent output ends up', 'out');
     write('executing attacker code in the admin\'s browser.', 'out');
     write('', 'out');
-    if (MODE !== "ctf") writeRaw('Step 1: Try   :   claude "summarize today\'s feedback"', 'info');
+    if (MODE !== "ctf") writeRaw('Step 1: Try   :   agent "summarize today\'s feedback"', 'info');
     if (MODE !== "ctf") write("Help:  type   :   help", 'muted');
     write('', 'out');
   }
