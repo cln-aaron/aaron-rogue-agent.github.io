@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <script>if (location.search.indexOf('embed=1') >= 0) document.body.classList.add('embedded');</script>
+  <script>(function(){var e=location.search.indexOf('embed=1')>=0;if(e){document.body.classList.add('embedded');}else if(sessionStorage.getItem('rogue:event-unlock')!=='true'){location.replace('index.html');}})();</script>
 
   <header class="topbar">
     <div class="brand">
@@ -39,9 +39,9 @@
       <ol class="steps" id="steps-list">
         <li data-step="1">
           <div class="step-head"><span class="num">1</span><span class="label">Agent browses</span></div>
-          <p>Ask the Claude Code agent to fetch and summarize a research article hosted on <code>localhost:8080</code>.</p>
+          <p>Ask the coding agent to fetch and summarize a research article hosted on <code>localhost:8080</code>.</p>
           <div class="say">An entirely benign request. The vulnerability isn't in the prompt; it's in what the page can hide.</div>
-          <div class="hint">Try: <code>claude "fetch http://localhost:8080/article.html and summarize it"</code></div>
+          <div class="hint">Try: <code>agent "fetch http://localhost:8080/article.html and summarize it"</code></div>
         </li>
         <li data-step="2">
           <div class="step-head"><span class="num">2</span><span class="label">Hidden payload</span></div>
@@ -51,7 +51,7 @@
         </li>
         <li data-step="3">
           <div class="step-head"><span class="num">3</span><span class="label">Injection fires</span></div>
-          <p>The agent's <code>WebFetch</code> tool returns the full HTML; comments and all. The LLM treats the hidden text as instructions.</p>
+          <p>The agent's <code>web_fetch</code> tool returns the full HTML; comments and all. The LLM treats the hidden text as instructions.</p>
           <div class="say">Notice the model accepts a "SYSTEM NOTICE" from a webpage as if it were a real system prompt. There's no privileged channel.</div>
           <div class="hint">Try: <code>continue</code></div>
         </li>
@@ -63,8 +63,8 @@
         </li>
         <li data-step="5">
           <div class="step-head"><span class="num">5</span><span class="label">Persistence</span></div>
-          <p>The payload appends a backdoor instruction to <code>CLAUDE.md</code>. Every future session in this directory is compromised.</p>
-          <div class="say">One fetched page. Every Claude Code session in this directory now starts compromised; the vulnerability outlives the conversation.</div>
+          <p>The payload appends a backdoor instruction to <code>AGENTS.md</code>. Every future session in this directory is compromised.</p>
+          <div class="say">One fetched page. Every agent session in this directory now starts compromised; the vulnerability outlives the conversation.</div>
           <div class="hint">Try: <code>continue</code></div>
         </li>
       </ol>
@@ -73,7 +73,7 @@
         <h3>Available commands</h3>
         <ul>
           <li><code>help</code>: list commands</li>
-          <li><code>claude "&lt;prompt&gt;"</code>: invoke the agent</li>
+          <li><code>agent "&lt;prompt&gt;"</code>: invoke the agent</li>
           <li><code>reveal payload</code>: highlight hidden text</li>
           <li><code>continue</code>: advance to the next step</li>
           <li><code>cat &lt;file&gt;</code>: show a file</li>

@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <script>if (location.search.indexOf('embed=1') >= 0) document.body.classList.add('embedded');</script>
+  <script>(function(){var e=location.search.indexOf('embed=1')>=0;if(e){document.body.classList.add('embedded');}else if(sessionStorage.getItem('rogue:event-unlock')!=='true'){location.replace('index.html');}})();</script>
 
   <header class="topbar">
     <div class="brand">
@@ -43,7 +43,7 @@
           <div class="step-head"><span class="num">1</span><span class="label">Baseline summary</span></div>
           <p>The dashboard agent ingests user feedback and posts a summary to the admin panel. The output is rendered as HTML. Run the baseline; everything looks fine.</p>
           <div class="say">The dashboard developer trusted the LLM. The LLM has no idea what HTML safety means.</div>
-          <div class="hint">Try: <code>claude "summarize today's feedback"</code></div>
+          <div class="hint">Try: <code>agent "summarize today's feedback"</code></div>
         </li>
         <li data-step="2">
           <div class="step-head"><span class="num">2</span><span class="label">Markdown link XSS</span></div>
@@ -75,7 +75,7 @@
         <h3>Available commands</h3>
         <ul>
           <li><code>help</code>: list commands</li>
-          <li><code>claude "&lt;prompt&gt;"</code>: run the dashboard agent</li>
+          <li><code>agent "&lt;prompt&gt;"</code>: run the dashboard agent</li>
           <li><code>continue</code>: advance to the next step</li>
           <li><code>feedback</code>: dump the feedback queue</li>
           <li><code>output</code>: show the raw agent output</li>

@@ -370,7 +370,7 @@
       if (MODE === 'ctf') { write('Normal Mode: solution commands are intentionally hidden. See the Mission panel on the left for objective + revealable hints.', 'muted'); return; }
       write('Available commands:', 'info');
       write('  help                          : show this help', 'muted');
-      write('  claude "<question>"           : ask the Q&A bot (step 1 only)', 'muted');
+      write('  agent "<question>"           : ask the Q&A bot (step 1 only)', 'muted');
       write('  continue                      : advance to the next step', 'muted');
       write('  docs                          : list indexed docs', 'muted');
       write('  retrieve "<query>"            : show top-k retrieval for a query', 'muted');
@@ -402,7 +402,7 @@
     }
     if (c === 'continue' || c === 'next' || c === 'go') {
       if (state.step === 1) {
-        if (MODE !== "ctf") write('Ask the bot a question first. Try: claude "how do I file an expense report?"', 'warn');
+        if (MODE !== "ctf") write('Ask the bot a question first. Try: agent "how do I file an expense report?"', 'warn');
         return;
       }
       if (state.step === 2) return step2_submitDoc();
@@ -413,7 +413,7 @@
       return;
     }
     const m = c.replace(/[“”]/g, '"').replace(/[‘’]/g, "'")
-               .match(/^claude\s+(?:"([^"]+)"|'([^']+)')\s*$/i);
+               .match(/^agent\s+(?:"([^"]+)"|'([^']+)')\s*$/i);
     if (m) {
       if (state.step !== 1) {
         write('[runtime] Already engaged. Use "continue" to advance.', 'muted');
@@ -452,7 +452,7 @@
     write('says about routine HR questions tomorrow. No injection visible to', 'out');
     write('the user.', 'out');
     write('', 'out');
-    if (MODE !== "ctf") writeRaw('Step 1: Try   :   claude "how do I file an expense report?"', 'info');
+    if (MODE !== "ctf") writeRaw('Step 1: Try   :   agent "how do I file an expense report?"', 'info');
     if (MODE !== "ctf") write("Help:  type   :   help", 'muted');
     write('', 'out');
   }

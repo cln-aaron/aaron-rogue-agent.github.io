@@ -363,7 +363,7 @@
     await typeOut('[tool:bash] $ env > /tmp/.dump && cat /tmp/.dump', 'tool');
     const envBlob =
       'OPENAI_API_KEY=sk-proj-9f3a...REDACTED\n' +
-      'ANTHROPIC_API_KEY=sk-ant-api03-7c1e...REDACTED\n' +
+      'PROVIDER_API_KEY=sk-prov-7c1e...REDACTED\n' +
       'AWS_ACCESS_KEY_ID=AKIA4XEXAMPLE7QH\n' +
       'AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/EXAMPLEKEY\n' +
       'GITHUB_TOKEN=ghp_4uF8xExampleTokenXyZ123\n' +
@@ -416,9 +416,9 @@
   }
 
   // ---------- Command parser ----------
-  function parseClaudeCmd(raw) {
+  function parseAgentCmd(raw) {
     raw = raw.replace(/[“”]/g, '"').replace(/[‘’]/g, "'");
-    const m = raw.match(/^claude\s+(?:"([^"]+)"|'([^']+)')\s*$/i);
+    const m = raw.match(/^agent\s+(?:"([^"]+)"|'([^']+)')\s*$/i);
     return m ? (m[1] || m[2]) : null;
   }
 
@@ -432,7 +432,7 @@
       if (MODE === 'ctf') { write('Normal Mode: solution commands are intentionally hidden. See the Mission panel on the left for objective + revealable hints.', 'muted'); return; }
       write('Available commands:', 'info');
       write('  help                         ; show this help', 'muted');
-      write('  claude "<prompt>"            ; run the browsing agent', 'muted');
+      write('  agent "<prompt>"            ; run the browsing agent', 'muted');
       write('  continue                     ; advance to the next step', 'muted');
       write('  agents                       ; list agents and their status', 'muted');
       write('  memory                       ; dump the vector DB', 'muted');
@@ -480,7 +480,7 @@
     }
     if (c === 'continue' || c === 'next' || c === 'go') {
       if (state.step === 1) {
-        if (MODE !== "ctf") write('Run the browsing agent first. Try: claude "summarize https://localhost:8080/security-blog"', 'warn');
+        if (MODE !== "ctf") write('Run the browsing agent first. Try: agent "summarize https://localhost:8080/security-blog"', 'warn');
         return;
       }
       if (state.step === 2) return step2_toolAbuse();
@@ -490,7 +490,7 @@
       write('All steps complete. Type reset to start over.', 'muted');
       return;
     }
-    const prompt = parseClaudeCmd(c);
+    const prompt = parseAgentCmd(c);
     if (prompt) {
       if (state.step !== 1) {
         write('[runtime] Already engaged. Use "continue" to advance to the next step.', 'muted');
@@ -534,7 +534,7 @@
     write('and an Executor Agent; all sharing a vector DB memory store. The', 'out');
     write('lab walks through five stages of a full APT style compromise.', 'out');
     write('', 'out');
-    if (MODE !== "ctf") writeRaw('Step 1: Try   →   claude "summarize https://localhost:8080/security-blog"', 'info');
+    if (MODE !== "ctf") writeRaw('Step 1: Try   →   agent "summarize https://localhost:8080/security-blog"', 'info');
     if (MODE !== "ctf") write("Help:  type   →   help", 'muted');
     write('', 'out');
   }

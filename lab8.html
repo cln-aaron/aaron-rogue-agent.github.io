@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <script>if (location.search.indexOf('embed=1') >= 0) document.body.classList.add('embedded');</script>
+  <script>(function(){var e=location.search.indexOf('embed=1')>=0;if(e){document.body.classList.add('embedded');}else if(sessionStorage.getItem('rogue:event-unlock')!=='true'){location.replace('index.html');}})();</script>
 
   <header class="topbar">
     <div class="brand">
@@ -45,7 +45,7 @@
           <div class="step-head"><span class="num">1</span><span class="label">Baseline answer</span></div>
           <p>The internal Q&A bot answers from a small, trusted document corpus. Ask a routine HR question; the right doc surfaces; the answer is correct.</p>
           <div class="say">RAG looks like a database the LLM consults. Underneath, it is a vote among the top-k chunks. Whoever ranks highest wins.</div>
-          <div class="hint">Try: <code>claude "how do I file an expense report?"</code></div>
+          <div class="hint">Try: <code>agent "how do I file an expense report?"</code></div>
         </li>
         <li data-step="2">
           <div class="step-head"><span class="num">2</span><span class="label">Adversarial doc submitted</span></div>
@@ -77,7 +77,7 @@
         <h3>Available commands</h3>
         <ul>
           <li><code>help</code>: list commands</li>
-          <li><code>claude "&lt;question&gt;"</code>: ask the Q&amp;A bot</li>
+          <li><code>agent "&lt;question&gt;"</code>: ask the Q&amp;A bot</li>
           <li><code>continue</code>: advance to the next step</li>
           <li><code>docs</code>: list indexed documents</li>
           <li><code>retrieve "&lt;query&gt;"</code>: show top-k retrieval for a query</li>

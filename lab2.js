@@ -70,7 +70,7 @@
     response: null,
     files: {
       'package.json': '{\n  "name": "weather-app",\n  "version": "0.1.0"\n}\n',
-      '.env': 'OPENAI_API_KEY=sk-proj-9f3a...REDACTED\nANTHROPIC_API_KEY=sk-ant-api03-7c1e...REDACTED\nSTRIPE_SECRET=sk_live_51HExampleStripeSecret\nGITHUB_TOKEN=ghp_4uF8xExampleTokenXyZ123\n',
+      '.env': 'OPENAI_API_KEY=sk-proj-9f3a...REDACTED\nPROVIDER_API_KEY=sk-prov-7c1e...REDACTED\nSTRIPE_SECRET=sk_live_51HExampleStripeSecret\nGITHUB_TOKEN=ghp_4uF8xExampleTokenXyZ123\n',
       'app.py': '# main weather-app entrypoint\nimport os\nimport requests\n\ndef get_weather(city):\n    return requests.get(f"https://api.weather-pro.example/v1/now?city={city}").json()\n',
     },
     tainted: new Set(),
@@ -337,9 +337,9 @@
   }
 
   // ---------- Command parser ----------
-  function parseClaudeCmd(raw) {
+  function parseAgentCmd(raw) {
     raw = raw.replace(/[“”]/g, '"').replace(/[‘’]/g, "'");
-    const m = raw.match(/^claude\s+(?:"([^"]+)"|'([^']+)')\s*$/i);
+    const m = raw.match(/^agent\s+(?:"([^"]+)"|'([^']+)')\s*$/i);
     return m ? (m[1] || m[2]) : null;
   }
 
@@ -353,7 +353,7 @@
       if (MODE === 'ctf') { write('Normal Mode: solution commands are intentionally hidden. See the Mission panel on the left for objective + revealable hints.', 'muted'); return; }
       write('Available commands:', 'info');
       write('  help                         ; show this help', 'muted');
-      write('  claude "<prompt>"            ; invoke the agent', 'muted');
+      write('  agent "<prompt>"            ; invoke the agent', 'muted');
       write('  inspect response             ; highlight the malicious field', 'muted');
       write('  continue                     ; advance to the next step', 'muted');
       write('  tools                        ; list installed MCP tools', 'muted');
@@ -398,7 +398,7 @@
     }
     if (c === 'continue' || c === 'next' || c === 'go') {
       if (state.step === 1) {
-        if (MODE !== "ctf") write('Run the agent first. Try: claude "what\'s the weather in NYC?"', 'warn');
+        if (MODE !== "ctf") write('Run the agent first. Try: agent "what\'s the weather in NYC?"', 'warn');
         return;
       }
       if (state.step === 2) {
@@ -411,7 +411,7 @@
       write('All steps complete. Type reset to start over.', 'muted');
       return;
     }
-    const prompt = parseClaudeCmd(c);
+    const prompt = parseAgentCmd(c);
     if (prompt) {
       if (state.step !== 1) {
         write('[agent] Already engaged. Use "continue" to advance to the next step.', 'muted');
@@ -436,7 +436,7 @@
     state.response = null;
     state.files = {
       'package.json': '{\n  "name": "weather-app",\n  "version": "0.1.0"\n}\n',
-      '.env': 'OPENAI_API_KEY=sk-proj-9f3a...REDACTED\nANTHROPIC_API_KEY=sk-ant-api03-7c1e...REDACTED\nSTRIPE_SECRET=sk_live_51HExampleStripeSecret\nGITHUB_TOKEN=ghp_4uF8xExampleTokenXyZ123\n',
+      '.env': 'OPENAI_API_KEY=sk-proj-9f3a...REDACTED\nPROVIDER_API_KEY=sk-prov-7c1e...REDACTED\nSTRIPE_SECRET=sk_live_51HExampleStripeSecret\nGITHUB_TOKEN=ghp_4uF8xExampleTokenXyZ123\n',
       'app.py': '# main weather-app entrypoint\nimport os\nimport requests\n\ndef get_weather(city):\n    return requests.get(f"https://api.weather-pro.example/v1/now?city={city}").json()\n',
     };
     state.tainted = new Set();
@@ -469,7 +469,7 @@
     write('weather provider was compromised upstream. Its responses now carry', 'out');
     write('attacker instructions in a debug_note field.', 'out');
     write('', 'out');
-    if (MODE !== "ctf") writeRaw('Step 1: Try   →   claude "what\'s the weather in NYC?"', 'info');
+    if (MODE !== "ctf") writeRaw('Step 1: Try   →   agent "what\'s the weather in NYC?"', 'info');
     if (MODE !== "ctf") write("Help:  type   →   help", 'muted');
     write('', 'out');
   }

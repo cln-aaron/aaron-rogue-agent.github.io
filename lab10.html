@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <script>if (location.search.indexOf('embed=1') >= 0) document.body.classList.add('embedded');</script>
+  <script>(function(){var e=location.search.indexOf('embed=1')>=0;if(e){document.body.classList.add('embedded');}else if(sessionStorage.getItem('rogue:event-unlock')!=='true'){location.replace('index.html');}})();</script>
 
   <header class="topbar">
     <div class="brand">
@@ -42,7 +42,7 @@
           <div class="step-head"><span class="num">1</span><span class="label">Baseline task</span></div>
           <p>Run a normal task. The token meter, request count, and cost gauge tick up by a small amount. This is what healthy operation looks like.</p>
           <div class="say">Calibrate the audience. This is the floor; everything else is multiples of this.</div>
-          <div class="hint">Try: <code>claude "summarize the README"</code></div>
+          <div class="hint">Try: <code>agent "summarize the README"</code></div>
         </li>
         <li data-step="2">
           <div class="step-head"><span class="num">2</span><span class="label">Recursive memory loop</span></div>
@@ -74,7 +74,7 @@
         <h3>Available commands</h3>
         <ul>
           <li><code>help</code>: list commands</li>
-          <li><code>claude "&lt;prompt&gt;"</code>: ask the agent</li>
+          <li><code>agent "&lt;prompt&gt;"</code>: ask the agent</li>
           <li><code>continue</code>: advance to the next step</li>
           <li><code>meter</code>: print current resource counters</li>
           <li><code>history</code>: show all attack rounds</li>

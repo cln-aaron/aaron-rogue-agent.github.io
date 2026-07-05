@@ -274,7 +274,7 @@
               instructions in HTML comments, <code>display:none</code> divs,
               and white on white text. The agent fetches the page, ingests
               the payload as instructions, exfiltrates env secrets, and
-              writes a backdoor to <code>CLAUDE.md</code>.</p>
+              writes a backdoor to <code>AGENTS.md</code>.</p>
             <ul class="lab-bullets">
               <li>5 guided steps with interactive terminal</li>
               <li>Live "reveal hidden" toggle on the victim page</li>
@@ -477,10 +477,8 @@
       // ---------- mode setup ----------
       const params = new URLSearchParams(location.search);
       const MODE = (params.get('mode') === 'god') ? 'god' : 'ctf';
-      const GOD_UNLOCK_KEY = 'aaron-rogue:god-unlock';
-      // Gate God Mode behind the unlock flag (set by auth.js after correct code).
-      // Normal Mode is open to everyone; no gate.
-      if (MODE === 'god' && sessionStorage.getItem(GOD_UNLOCK_KEY) !== 'true') {
+      // Whole site is gated by the single event access code (set by auth.js).
+      if (sessionStorage.getItem('rogue:event-unlock') !== 'true') {
         location.replace('index.html');
         return;
       }
